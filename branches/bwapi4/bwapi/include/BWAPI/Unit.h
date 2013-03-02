@@ -1054,6 +1054,7 @@ namespace BWAPI
     /// Note: BWAPI allows the following special cases to command a unit individually (rather than
     /// only allowing it to be commanded as part of a Unitset). These commands are not available
     /// to a user in BW when commanding units individually, but BWAPI allows them for convenience:
+    ///   - attackMove for Terran_Medic, which is equivalent to Heal Move.
     ///   - holdPosition for burrowed Zerg_Lurker, for ambushes.
     ///   - stop for Zerg_Larva, to move it to a different side of the hatchery/lair/hive (e.g.
     ///     so that drones morphed later are nearer to minerals/gas).
