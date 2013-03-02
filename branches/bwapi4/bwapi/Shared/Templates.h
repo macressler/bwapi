@@ -478,7 +478,8 @@ namespace BWAPI
       UnitType uType = thisUnit->getType();
       if ( uType == UnitTypes::Protoss_Interceptor ||
            uType == UnitTypes::Terran_Vulture_Spider_Mine ||
-           uType == UnitTypes::Spell_Scanner_Sweep )
+           uType == UnitTypes::Spell_Scanner_Sweep ||
+           uType == UnitTypes::Special_Map_Revealer )
         return Broodwar->setLastError(Errors::Incompatible_UnitType);
       if ( thisUnit->isCompleted() &&
            ( uType == UnitTypes::Protoss_Pylon ||
@@ -580,10 +581,21 @@ namespace BWAPI
 
       if ( !thisUnit->getType().isBuilding() && !thisUnit->isInterruptible() )
         return Broodwar->setLastError(Errors::Unit_Busy);
-      if ( thisUnit->getType().groundWeapon() == WeaponTypes::None && thisUnit->getType().airWeapon() == WeaponTypes::None &&
-           thisUnit->getType() != UnitTypes::Protoss_Reaver && thisUnit->getType() != UnitTypes::Hero_Warbringer &&
-           thisUnit->getType() != UnitTypes::Protoss_Carrier && thisUnit->getType() != UnitTypes::Hero_Gantrithor )
-        return Broodwar->setLastError(Errors::Unable_To_Hit);
+      if ( thisUnit->getType().groundWeapon() == WeaponTypes::None && thisUnit->getType().airWeapon() == WeaponTypes::None )
+      {
+        if ( thisUnit->getType() == UnitTypes::Protoss_Carrier || thisUnit->getType() == UnitTypes::Hero_Gantrithor )
+        {
+          if ( thisUnit->getInterceptorCount() <= 0 )
+            return Broodwar->setLastError(Errors::Unable_To_Hit);
+        }
+        else if ( thisUnit->getType() == UnitTypes::Protoss_Reaver || thisUnit->getType() == UnitTypes::Hero_Warbringer )
+        {
+          if ( thisUnit->getScarabCount() <= 0 )
+            return Broodwar->setLastError(Errors::Unable_To_Hit);
+        }
+        else
+          return Broodwar->setLastError(Errors::Unable_To_Hit);
+      }
       if ( thisUnit->getType() == UnitTypes::Zerg_Lurker )
       {
         if ( !thisUnit->isBurrowed() )
@@ -614,19 +626,18 @@ namespace BWAPI
       if ( targetUnit->isInvincible() )
         return Broodwar->setLastError(Errors::Unable_To_Hit);
 
-      WeaponType weapon = thisUnit->getType().groundWeapon();
       bool targetInAir = targetUnit->isFlying();
-      if ( targetInAir )
-        weapon = thisUnit->getType().airWeapon();
-
+      WeaponType weapon = targetInAir ? thisUnit->getType().airWeapon() : thisUnit->getType().groundWeapon();
       bool canAttack = ( weapon != WeaponTypes::None );
 
-      if ( ( (thisUnit->getType() == UnitTypes::Protoss_Reaver  || thisUnit->getType() == UnitTypes::Hero_Warbringer) && thisUnit->getScarabCount() > 0 && !targetInAir) ||
-           ( (thisUnit->getType() == UnitTypes::Protoss_Carrier || thisUnit->getType() == UnitTypes::Hero_Gantrithor) && thisUnit->getInterceptorCount() > 0) )
-        canAttack = true;
-
       if ( !canAttack )
-        return Broodwar->setLastError(Errors::Unable_To_Hit);
+      {
+        if ( ( thisUnit->getType() == UnitTypes::Protoss_Carrier || thisUnit->getType() == UnitTypes::Hero_Gantrithor ) ||
+             ( !targetInAir && (thisUnit->getType() == UnitTypes::Protoss_Reaver  || thisUnit->getType() == UnitTypes::Hero_Warbringer) ) )
+          canAttack = true;
+        else
+          return Broodwar->setLastError(Errors::Unable_To_Hit);
+      }
 
       if ( !thisUnit->getType().canMove() && !thisUnit->isInWeaponRange(targetUnit) )
         return Broodwar->setLastError(Errors::Out_Of_Range);
@@ -1801,11 +1812,10 @@ namespace BWAPI
         return false;
 
       if ( !targetUnit->getPlayer()->isNeutral() && thisUnit->getPlayer()->isEnemy(targetUnit->getPlayer()) &&
-           !canAttackUnit(thisUnit, targetUnit, false, false, false) )
+           !canAttackUnit(thisUnit, targetUnit, false, true, false) )
         return false;
 
       if ( !canFollow(thisUnit, targetUnit, false, true, false) &&
-           !canAttackUnit(thisUnit, targetUnit, false, true, false) &&
            !canLoad(thisUnit, targetUnit, false, true, false) &&
            !canSetRallyUnit(thisUnit, targetUnit, false, true, false) )
         return Broodwar->setLastError(Errors::Incompatible_State);
@@ -1848,11 +1858,10 @@ namespace BWAPI
         return false;
 
       if ( !targetUnit->getPlayer()->isNeutral() && thisUnit->getPlayer()->isEnemy(targetUnit->getPlayer()) &&
-           !canAttackUnitGrouped(thisUnit, targetUnit, false, false, false, false) )
+           !canAttackUnitGrouped(thisUnit, targetUnit, false, true, false, false) )
         return false;
 
       if ( !canFollow(thisUnit, targetUnit, false, true, false) &&
-           !canAttackUnitGrouped(thisUnit, targetUnit, false, true, false, false) &&
            !canLoad(thisUnit, targetUnit, false, true, false) )
         return Broodwar->setLastError(Errors::Incompatible_State);
 
