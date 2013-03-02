@@ -49,7 +49,7 @@ namespace BWAPI
     "Lurker_Aspect",
     "",
     "Healing",
-    "", "", "", "", "", "", "", "", "", ""
+    "", "", "", "", "", "", "", "", "",
     "None",
     "Nuclear_Strike",
     "Unknown"
