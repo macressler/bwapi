@@ -1044,20 +1044,21 @@ namespace BWAPI
     /// The reason this function exists is because some commands are valid for an individual unit
     /// but not for those individuals as a group (e.g. buildings, critters) and some commands are
     /// only valid for a unit if it is commanded as part of a unit group, e.g.:
-    ///   1. attackMove/attackUnit for a Unitset, some of which can't attack (e.g. high
-    ///      templar). This is supported simply for consistency with BW's behaviour - you could
-    ///      issue move command(s) individually instead.
-    ///   2. attackMove/move/patrol/rightClickPosition for air unit(s) + e.g. larva(e), as part of
+    ///   1. attackMove/attackUnit for a Unitset, some of which can't attack (e.g.
+    ///       @High_Templar ). This is supported simply for consistency with BW's behaviour - you
+    ///       could issue move command(s) individually instead.
+    ///   2. attackMove/move/patrol/rightClickPosition for air unit(s) + e.g. @Larva, as part of
     ///      the air stacking technique. This is supported simply for consistency with BW's
     ///      behaviour - you could issue move/patrol/rightClickPosition command(s) for them
     ///     individually instead.
-    /// Note: BWAPI allows the following special cases to command a unit individually (rather than
+    ///
+    /// @note BWAPI allows the following special cases to command a unit individually (rather than
     /// only allowing it to be commanded as part of a Unitset). These commands are not available
     /// to a user in BW when commanding units individually, but BWAPI allows them for convenience:
-    ///   - attackMove for Terran_Medic, which is equivalent to Heal Move.
-    ///   - holdPosition for burrowed Zerg_Lurker, for ambushes.
-    ///   - stop for Zerg_Larva, to move it to a different side of the hatchery/lair/hive (e.g.
-    ///     so that drones morphed later are nearer to minerals/gas).
+    ///   - attackMove for @Medic, which is equivalent to Heal Move.
+    ///   - holdPosition for burrowed @Lurker, for ambushes.
+    ///   - stop for @Larva, to move it to a different side of the @Hatchery / @Lair / @Hive (e.g.
+    ///     so that @Drones morphed later morph nearer to minerals/gas).
     ///
     /// @see UnitCommandTypes, Game::getLastError, Unit::canIssueCommand,
     /// Unit::canCommandGrouped, Unit::canIssueCommandTypeGrouped, Unit::canTargetUnit
