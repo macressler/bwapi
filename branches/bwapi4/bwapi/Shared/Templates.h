@@ -707,7 +707,7 @@ namespace BWAPI
 
       if ( thisUnit->getType() == UnitTypes::Zerg_Queen &&
            ( targetUnit->getType() != UnitTypes::Terran_Command_Center ||
-             targetUnit->getHitPoints() >= 750 || targetUnit->getHitPoints() == 0 ) )
+             targetUnit->getHitPoints() >= 750 || targetUnit->getHitPoints() <= 0 ) )
         return Broodwar->setLastError(Errors::Invalid_Parameter);
 
       if ( targetUnit == thisUnit )
@@ -2113,6 +2113,136 @@ namespace BWAPI
 
       if ( checkCanTargetUnit && !canTargetUnit(thisUnit, targetUnit, false) )
         return false;
+
+      UnitType targetType = targetUnit->getType();
+
+      switch (tech)
+      {
+        case TechTypes::Enum::Archon_Warp:
+          if ( targetType != UnitTypes::Protoss_High_Templar )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          if ( targetUnit->getPlayer() != thisUnit->getPlayer() )
+            return Broodwar->setLastError(Errors::Unit_Not_Owned);
+          break;
+
+        case TechTypes::Enum::Dark_Archon_Meld:
+          if ( targetType != UnitTypes::Protoss_Dark_Templar )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          if ( targetUnit->getPlayer() != thisUnit->getPlayer() )
+            return Broodwar->setLastError(Errors::Unit_Not_Owned);
+          break;
+
+        case TechTypes::Enum::Consume:
+          if ( targetUnit->getPlayer() != thisUnit->getPlayer() )
+            return Broodwar->setLastError(Errors::Unit_Not_Owned);
+          if ( targetType.getRace() != Races::Zerg || targetType == UnitTypes::Zerg_Larva )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+
+        case TechTypes::Enum::Spawn_Broodlings:
+          if ( ( !targetType.isOrganic() && !targetType.isMechanical() ) ||
+               targetType.isRobotic() ||
+               targetType.isFlyer() )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+
+        case TechTypes::Enum::Lockdown:
+          if ( !targetType.isMechanical() )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+
+        case TechTypes::Enum::Healing:
+          if ( targetUnit->getHitPoints() == targetType.maxHitPoints() )
+            return Broodwar->setLastError(Errors::Incompatible_State);
+          if ( !targetType.isOrganic() ||
+               targetType.isFlyer() )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          if ( !targetUnit->getPlayer()->isNeutral() && thisUnit->getPlayer()->isEnemy(targetUnit->getPlayer()) )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          break;
+
+        case TechTypes::Enum::Mind_Control:
+          if ( targetUnit->getPlayer() == thisUnit->getPlayer() )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          if ( targetType == UnitTypes::Protoss_Interceptor ||
+               targetType == UnitTypes::Terran_Vulture_Spider_Mine ||
+               targetType == UnitTypes::Zerg_Lurker_Egg ||
+               targetType == UnitTypes::Zerg_Cocoon ||
+               targetType == UnitTypes::Zerg_Larva ||
+               targetType == UnitTypes::Zerg_Egg )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+
+        case TechTypes::Enum::Feedback:
+          if ( !targetType.isSpellcaster() )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+
+        case TechTypes::Enum::Infestation:
+          if ( targetType != UnitTypes::Terran_Command_Center ||
+               targetUnit->getHitPoints() >= 750 || targetUnit->getHitPoints() <= 0 )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          break;
+      }
+
+      switch (tech)
+      {
+        case TechTypes::Enum::Archon_Warp:
+        case TechTypes::Enum::Dark_Archon_Meld:
+          if ( !thisUnit->hasPath(targetUnit->getPosition()) )
+            return Broodwar->setLastError(Errors::Unreachable_Location);
+          if ( targetUnit->isHallucination() )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          if ( targetUnit->isMaelstrommed() )
+            return Broodwar->setLastError(Errors::Incompatible_State);
+          // Fall through (don't break).
+        case TechTypes::Enum::Parasite:
+        case TechTypes::Enum::Irradiate:
+        case TechTypes::Enum::Optical_Flare:
+        case TechTypes::Enum::Spawn_Broodlings:
+        case TechTypes::Enum::Lockdown:
+        case TechTypes::Enum::Defensive_Matrix:
+        case TechTypes::Enum::Hallucination:
+        case TechTypes::Enum::Healing:
+        case TechTypes::Enum::Restoration:
+        case TechTypes::Enum::Mind_Control:
+        case TechTypes::Enum::Consume:
+        case TechTypes::Enum::Feedback:
+        case TechTypes::Enum::Yamato_Gun:
+          if ( targetUnit->isStasised() )
+            return Broodwar->setLastError(Errors::Incompatible_State);
+          break;
+      }
+
+      switch (tech)
+      {
+        case TechTypes::Enum::Yamato_Gun:
+          if ( targetUnit->isInvincible() )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          break;
+
+        case TechTypes::Enum::Parasite:
+        case TechTypes::Enum::Irradiate:
+        case TechTypes::Enum::Optical_Flare:
+        case TechTypes::Enum::Spawn_Broodlings:
+        case TechTypes::Enum::Lockdown:
+        case TechTypes::Enum::Defensive_Matrix:
+        case TechTypes::Enum::Hallucination:
+        case TechTypes::Enum::Healing:
+        case TechTypes::Enum::Restoration:
+        case TechTypes::Enum::Mind_Control:
+          if ( targetUnit->isInvincible() )
+            return Broodwar->setLastError(Errors::Invalid_Parameter);
+          // Fall through (don't break).
+        case TechTypes::Enum::Consume:
+        case TechTypes::Enum::Feedback:
+          if ( targetType.isBuilding() )
+            return Broodwar->setLastError(Errors::Incompatible_UnitType);
+          break;
+      }
+
+      if ( targetUnit == thisUnit )
+        return Broodwar->setLastError(Errors::Invalid_Parameter);
 
       return true;
     }
