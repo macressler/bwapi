@@ -29,6 +29,7 @@ This page contains links to other projects that make use of BWAPI.
   * [http://code.google.com/p/voidbot/ voidbot]  
   * [http://eis.ucsc.edu/EISBot/ EISBot]
   * [http://www.planiart.usherbrooke.ca/projects/spar/ SPAR]
+  * [https://github.com/rudym/starcraft-bot-in-fsharp fsharp bot]
 
 = AI Source Packages =
   * [http://code.google.com/p/bwapi/downloads/detail?name=Bots-src.7z AIIDE 2011 bot source code]
