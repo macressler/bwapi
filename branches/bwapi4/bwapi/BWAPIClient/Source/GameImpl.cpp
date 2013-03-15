@@ -702,16 +702,15 @@ namespace BWAPI
   //----------------------------------------------- SET VISION -----------------------------------------------
   bool GameImpl::setVision(BWAPI::Player *player, bool enabled)
   {
-    /* Set the current player's vision status */
-    if ( !self() || isReplay() || !player || player == self() )
-    {
-      lastError = Errors::Invalid_Parameter;
-      return false;
-    }
+    // Param check
+    if ( !player )
+      return setLastError(Errors::Invalid_Parameter);
 
+    if ( !isReplay() && (!self() || player == self()) )
+      return setLastError(Errors::Invalid_Parameter);
+    
     addCommand(BWAPIC::Command(BWAPIC::CommandType::SetVision, player->getID(), enabled ? 1 : 0));
-    lastError = Errors::None;
-    return true;
+    return setLastError();
   }
   //---------------------------------------------- SET GAME SPEED --------------------------------------------
   void GameImpl::setLocalSpeed(int speed)
@@ -786,7 +785,7 @@ namespace BWAPI
     textSize = size;
   }
   //-------------------------------------------------- DRAW TEXT ---------------------------------------------
-  void GameImpl::vDrawText(int ctype, int x, int y, const char *format, va_list arg)
+  void GameImpl::vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg)
   {
     if ( !data->hasGUI ) return;
     char buffer[512];
@@ -795,37 +794,37 @@ namespace BWAPI
     addText(s,buffer);
   }
   //--------------------------------------------------- DRAW BOX ---------------------------------------------
-  void GameImpl::drawBox(int ctype, int left, int top, int right, int bottom, Color color, bool isSolid)
+  void GameImpl::drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Box,ctype,left,top,right,bottom,0,0,color,isSolid));
   }
   //------------------------------------------------ DRAW TRIANGLE -------------------------------------------
-  void GameImpl::drawTriangle(int ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid)
+  void GameImpl::drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Triangle,ctype,ax,ay,bx,by,cx,cy,color,isSolid));
   }
   //------------------------------------------------- DRAW CIRCLE --------------------------------------------
-  void GameImpl::drawCircle(int ctype, int x, int y, int radius, Color color, bool isSolid)
+  void GameImpl::drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Circle,ctype,x,y,0,0,radius,0,color,isSolid));
   }
   //------------------------------------------------- DRAW ELIPSE --------------------------------------------
-  void GameImpl::drawEllipse(int ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid)
+  void GameImpl::drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Ellipse,ctype,x,y,0,0,xrad,yrad,color,isSolid));
   }
 
-  void GameImpl::drawDot(int ctype, int x, int y, Color color)
+  void GameImpl::drawDot(CoordinateType::Enum ctype, int x, int y, Color color)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Dot,ctype,x,y,0,0,0,0,color,false));
   }
   //-------------------------------------------------- DRAW LINE ---------------------------------------------
-  void GameImpl::drawLine(int ctype, int x1, int y1, int x2, int y2, Color color)
+  void GameImpl::drawLine(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, Color color)
   {
     if ( !data->hasGUI ) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Line,ctype,x1,y1,x2,y2,0,0,color,false));
@@ -996,17 +995,6 @@ namespace BWAPI
   int GameImpl::getLastEventTime() const
   {
     return 0;
-  }
-  bool GameImpl::setReplayVision(Player *player, bool enabled)
-  {
-    if ( !player || !isReplay() )
-    {
-      lastError = Errors::Invalid_Parameter;
-      return false;
-    }
-    addCommand(BWAPIC::Command(BWAPIC::CommandType::SetReplayVision, player->getID(), enabled ? 1 : 0));
-    lastError = Errors::None;
-    return true;
   }
   bool GameImpl::setRevealAll(bool reveal)
   {

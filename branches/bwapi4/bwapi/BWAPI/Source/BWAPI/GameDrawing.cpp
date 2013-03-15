@@ -13,7 +13,7 @@
 namespace BWAPI
 {
   //-------------------------------------------------- IN SCREEN ---------------------------------------------
-  bool GameImpl::inScreen(int ctype, int x, int y)
+  bool GameImpl::inScreen(CoordinateType::Enum ctype, int x, int y)
   {
     if ( !data->hasGUI )
       return false;
@@ -38,7 +38,7 @@ namespace BWAPI
     return true;
   }
 
-  bool GameImpl::inScreen(int ctype, int x1, int y1, int x2, int y2)
+  bool GameImpl::inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2)
   {
     if ( !data->hasGUI )
       return false;
@@ -80,7 +80,7 @@ namespace BWAPI
     return true;
   }
 
-  bool GameImpl::inScreen(int ctype, int x1, int y1, int x2, int y2, int x3, int y3)
+  bool GameImpl::inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, int x3, int y3)
   {
     if ( !data->hasGUI )
       return false;
@@ -151,7 +151,7 @@ namespace BWAPI
       return;
     this->textSize = size;
   }
-  void GameImpl::vDrawText(int ctype, int x, int y, const char *format, va_list arg)
+  void GameImpl::vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg)
   {
     if ( !data->hasGUI ) return;
     char buffer[512];
@@ -160,38 +160,38 @@ namespace BWAPI
     addText(s,buffer);
   }
   //--------------------------------------------------- DRAW BOX ---------------------------------------------
-  void GameImpl::drawBox(int ctype, int left, int top, int right, int bottom, Color color, bool isSolid)
+  void GameImpl::drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid)
   {
     /* Draws a box */
     if (!inScreen(ctype,left,top,right,bottom)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Box,ctype,left,top,right,bottom,0,0,color,isSolid));
   }
   //------------------------------------------------ DRAW TRIANGLE -------------------------------------------
-  void GameImpl::drawTriangle(int ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid)
+  void GameImpl::drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid)
   {
     if (!inScreen(ctype,ax,ay,bx,by,cx,cy)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Triangle,ctype,ax,ay,bx,by,cx,cy,color,isSolid));
   }
   //------------------------------------------------- DRAW CIRCLE --------------------------------------------
-  void GameImpl::drawCircle(int ctype, int x, int y, int radius, Color color, bool isSolid)
+  void GameImpl::drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid)
   {
     if (!inScreen(ctype,x-radius,y-radius,x+radius,y+radius)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Circle,ctype,x,y,0,0,radius,0,color,isSolid));
   }
   //------------------------------------------------- DRAW ELIPSE --------------------------------------------
-  void GameImpl::drawEllipse(int ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid)
+  void GameImpl::drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid)
   {
     if (!inScreen(ctype,x-xrad,y-yrad,x+xrad,y+yrad)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Ellipse,ctype,x,y,0,0,xrad,yrad,color,isSolid));
   }
   //--------------------------------------------------- DRAW DOT ---------------------------------------------
-  void GameImpl::drawDot(int ctype, int x, int y, Color color)
+  void GameImpl::drawDot(CoordinateType::Enum ctype, int x, int y, Color color)
   {
     if (!inScreen(ctype,x,y)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Dot,ctype,x,y,0,0,0,0,color,false));
   }
   //-------------------------------------------------- DRAW LINE ---------------------------------------------
-  void GameImpl::drawLine(int ctype, int x1, int y1, int x2, int y2, Color color)
+  void GameImpl::drawLine(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, Color color)
   {
     if (!inScreen(ctype,x1,y1,x2,y2)) return;
     addShape(BWAPIC::Shape(BWAPIC::ShapeType::Line,ctype,x1,y1,x2,y2,0,0,color,false));
@@ -227,7 +227,7 @@ namespace BWAPI
       int x2, y2, x3, y3, ly, ry, w, h, lx, rx, dx1, dx2, dx3;
       int radius, f, ddF_x, ddF_y, xi, yi;
       int xrad, yrad, a2, b2, crit1, crit2, crit3, t, dxt, dyt, d2xt, d2yt, twoAsquare, twoBsquare, xchange, ychange, ellipseerror, stoppingX, stoppingY;
-      int ctype = data->shapes[i].ctype;
+      CoordinateType::Enum ctype = data->shapes[i].ctype;
       bool isSolid = data->shapes[i].isSolid;
       BWAPI::Color color = Color(data->shapes[i].color);
       switch ( s )

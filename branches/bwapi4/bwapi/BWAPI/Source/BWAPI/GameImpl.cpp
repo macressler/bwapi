@@ -620,16 +620,30 @@ namespace BWAPI
   //----------------------------------------------- SET VISION -----------------------------------------------
   bool GameImpl::setVision(BWAPI::Player *player, bool enabled)
   {
-    // Set the current player's vision status 
-    if ( !BWAPIPlayer || isReplay() || !player || player == BWAPIPlayer )
+    if ( !player )  // Parameter check
       return this->setLastError(Errors::Invalid_Parameter);
 
-    u16 vision = (u16)BW::BWDATA::PlayerVision[BWAPIPlayer->getIndex()];    
-    if ( enabled )
-      vision |= 1 << static_cast<PlayerImpl*>(player)->getIndex();
+    if ( this->isReplay() )
+    {
+      u32 vision = *BW::BWDATA::ReplayVision;
+      if ( enabled )
+        vision |= 1 << static_cast<PlayerImpl*>(player)->getIndex();
+      else
+        vision &= ~(1 <<  static_cast<PlayerImpl*>(player)->getIndex() );
+      *BW::BWDATA::ReplayVision = vision;
+    }
     else
-      vision &= ~(1 <<  static_cast<PlayerImpl*>(player)->getIndex() );
-    QUEUE_COMMAND(BW::Orders::SetVision, vision);
+    {
+      if ( !BWAPIPlayer || player == BWAPIPlayer )
+        return this->setLastError(Errors::Invalid_Parameter);
+
+      u16 vision = (u16)BW::BWDATA::PlayerVision[BWAPIPlayer->getIndex()];    
+      if ( enabled )
+        vision |= 1 << static_cast<PlayerImpl*>(player)->getIndex();
+      else
+        vision &= ~(1 <<  static_cast<PlayerImpl*>(player)->getIndex() );
+      QUEUE_COMMAND(BW::Orders::SetVision, vision);
+    }
     return this->setLastError();
   }
   //--------------------------------------------------- GAME SPEED -------------------------------------------
@@ -905,20 +919,6 @@ namespace BWAPI
   int GameImpl::getLastEventTime() const
   {
     return this->lastEventTime;
-  }
-  bool GameImpl::setReplayVision(Player *player, bool enabled)
-  {
-    // Sets the replay vision status
-    if ( !isReplay() || !player )
-      return this->setLastError(Errors::Invalid_Parameter);
-
-    u32 vision = *BW::BWDATA::ReplayVision;
-    if ( enabled )
-      vision |= 1 << static_cast<PlayerImpl*>(player)->getIndex();
-    else
-      vision &= ~(1 <<  static_cast<PlayerImpl*>(player)->getIndex() );
-    *BW::BWDATA::ReplayVision = vision;
-    return this->setLastError();
   }
   bool GameImpl::setRevealAll(bool reveal)
   {

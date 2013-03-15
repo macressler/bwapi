@@ -29,7 +29,6 @@ namespace BWAPIC
       SetAllies,
       SetVision,
       SetCommandOptimizerLevel,
-      SetReplayVision,
       SetRevealAll
     };
   }

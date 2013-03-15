@@ -57,7 +57,8 @@ void SetResolution(int width, int height)
 HMODULE ddLib;
 void DDrawDestroy()
 {
-  SDrawManualInitialize(ghMainWnd);
+  //SDrawManualInitialize(ghMainWnd);
+  SDrawManualInitialize();
   if ( *BW::BWDATA::PrimaryPalette )
     (*BW::BWDATA::PrimaryPalette)->Release();
   *BW::BWDATA::PrimaryPalette = NULL;

@@ -9,6 +9,7 @@
 #include <BWAPI/Filters.h>
 #include <BWAPI/UnaryFilter.h>
 #include <BWAPI/Input.h>
+#include <BWAPI/CoordinateType.h>
 
 #include <sstream>
 
@@ -509,11 +510,18 @@ namespace BWAPI
     /** Returns a set of all the observer players that have not left. */
     virtual Playerset& observers() = 0;
 
+    /// Sets the size of the text for all calls to drawText following this one.
+    ///
+    /// @param size (optional)
+    ///   The size of the text. This value can be from 0 to 3 inclusive. A higher value indicates
+    ///   a larger text size. If this value is omitted or invalid, then it will use a default
+    ///   value of 1.
     virtual void setTextSize(int size = 1) = 0;
+
     /** Draws text on the screen at the given position. Text can be drawn in different colors by using the
      * following control characters: TODO: add image from wiki.*/
-    virtual void vDrawText(int ctype, int x, int y, const char *format, va_list arg) = 0;
-    void drawText(int ctype, int x, int y, const char *format, ...);
+    virtual void vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg) = 0;
+    void drawText(CoordinateType::Enum ctype, int x, int y, const char *format, ...);
     void drawTextMap(int x, int y, const char *format, ...);
     void drawTextMouse(int x, int y, const char *format, ...);
     void drawTextScreen(int x, int y, const char *format, ...);
@@ -523,14 +531,14 @@ namespace BWAPI
 
     /** Draws a box on the screen, with the given color. If isSolid is true, the entire box will be
      * rendered, otherwise just the outline will be drawn. */
-    virtual void drawBox(int ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) = 0;
+    virtual void drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) = 0;
     void drawBoxMap(int left, int top, int right, int bottom, Color color, bool isSolid = false);
     void drawBoxMouse(int left, int top, int right, int bottom, Color color, bool isSolid = false);
     void drawBoxScreen(int left, int top, int right, int bottom, Color color, bool isSolid = false);
 
     /** Draws a triangle on the screen. If isSolid is true, a solid triangle is drawn, otherwise just the
      * outline of the triangle will be drawn. */
-    virtual void drawTriangle(int ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) = 0;
+    virtual void drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) = 0;
     void drawTriangleMap(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
     void drawTriangleMouse(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
     void drawTriangleScreen(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
@@ -540,7 +548,7 @@ namespace BWAPI
 
     /** Draws a circle on the screen, with the given color. If isSolid is true, a solid circle is drawn,
      * otherwise just the outline of a circle will be drawn. */
-    virtual void drawCircle(int ctype, int x, int y, int radius, Color color, bool isSolid = false) = 0;
+    virtual void drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid = false) = 0;
     void drawCircleMap(int x, int y, int radius, Color color, bool isSolid = false);
     void drawCircleMouse(int x, int y, int radius, Color color, bool isSolid = false);
     void drawCircleScreen(int x, int y, int radius, Color color, bool isSolid = false);
@@ -550,7 +558,7 @@ namespace BWAPI
 
     /** Draws an ellipse on the screen, with the given color. If isSolid is true, a solid ellipse is drawn,
      * otherwise just the outline of an ellipse will be drawn. */
-    virtual void drawEllipse(int ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) = 0;
+    virtual void drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) = 0;
     void drawEllipseMap(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
     void drawEllipseMouse(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
     void drawEllipseScreen(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
@@ -558,22 +566,56 @@ namespace BWAPI
     void drawEllipseMouse(Position p, int xrad, int yrad, Color color, bool isSolid = false);
     void drawEllipseScreen(Position p, int xrad, int yrad, Color color, bool isSolid = false);
 
-    /** Draws a dot on the screen at the given position with the given color. */
-    virtual void drawDot(int ctype, int x, int y, Color color) = 0;
+    /// Draws a dot on the map or screen with a given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param x
+    ///   The x coordinate, in pixels, relative to ctype.
+    /// @param y
+    ///   The y coordinate, in pixels, relative to ctype.
+    /// @param color
+    ///   The color of the dot.
+    virtual void drawDot(CoordinateType::Enum ctype, int x, int y, Color color) = 0;
+    /// @overload
     void drawDotMap(int x, int y, Color color);
+    /// @overload
     void drawDotMouse(int x, int y, Color color);
+    /// @overload
     void drawDotScreen(int x, int y, Color color);
+    /// @overload
     void drawDotMap(Position p, Color color);
+    /// @overload
     void drawDotMouse(Position p, Color color);
+    /// @overload
     void drawDotScreen(Position p, Color color);
 
-    /** Draws a line on the screen from (x1,y1) to (x2,y2) with the given color. */
-    virtual void drawLine(int ctype, int x1, int y1, int x2, int y2, Color color) = 0;
+    /// Draws a line on the map or screen with a given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param x1
+    ///   The starting x coordinate, in pixels, relative to ctype.
+    /// @param y1
+    ///   The starting y coordinate, in pixels, relative to ctype.
+    /// @param x2
+    ///   The ending x coordinate, in pixels, relative to ctype.
+    /// @param y2
+    ///   The ending y coordinate, in pixels, relative to ctype.
+    /// @param color
+    ///   The color of the line.
+    virtual void drawLine(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, Color color) = 0;
+    /// @overload
     void drawLineMap(int x1, int y1, int x2, int y2, Color color);
+    /// @overload
     void drawLineMouse(int x1, int y1, int x2, int y2, Color color);
+    /// @overload
     void drawLineScreen(int x1, int y1, int x2, int y2, Color color);
+    /// @overload
     void drawLineMap(Position a, Position b, Color color);
+    /// @overload
     void drawLineMouse(Position a, Position b, Color color);
+    /// @overload
     void drawLineScreen(Position a, Position b, Color color);
 
     /** Retrieves latency values for the game. Includes latency, speed, and mode */
@@ -582,7 +624,9 @@ namespace BWAPI
     virtual int getRemainingLatencyFrames() const = 0;
     virtual int getRemainingLatencyTime() const = 0;
 
-    /** Retrieves the current revision of BWAPI. */
+    /// Retrieves the current revisioni of BWAPI.
+    ///
+    /// @returns The revision number of the current BWAPI interface.
     virtual int getRevision() const = 0;
 
     /** Retrieves the debug state of the BWAPI build. */
@@ -630,25 +674,78 @@ namespace BWAPI
     ///   An integer value representing the instance number.
     virtual int getInstanceNumber() const = 0;
 
-    /** Retrieves the bot's APM. Can include or exclude select commands. */
+    /// Retrieves the Actions Per Minute (APM) that the bot is producing.
+    ///
+    /// @param includeSelects (optional)
+    ///   If true, the return value will include selections as individual commands, otherwise
+    ///   it will exclude selections. This value is false by default.
+    ///
+    /// @returns The number of actions that the bot has executed per minute, on average.
     virtual int getAPM(bool includeSelects = false) const = 0;
 
-    /** Changes the map to the one specified. Changes do not take effect unless the game is restarted. */
+    /// Changes the map to the one specified. Once restarted, the game will load the map that was
+    /// provided. Changes do not take effect unless the game is restarted.
+    ///
+    /// @param mapFileName
+    ///   A string containing the path and file name to the desired map.
+    ///
+    /// @retval true if the function succeeded and has changed the map.
+    /// @retval false if the function failed, does not have permission from the tournament module,
+    ///               failed to find the map specified, or received an invalid parameter.
     virtual bool setMap(const char *mapFileName) = 0;
+    /// @overload
+    bool setMap(const std::string &mapFileName);
 
-    /** Sets the frame skip value. 1 = normal */
+    /// Sets the number of graphical frames for every logical frame. This allows the game to run
+    /// more logical frames per graphical frame, increasing the speed at which the game runs.
+    ///
+    /// @param frameSkip
+    ///   Number of graphical frames per logical frame. If this value is 0 or less, then it will
+    ///   default to 1.
     virtual void setFrameSkip(int frameSkip) = 0;
 
-    /** Returns true if Starcraft can find a path from the source to the destination. */
+    /// Checks if there is a path from source to destination. This only checks if the source
+    /// position is connected to the destination position. This function does not check if all 
+    /// units can actually travel from source to destination. Because of this limitation, it has
+    /// an O(1) complexity, and cases where this limitation hinders gameplay is uncommon at best.
+    /// 
+    /// @param source
+    ///   The source position.
+    /// @param destination
+    ///   The destination position.
+    ///
+    /// @retval true if there is a path between the two positions
+    /// @retval false if there is no path
     virtual bool hasPath(Position source, Position destination) const = 0;
 
-    /** Sets the BWAPI player's alliance with another player. */
+    /// Sets the alliance state of the current player with the target player.
+    ///
+    /// @param player
+    ///   The target player to set alliance with.
+    /// @param allied (optional)
+    ///   If true, the current player will ally the target player. If false, the current player
+    ///   will make the target player an enemy. This value is true by default.
+    /// @param alliedVictory (optional)
+    ///   Sets the state of "allied victory". If true, the game will end in a victory if all
+    ///   allied players have eliminated their opponents. Otherwise, the game will only end if
+    ///   no other players are remaining in the game. This value is true by default.
     virtual bool setAlliance(BWAPI::Player *player, bool allied = true, bool alliedVictory = true) = 0;
 
-    /** Sets the BWAPI player's vision with another player. */
+    /// In a game, this function sets the vision of the current BWAPI player with the target
+    /// player. In a replay, this function toggles the visibility of the target player.
+    ///
+    /// @param player
+    ///   The target player to toggle vision.
+    /// @param enabled (optional)
+    ///   The vision state. If true, and in a game, the current player will enable shared vision
+    ///   with the target player, otherwise it will unshare vision. If in a replay, the vision
+    ///   of the target player will be shown, otherwise the target player will be hidden. This
+    ///   value is true by default.
     virtual bool setVision(BWAPI::Player *player, bool enabled = true) = 0;
 
-    /** Returns the elapsed game time in seconds. */
+    /// Retrieves current amount of time in seconds that the game has elapsed.
+    ///
+    /// @returns Time, in seconds, that the game has elapsed as an integer.
     virtual int  elapsedTime() const = 0;
 
     /// Sets the command optimization level. Command optimization is a feature in BWAPI that tries
@@ -762,20 +859,36 @@ namespace BWAPI
     /// @returns Integer containing the time (in game seconds) on the countdown timer.
     virtual int countdownTimer() const = 0;
 
-    /** Returns the set of all map regions. */
+    /// Retrieves the set of all regions on the map.
+    ///
+    /// @returns Regionset containing all map regions.
     virtual const Regionset &getAllRegions() const = 0;
 
-    /** Returns the region at a position. */
+    /// Retrieves the region at a given position.
+    ///
+    /// @param x
+    ///   The x coordinate, in pixels.
+    /// @param y
+    ///   The y coordinate, in pixels.
+    ///
+    /// @returns Pointer to the Region interface at the given position.
     virtual BWAPI::Region *getRegionAt(int x, int y) const = 0;
+    /// @overload
     BWAPI::Region *getRegionAt(BWAPI::Position position) const;
 
-    /** Returns the time taken to perform the previous event call. Used for tournament management. */
+    /// Retrieves the amount of time (in milliseconds) that has elapsed when running the last AI
+    /// module callback. This is used by tournament modules to penalize AI modules that use too
+    /// much processing time.
+    ///
+    /// @retval 0 When called from an AI module.
+    /// @returns Time in milliseconds spent in last AI module call.
     virtual int getLastEventTime() const = 0;
 
-    /** Hides or reveals a player in a replay. */
-    virtual bool setReplayVision(BWAPI::Player *player, bool enabled = true) = 0;
-
-    /** Enables or disables the Fog of War in a replay. */
+    /// Sets the state of the fog of war when watching a replay.
+    ///
+    /// @param reveal (optional)
+    ///   The state of the reveal all flag. If false, all fog of war will be enabled. If true,
+    ///   then the fog of war will be revealed. It is true by default.
     virtual bool setRevealAll(bool reveal = true) = 0;
 
     /// Retrieves a basic build position just as the default Computer AI would. This allows users
@@ -873,6 +986,7 @@ namespace BWAPI
       return *this;
     };
 
+    /// Flushes the Broodwar stream, printing all text in the stream to the screen.
     void flush()
     {
       if ( !BroodwarPtr )

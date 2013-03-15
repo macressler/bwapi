@@ -565,6 +565,10 @@ namespace BWAPI
     return bestPosition;
   }
   //------------------------------------------ ACTIONS -----------------------------------------------
+  bool Game::setMap(const std::string &mapFileName)
+  {
+    return this->setMap(mapFileName.c_str());
+  }
   void Game::setScreenPosition(BWAPI::Position p)
   {
     this->setScreenPosition(p.x, p.y);
@@ -685,7 +689,7 @@ namespace BWAPI
     return this->getRegionAt(position.x, position.y);
   }
   //------------------------------------------ DRAW TEXT ----------------------------------------------
-  void Game::drawText(int ctype, int x, int y, const char *format, ...)
+  void Game::drawText(CoordinateType::Enum ctype, int x, int y, const char *format, ...)
   {
     va_list ap;
     va_start(ap,format);

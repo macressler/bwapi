@@ -143,6 +143,20 @@ namespace BWAPI
     /// @retval nullptr If the unit is inaccessible.
     ///
     /// @returns A pointer to a Region object that contains this unit.
+    ///
+    /// Example
+    /// @code
+    ///   Unitset myUnits = Broodwar->self()->getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///   {
+    ///     if ( u->isFlying() && u->isUnderAttack() ) // implies exists and isCompleted
+    ///     {
+    ///       Region *r = u->getRegion();
+    ///       if ( r )
+    ///         u->move(r->getClosestInaccessibleRegion()); // Retreat to inaccessible region
+    ///     }
+    ///   }
+    /// @endcode
     BWAPI::Region *getRegion() const;
 
     /// Retrieves the X coordinate of the unit's left boundry, measured in pixels from the left

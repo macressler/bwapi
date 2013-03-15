@@ -172,13 +172,13 @@ namespace BWAPI
       virtual Playerset& observers() override;
 
       virtual void setTextSize(int size = 1) override;
-      virtual void vDrawText(int ctype, int x, int y, const char *format, va_list arg) override;
-      virtual void drawBox(int ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) override;
-      virtual void drawTriangle(int ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) override;
-      virtual void drawCircle(int ctype, int x, int y, int radius, Color color, bool isSolid = false) override;
-      virtual void drawEllipse(int ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) override;
-      virtual void drawDot(int ctype, int x, int y, Color color) override;
-      virtual void drawLine(int ctype, int x1, int y1, int x2, int y2, Color color) override;
+      virtual void vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg) override;
+      virtual void drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) override;
+      virtual void drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) override;
+      virtual void drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid = false) override;
+      virtual void drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) override;
+      virtual void drawDot(CoordinateType::Enum ctype, int x, int y, Color color) override;
+      virtual void drawLine(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, Color color) override;
 
       virtual int  getLatencyFrames() const override;
       virtual int  getLatencyTime() const override;
@@ -203,7 +203,6 @@ namespace BWAPI
       virtual const Regionset &getAllRegions() const override;
       virtual BWAPI::Region *getRegionAt(int x, int y) const override;
       virtual int getLastEventTime() const override;
-      virtual bool setReplayVision(BWAPI::Player *player, bool enabled = true) override;
       virtual bool setRevealAll(bool reveal = true) override;
   };
 }
