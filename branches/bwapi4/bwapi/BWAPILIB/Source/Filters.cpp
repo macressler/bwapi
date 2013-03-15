@@ -85,7 +85,7 @@ namespace BWAPI
 
   U_CFILTERX(TopSpeed, u->getPlayer()->topSpeed(u->getType()), double );
   U_CFILTER(SightRange, u->getPlayer()->sightRange(u->getType()) );
-  U_CFILTER(MaxWeaponCooldown, u->getPlayer()->groundWeaponDamageCooldown(u->getType()) );
+  U_CFILTER(MaxWeaponCooldown, u->getPlayer()->weaponDamageCooldown(u->getType()) );
   U_CFILTERX(SizeType, u->getType().size(), UnitSizeType );
 
   U_CFILTERX(GroundWeapon, u->getType().groundWeapon(), WeaponType );

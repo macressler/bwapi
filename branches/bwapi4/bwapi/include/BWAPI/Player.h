@@ -320,6 +320,22 @@ namespace BWAPI
     ///   then it will use UnitTypes::AllUnits by default.
     ///
     /// @returns The number of completed units of the given type that the player owns.
+    ///
+    /// Example usage:
+    /// @code
+    ///   bool obtainNextUpgrade(BWAPI::UpgradeType upgType)
+    ///   {
+    ///     BWAPI::Player *self = BWAPI::Broodwar->self();
+    ///     int maxLvl      = self->getMaxUpgradeLevel(upgType);
+    ///     int currentLvl  = self->getUpgradeLevel(upgType);
+    ///     if ( !self->isUpgrading(upgType) && currentLvl < maxLvl &&
+    ///           self->completedUnitCount(upgType.whatsRequired(currentLvl+1)) > 0 &&
+    ///           self->completedUnitCount(upgType.whatUpgrades()) > 0 )
+    ///       return self->getUnits().upgrade(upgType);
+    ///     return false;
+    ///   }
+    /// @endcode
+    ///
     /// @see allUnitCount, visibleUnitCount, incompleteUnitCount
     virtual int completedUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
@@ -337,48 +353,147 @@ namespace BWAPI
     /// @see allUnitCount, visibleUnitCount, completedUnitCount
     int incompleteUnitCount(UnitType unit = UnitTypes::AllUnits) const;
 
-    /** Returns the number of dead units of the given type. */
+    /// Retrieves the number units that have died for this player.
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The total number of units that have died throughout the game.
     virtual int deadUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
-    /** Returns the number of killed units of the given type. */
+    /// Retrieves the number units that the player has killed.
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The total number of units that the player has killed throughout the game.
     virtual int killedUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
-    /** Returns the player's current upgrade level of the given upgrade. To order a unit to upgrade a given
-     * upgrade type, see Unit::upgrade. */
+    /// Retrieves the current upgrade level that the player has attained for a given upgrade type.
+    ///
+    /// @param upgrade
+    ///   The UpgradeType to query.
+    ///
+    /// @returns The number of levels that the \p upgrade has been upgraded for this player.
+    ///
+    /// Example usage:
+    /// @code
+    ///   bool obtainNextUpgrade(BWAPI::UpgradeType upgType)
+    ///   {
+    ///     BWAPI::Player *self = BWAPI::Broodwar->self();
+    ///     int maxLvl      = self->getMaxUpgradeLevel(upgType);
+    ///     int currentLvl  = self->getUpgradeLevel(upgType);
+    ///     if ( !self->isUpgrading(upgType) && currentLvl < maxLvl &&
+    ///           self->completedUnitCount(upgType.whatsRequired(currentLvl+1)) > 0 &&
+    ///           self->completedUnitCount(upgType.whatUpgrades()) > 0 )
+    ///       return self->getUnits().upgrade(upgType);
+    ///     return false;
+    ///   }
+    /// @endcode
+    ///
+    /// @see Unit::upgrade, getMaxUpgradeLevel
     virtual int getUpgradeLevel(UpgradeType upgrade) const = 0;
 
-    /** Returns true if the player has finished researching the given tech. To order a unit to research a
-     * given tech type, see Unit::research. */
+    /// Checks if the player has already researched a given technology.
+    ///
+    /// @param tech
+    ///   The TechType to query.
+    ///
+    /// @returns true if the player has obtained the given \p tech, or false if they have not
+    /// @see isResearching, Unit::research, isResearchAvailable
     virtual bool hasResearched(TechType tech) const = 0;
 
-    /** Returns true if the player is researching the given tech. To order a unit to research a given tech
-     * type, see Unit::reseach. */
+    /// Checks if the player is researching a given technology type.
+    ///
+    /// @param tech
+    ///   The TechType to query.
+    ///
+    /// @returns true if the player is currently researching the \p tech, or false otherwise
+    /// @see Unit::research, hasResearched
     virtual bool isResearching(TechType tech) const = 0;
 
-    /** Returns true if the player is upgrading the given upgrade. To order a unit to upgrade a given
-     * upgrade type, see Unit::upgrade. */
+    /// Checks if the player is upgrading a given upgrade type.
+    ///
+    /// @param upgrade
+    ///   The upgrade type to query.
+    ///
+    /// @returns true if the player is currently upgrading the given \p upgrade, false otherwise
+    ///
+    /// Example usage:
+    /// @code
+    ///   bool obtainNextUpgrade(BWAPI::UpgradeType upgType)
+    ///   {
+    ///     BWAPI::Player *self = BWAPI::Broodwar->self();
+    ///     int maxLvl      = self->getMaxUpgradeLevel(upgType);
+    ///     int currentLvl  = self->getUpgradeLevel(upgType);
+    ///     if ( !self->isUpgrading(upgType) && currentLvl < maxLvl &&
+    ///           self->completedUnitCount(upgType.whatsRequired(currentLvl+1)) > 0 &&
+    ///           self->completedUnitCount(upgType.whatUpgrades()) > 0 )
+    ///       return self->getUnits().upgrade(upgType);
+    ///     return false;
+    ///   }
+    /// @endcode
+    ///
+    /// @see Unit::upgrade
     virtual bool isUpgrading(UpgradeType upgrade) const = 0;
 
-    /** Returns the color of the player for drawing */
+    /// Retrieves the color value of the current player.
+    ///
+    /// @returns Color object that represents the color of the current player.
     virtual BWAPI::Color getColor() const = 0;
 
-    /** Returns the color of the player for text messages */
+    /// Retrieves the control code character that changes the color of text messages to represent
+    /// this player.
+    ///
+    /// @returns character code to use for text in Broodwar.
     char getTextColor() const;
 
-    /** Returns the max energy of the given unit type, taking into account upgrades */
+    /// Retrieves the maximum amount of energy that a unit type will have, taking the player's
+    /// energy upgrades into consideration.
+    ///
+    /// @param unit
+    ///   The UnitType to retrieve the maximum energy for.
+    ///
+    /// @returns Maximum amount of energy that the given unit type can have.
     int maxEnergy(UnitType unit) const;
 
-    /** Returns the top speed of the given unit type, includes upgrades */
+    /// Retrieves the top speed of a unit type, taking the player's speed upgrades into
+    /// consideration.
+    ///
+    /// @param unit
+    ///   The UnitType to retrieve the top speed for.
+    ///
+    /// @returns Top speed of the provided unit type for this player.
     double topSpeed(UnitType unit) const;
 
-    /** Returns the max range of the given weapon with upgrades */
+    /// Retrieves the maximum weapon range of a weapon type, taking the player's weapon upgrades
+    /// into consideration.
+    ///
+    /// @param weapon
+    ///   The WeaponType to retrieve the maximum range for.
+    ///
+    /// @returns Maximum range of the given weapon type for units owned by this player.
     int weaponMaxRange(WeaponType weapon) const;
 
-    /** Returns the sight range of the given unit type, includes upgrades */
+    /// Retrieves the sight range of a unit type, taking the player's sight range upgrades into
+    /// consideration.
+    ///
+    /// @param unit
+    ///   The UnitType to retrieve the sight range for.
+    ///
+    /// @returns Sight range of the provided unit type for this player.
     int sightRange(UnitType unit) const;
 
-    /** Returns the ground weapon cooldown of the given unit type, includes upgrades */
-    int groundWeaponDamageCooldown(UnitType unit) const;
+    /// Retrieves the weapon cooldown of a unit type, taking the player's attack speed upgrades
+    /// into consideration.
+    ///
+    /// @param unit
+    ///   The UnitType to retrieve the damage cooldown for.
+    ///
+    /// @returns Weapon cooldown of the provided unit type for this player.
+    int weaponDamageCooldown(UnitType unit) const;
 
     /// Calculates the armor that a given unit type will have, including upgrades.
     ///
@@ -396,31 +511,78 @@ namespace BWAPI
     /// @returns The amount of damage that the weapon deals with this player's upgrades.
     int damage(WeaponType wpn) const;
 
-    /** Returns the Player's Total Unit Score */
+    /// Retrieves the total unit score, as seen in the end-game score screen.
+    ///
+    /// @returns The player's unit score.
     virtual int getUnitScore() const = 0;
 
-    /** Returns the Player's Total Kill Score */
+    /// Retrieves the total kill score, as seen in the end-game score screen.
+    ///
+    /// @returns The player's kill score.
     virtual int getKillScore() const = 0;
 
-    /** Returns the Player's Total Buildings Score */
+    /// Retrieves the total building score, as seen in the end-game score screen.
+    ///
+    /// @returns The player's building score.
     virtual int getBuildingScore() const = 0;
 
-    /** Returns the Player's Total Razings Score */
+    /// Retrieves the total razing score, as seen in the end-game score screen.
+    ///
+    /// @returns The player's razing score.
     virtual int getRazingScore() const = 0;
 
-    /** Returns the Player's Custom Score */
+    /// Retrieves the player's custom score. This score is used in @UMS game types.
+    ///
+    /// @returns The player's custom score.
     virtual int getCustomScore() const = 0;
 
-    /** Returns true if the Player is only observing the game, and not participating */
+    /// Checks if the player is an observer player, typically in a @UMS observer game. An observer
+    /// player does not participate in the game.
+    ///
+    /// @returns true if the player is observing, or false if the player is capable of playing in
+    /// the game.
     virtual bool isObserver() const = 0;
 
-    /** Returns the maximum upgrades available specific to the player (Use Map Settings). */
+    /// Retrieves the maximum upgrades available specific to the player. This value is only
+    /// different from UpgradeType::maxRepeats in @UMS games.
+    ///
+    /// @param upgrade
+    ///   The UpgradeType to retrieve the maximum upgrade level for.
+    ///
+    /// @returns Maximum upgrade level of the given \p upgrade type.
+    ///
+    /// Example usage:
+    /// @code
+    ///   bool obtainNextUpgrade(BWAPI::UpgradeType upgType)
+    ///   {
+    ///     BWAPI::Player *self = BWAPI::Broodwar->self();
+    ///     int maxLvl      = self->getMaxUpgradeLevel(upgType);
+    ///     int currentLvl  = self->getUpgradeLevel(upgType);
+    ///     if ( !self->isUpgrading(upgType) && currentLvl < maxLvl &&
+    ///           self->completedUnitCount(upgType.whatsRequired(currentLvl+1)) > 0 &&
+    ///           self->completedUnitCount(upgType.whatUpgrades()) > 0 )
+    ///       return self->getUnits().upgrade(upgType);
+    ///     return false;
+    ///   }
+    /// @endcode
     virtual int getMaxUpgradeLevel(UpgradeType upgrade) const = 0;
 
-    /** Returns true if the research is available for the player to research (Use Map Settings). */
+    /// Checks if a technology can be researched by the player. Certain technologies may be
+    /// disabled in @UMS game types.
+    ///
+    /// @param tech
+    ///   The TechType to query.
+    ///
+    /// @returns true if the \p tech type is available to the player for research.
     virtual bool isResearchAvailable(TechType tech) const = 0;
 
-    /** Returns true if the unit is available for the player to build (Use Map Settings). */
+    /// Checks if a unit type can be created by the player. Certain unit types may be disabled in
+    /// @UMS game types.
+    ///
+    /// @param unit
+    ///   The UnitType to check.
+    ///
+    /// @returns true if the \p unit type is available to the player.
     virtual bool isUnitAvailable(UnitType unit) const = 0;
   };
 };

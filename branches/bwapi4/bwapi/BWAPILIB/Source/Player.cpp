@@ -79,7 +79,7 @@ int Player::sightRange(UnitType unit) const
   return range;
 }
 //--------------------------------------------- GROUND WEAPON DAMAGE COOLDOWN ------------------------------
-int Player::groundWeaponDamageCooldown(UnitType unit) const
+int Player::weaponDamageCooldown(UnitType unit) const
 {
   int cooldown = unit.groundWeapon().damageCooldown();
   if (unit == UnitTypes::Zerg_Zergling && getUpgradeLevel(UpgradeTypes::Adrenal_Glands) > 0)
