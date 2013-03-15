@@ -5,6 +5,7 @@
 #include <BWAPI/Race.h>
 #include <BWAPI/Filters.h>
 #include <BWAPI/Interface.h>
+#include <BWAPI/UnitType.h>
 
 namespace BWAPI
 {
@@ -15,7 +16,6 @@ namespace BWAPI
   class TechType;
   class Unit;
   class Unitset;
-  class UnitType;
   class UpgradeType;
   class WeaponType;
 
@@ -59,6 +59,15 @@ namespace BWAPI
     ///
     /// @note This does not include units that are loaded into transports, @Bunkers, @Refineries,
     /// @Assimilators, or @Extractors.
+    ///
+    /// Example usage:
+    /// @code
+    ///   Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///   {
+    ///     // Do something with your units
+    ///   }
+    /// @endcode
     virtual const Unitset &getUnits() const = 0;
 
     /// Retrieves the race of the player. This allows you to change strategies against different
@@ -152,75 +161,187 @@ namespace BWAPI
     /// @see Game::getStartLocations, Game::getLastError
     virtual TilePosition getStartLocation() const = 0;
 
-    /** Returns true if the player has achieved victory. */
+    /// Checks if the player has achieved victory.
+    ///
+    /// @returns true if this player has achieved victory, otherwise false
     virtual bool isVictorious() const = 0;
 
-    /** Returns true if the player has been defeated. */
+    /// Checks if the player has been defeated.
+    ///
+    /// @returns true if the player is defeated, otherwise false
     virtual bool isDefeated() const = 0;
 
-    /** Returns true if the player left the game. */
+    /// Checks if the player has left the game.
+    ///
+    /// @returns true if the player has left the game, otherwise false
     virtual bool leftGame() const = 0;
 
-    /** Returns the amount of minerals the player has. */
+    /// Retrieves the current amount of minerals/ore that this player has.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Amount of minerals that the player currently has for spending.
     virtual int minerals() const = 0;
 
-    /** Returns the amount of vespene gas the player has. */
+    /// Retrieves the current amount of vespene gas that this player has.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Amount of gas that the player currently has for spending.
     virtual int gas() const = 0;
 
-    /** Returns the cumulative amount of minerals the player has mined up to this point (including the 50
-     * minerals at the start of the game). */
+    /// Retrieves the cumulative amount of minerals/ore that this player has gathered since the
+    /// beginning of the game, including the amount that the player starts the game with (if any).
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of minerals that the player has gathered.
     virtual int gatheredMinerals() const = 0;
 
-    /** Returns the cumulative amount of gas the player has harvested up to this point. */
+    /// Retrieves the cumulative amount of vespene gas that this player has gathered since the
+    /// beginning of the game, including the amount that the player starts the game with (if any).
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of gas that the player has gathered.
     virtual int gatheredGas() const = 0;
 
-    /** Returns the cumulative amount of minerals the player has spent on repairs up to this point. */
+    /// Retrieves the cumulative amount of minerals/ore that this player has spent on repairing
+    /// units since the beginning of the game. This function only applies to @Terran players.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of minerals that the player has spent repairing.
     virtual int repairedMinerals() const = 0;
 
-    /** Returns the cumulative amount of gas the player has spent on repairs up to this point. */
+    /// Retrieves the cumulative amount of vespene gas that this player has spent on repairing
+    /// units since the beginning of the game. This function only applies to @Terran players.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of gas that the player has spent repairing.
     virtual int repairedGas() const = 0;
 
-    /** Returns the cumulative amount of minerals the player has gained from refunded units up to this point. */
+    /// Retrieves the cumulative amount of minerals/ore that this player has gained from refunding
+    /// (cancelling) units and structures.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of minerals that the player has received from refunds.
     virtual int refundedMinerals() const = 0;
 
-    /** Returns the cumulative amount of gas the player has gained from refunded units up to this point. */
+    /// Retrieves the cumulative amount of vespene gas that this player has gained from refunding
+    /// (cancelling) units and structures.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of gas that the player has received from refunds.
     virtual int refundedGas() const = 0;
 
-    /** Returns the cumulative amount of minerals the player has spent up to this point (not including repairs). */
+    /// Retrieves the cumulative amount of minerals/ore that this player has spent, excluding
+    /// repairs.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of minerals that the player has spent.
     virtual int spentMinerals() const = 0;
 
-    /** Returns the cumulative amount of gas the player has spent up to this point (not including repairs). */
+    /// Retrieves the cumulative amount of vespene gas that this player has spent, excluding
+    /// repairs.
+    ///
+    /// @note This function will return 0 if the player is inaccessible.
+    ///
+    /// @returns Cumulative amount of gas that the player has spent.
     virtual int spentGas() const = 0;
 
-    /** Returns the total amount of supply the player has. If a race is provided, the total supply for the
-     * given race will be returned, otherwise the player's initial race will be used. Supply counts returned
-     * by BWAPI are double what you would expect to see from playing the game. This is because zerglings
-     * take up 0.5 in-game supply. */
+    /// Retrieves the total amount of supply the player has available for unit control.
+    ///
+    /// @note In Starcraft programming, the managed supply values are double than what they appear
+    /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
+    ///
+    /// @note In Starcraft, the supply for each race is separate. Having a @Pylon and an @Overlord
+    /// will not give you 32. It will instead give you 16 @Protoss supply and 16 @Zerg supply.
+    ///
+    /// @param race (optional)
+    ///   The race to query the total supply for. If this is omitted, then the player's current
+    ///   race will be used.
+    ///
+    /// @returns The total supply available for this player and the given \p race.
+    ///
+    /// Example usage:
+    /// @code
+    ///   if ( BWAPI::Broodwar->self()->supplyUsed() + 8 >= BWAPI::Broodwar->self()->supplyTotal() )
+    ///   {
+    ///     // Construct pylons, supply depots, or overlords
+    ///   }
+    /// @endcode
+    /// @see supplyUsed
     virtual int supplyTotal(Race race = Races::None) const = 0;
 
-    /** Returns how much of the supply is actually being used by units. If a race is provided, the used
-     * supply for the given race will be returned, otherwise the player's initial race will be used. Supply
-     * counts returned by BWAPI are double what you would expect to see from playing the game. This is
-     * because zerglings take up 0.5 in-game supply. */
+    /// Retrieves the current amount of supply that the player is using for unit control.
+    ///
+    /// @param race (optional)
+    ///   The race to query the used supply for. If this is omitted, then the player's current
+    ///   race will be used.
+    ///
+    /// @returns The supply that is in use for this player and the given \p race.
+    /// @see supplyTotal
     virtual int supplyUsed(Race race = Races::None) const = 0;
 
-    /** Returns the number of all accessible units of the given type. */
-    virtual int allUnitCount(UnitType unit) const = 0;
+    /// Retrieves the total number of units that the player has. If the information about the
+    /// player is limited, then this function will only return the number of visible units.
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The total number of units of the given type that the player owns.
+    /// @see visibleUnitCount, completedUnitCount, incompleteUnitCount
+    virtual int allUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
-    /** Returns the number of visible units of the given type. */
-    virtual int visibleUnitCount(UnitType unit) const = 0;
+    /// Retrieves the total number of strictly visible units that the player has, even if
+    /// information on the player is unrestricted.
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The total number of units of the given type that the player owns, and is visible
+    ///   to the BWAPI player.
+    /// @see allUnitCount, completedUnitCount, incompleteUnitCount
+    virtual int visibleUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
-    /** Returns the number of completed units of the given type. */
-    virtual int completedUnitCount(UnitType unit) const = 0;
+    /// Retrieves the number of completed units that the player has. If the information about the
+    /// player is limited, then this function will only return the number of visible completed
+    /// units.
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The number of completed units of the given type that the player owns.
+    /// @see allUnitCount, visibleUnitCount, incompleteUnitCount
+    virtual int completedUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
-    /** Returns the number of incomplete units of the given type. */
-    int incompleteUnitCount(UnitType unit) const;
+    /// Retrieves the number of incomplete units that the player has. If the information about the
+    /// player is limited, then this function will only return the number of visible incomplete
+    /// units.
+    ///
+    /// @note This function is a macro for allUnitCount() - completedUnitCount().
+    ///
+    /// @param unit (optional)
+    ///   The unit type to query. UnitType macros are accepted. If this parameter is omitted,
+    ///   then it will use UnitTypes::AllUnits by default.
+    ///
+    /// @returns The number of incomplete units of the given type that the player owns.
+    /// @see allUnitCount, visibleUnitCount, completedUnitCount
+    int incompleteUnitCount(UnitType unit = UnitTypes::AllUnits) const;
 
     /** Returns the number of dead units of the given type. */
-    virtual int deadUnitCount(UnitType unit) const = 0;
+    virtual int deadUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
     /** Returns the number of killed units of the given type. */
-    virtual int killedUnitCount(UnitType unit) const = 0;
+    virtual int killedUnitCount(UnitType unit = UnitTypes::AllUnits) const = 0;
 
     /** Returns the player's current upgrade level of the given upgrade. To order a unit to upgrade a given
      * upgrade type, see Unit::upgrade. */

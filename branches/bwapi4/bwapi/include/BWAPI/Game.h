@@ -490,7 +490,18 @@ namespace BWAPI
     /// @see enableFlag
     virtual const Unitset& getSelectedUnits() const = 0;
 
-    /** Returns a pointer to the player that BWAPI controls. In replays this will return null. */
+    /// Retrieves the player object that BWAPI is controlling. 
+    ///
+    /// @returns Pointer to Player interface object representing the current player.
+    /// @retval nullptr if the current game is a replay.
+    ///
+    /// Example usage
+    /// @code
+    ///   void ExampleAIModule::onStart()
+    ///   {
+    ///     BWAPI::Broodwar->sendText("Hello, my name is %s.", BWAPI::Broodwar->self()->getName().c_str());
+    ///   }
+    /// @endcode
     virtual Player* self() const = 0;
 
     /** Returns a pointer to the enemy player. If there is more than one enemy, this returns a pointer to
