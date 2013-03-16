@@ -1307,6 +1307,9 @@ namespace BWAPI
       if ( !targetUnit->isCompleted() )
         return Broodwar->setLastError(Errors::Unit_Busy);
 
+      if ( !thisUnit->hasPath(targetUnit->getPosition()) )
+        return Broodwar->setLastError(Errors::Unreachable_Location);
+
       if ( uType.isRefinery() && targetUnit->getPlayer() != Broodwar->self() )
         return Broodwar->setLastError(Errors::Unit_Not_Owned);
 
@@ -1622,10 +1625,13 @@ namespace BWAPI
       if ( unitThatLoads->isHallucination() )
         return Broodwar->setLastError(Errors::Incompatible_UnitType);
 
-      if ( unitThatLoads->getType() == UnitTypes::Terran_Bunker &&
-           ( !unitToBeLoaded->getType().isOrganic() ||
-             unitToBeLoaded->getType().getRace() != Races::Terran ) )
-        return Broodwar->setLastError(Errors::Incompatible_UnitType);
+      if ( unitThatLoads->getType() == UnitTypes::Terran_Bunker )
+      {
+        if ( !unitToBeLoaded->getType().isOrganic() || unitToBeLoaded->getType().getRace() != Races::Terran )
+          return Broodwar->setLastError(Errors::Incompatible_UnitType);
+        if ( !unitToBeLoaded->hasPath(unitThatLoads->getPosition()) )
+          return Broodwar->setLastError(Errors::Unreachable_Location);
+      }
 
       int freeSpace = ( thisUnitSpaceProvided > 0 ? thisUnitSpaceProvided : targetSpaceProvided );
       int requiredSpace;
