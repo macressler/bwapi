@@ -147,26 +147,6 @@ namespace BWAPI
       }
     }
   }
-  //--------------------------------------------- IS BATTLE NET ----------------------------------------------
-  bool GameImpl::_isBattleNet() const
-  {
-    return *BW::BWDATA::NetMode == 'BNET';
-  }
-  //-------------------------------------------- IS SINGLE PLAYER --------------------------------------------
-  bool GameImpl::_isSinglePlayer() const
-  {
-    return *BW::BWDATA::NetMode == 0 || *BW::BWDATA::NetMode == -1;
-  }
-  //------------------------------------------------ IS IN GAME ----------------------------------------------
-  bool GameImpl::_isInGame() const
-  {
-    return *BW::BWDATA::InGame != 0;
-  }
-  //----------------------------------------------- IN REPLAY ------------------------------------------------
-  bool  GameImpl::_isReplay() const
-  {
-    return *BW::BWDATA::InReplay != 0;
-  }
   //------------------------------------------------ MOUSE/KEY INPUT -----------------------------------------
   void GameImpl::pressKey(int key)
   {

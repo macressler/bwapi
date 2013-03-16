@@ -74,7 +74,7 @@ namespace BWAPI
     int h = buildability.getHeight();
     GameData* data = BroodwarImpl.server.data;
     bool completeMapInfo = Broodwar->isFlagEnabled(Flag::CompleteMapInformation);
-    if (BroodwarImpl._isReplay())
+    if ( BroodwarImpl.isReplay() )
     {
       for(int x = 0; x < w; ++x)
       {
@@ -125,7 +125,7 @@ namespace BWAPI
     if ((unsigned int)x >= buildability.getWidth() || (unsigned int)y >= buildability.getHeight())
       return false;
     BW::activeTile value = (*this->activeTiles)[y][x];
-    if (BroodwarImpl._isReplay())
+    if ( BroodwarImpl.isReplay() )
       return value.bVisibilityFlags != 255;
     return !(value.bVisibilityFlags & (1 << BroodwarImpl.BWAPIPlayer->getIndex()));
   }
@@ -135,7 +135,7 @@ namespace BWAPI
     if ((unsigned int)x >= buildability.getWidth() || (unsigned int)y >= buildability.getHeight())
       return false;
     BW::activeTile value = (*this->activeTiles)[y][x];
-    if (BroodwarImpl._isReplay())
+    if ( BroodwarImpl.isReplay() )
       return value.bExploredFlags != 255;
     return !(value.bExploredFlags & (1 << BroodwarImpl.BWAPIPlayer->getIndex()));
   }

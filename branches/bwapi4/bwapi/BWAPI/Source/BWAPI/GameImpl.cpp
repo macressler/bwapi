@@ -94,10 +94,10 @@ namespace BWAPI
   int GameImpl::getLatency() const
   {
     // Returns the real latency values
-    if (_isSinglePlayer())
+    if ( !this->isMultiplayer() )
       return BWAPI::Latency::SinglePlayer;
 
-    if (_isBattleNet())
+    if ( this->isBattleNet() )
     {
       switch(*BW::BWDATA::Latency)
       {
@@ -154,31 +154,30 @@ namespace BWAPI
     return BWAPI::Position(BW::BWDATA::Mouse->x, BW::BWDATA::Mouse->y);
   }
   //--------------------------------------------- GET MOUSE STATE --------------------------------------------
-  bool GameImpl::getMouseState(int button) const
+  bool GameImpl::getMouseState(MouseButton button) const
   {
     if ( !this->isFlagEnabled(BWAPI::Flag::UserInput) )
       return false;
 
-    SHORT ButtonDown = 0;
+    int vkValue;
     switch ( button )
     {
       case BWAPI::M_LEFT:
-        ButtonDown = GetKeyState(VK_LBUTTON);
-        break;
-      case BWAPI::M_MIDDLE:
-        ButtonDown = GetKeyState(VK_MBUTTON);
+        vkValue = VK_LBUTTON;
         break;
       case BWAPI::M_RIGHT:
-        ButtonDown = GetKeyState(VK_RBUTTON);
+        vkValue = VK_RBUTTON;
+        break;
+      case BWAPI::M_MIDDLE:
+        vkValue = VK_MBUTTON;
         break;
       default:
         return false;
     }
-    bool pressed = (ButtonDown & 0x80) > 0;
-    return pressed;
+    return (GetKeyState(vkValue) & 0x80) > 0;
   }
   //---------------------------------------------- GET KEY STATE ---------------------------------------------
-  bool GameImpl::getKeyState(int key) const
+  bool GameImpl::getKeyState(Key key) const
   {
     if ( !this->isFlagEnabled(BWAPI::Flag::UserInput) )
       return false;
@@ -458,14 +457,14 @@ namespace BWAPI
       return;
     }
 
-    if ( _isReplay() )  // Just print the text if in a replay
+    if ( this->isReplay() )  // Just print the text if in a replay
     {
       Broodwar << buffer << std::endl;
       return;
     }
 
     // If we're in single player
-    if ( _isInGame() && _isSinglePlayer() )
+    if ( this->isInGame() && !this->isMultiplayer() )
     {
       BW::CheatFlags::Enum cheatID = BW::getCheatFlag(buffer);
       if ( cheatID != BW::CheatFlags::None )  // Apply cheat code if it is one
@@ -492,7 +491,7 @@ namespace BWAPI
       szMessage[1] = 1;
       int msgLen = SStrCopy(&szMessage[2], buffer, 80);
 
-      if ( _isInGame() )    // in game
+      if ( this->isInGame() )    // in game
       {
         if ( toAllies ) // Send to all allies
         {
@@ -663,7 +662,7 @@ namespace BWAPI
     }
     else
     {
-      // Set all speeds if it is positive */
+      // Set all speeds if it is positive
       for ( int i = 0; i < 7; ++i )
       {
         BW::BWDATA::GameSpeedModifiers[i]    = speed;

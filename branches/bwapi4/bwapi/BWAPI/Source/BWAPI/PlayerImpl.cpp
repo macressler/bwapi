@@ -107,7 +107,7 @@ namespace BWAPI
 
     // Return unknown and set Access_Denied if the start location
     // should not be made available.
-    if ( !BroodwarImpl._isReplay() &&
+    if ( !BroodwarImpl.isReplay() &&
        BroodwarImpl.self()->isEnemy((Player*)this) &&
        !BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation) )
     {
@@ -141,7 +141,7 @@ namespace BWAPI
   
     // Get upgrades, tech, resources
     if ( this->isNeutral() || 
-         (!BroodwarImpl._isReplay() && 
+         (!BroodwarImpl.isReplay() && 
           BroodwarImpl.self()->isEnemy(this) && 
           !BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation)) )
     {
@@ -238,7 +238,7 @@ namespace BWAPI
     }
 
     // Get Scores, supply
-    if ( (!BroodwarImpl._isReplay() && 
+    if ( (!BroodwarImpl.isReplay() && 
           BroodwarImpl.self()->isEnemy((Player*)this) && 
           !BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation)) ||
           index >= 12 )

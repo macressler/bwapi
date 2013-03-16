@@ -428,14 +428,14 @@ namespace BWAPI
     return Position(data->mouseX,data->mouseY);
   }
   //---------------------------------------------- GET MOUSE STATE -------------------------------------------
-  bool GameImpl::getMouseState(int button) const
+  bool GameImpl::getMouseState(MouseButton button) const
   {
     if ( button < 0 || button >= M_MAX )
       return false;
     return data->mouseState[button];
   }
   //----------------------------------------------- GET KEY STATE --------------------------------------------
-  bool GameImpl::getKeyState(int key) const
+  bool GameImpl::getKeyState(Key key) const
   {
     if ( key < 0 || key >= K_MAX )
       return false;

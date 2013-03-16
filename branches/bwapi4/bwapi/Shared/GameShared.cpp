@@ -4,16 +4,6 @@
 
 namespace BWAPI
 {
-  //--------------------------------------------- GET MOUSE STATE --------------------------------------------
-  bool GameImpl::getMouseState(MouseButton button) const
-  {
-    return getMouseState((int)button);
-  }
-  //---------------------------------------------- GET KEY STATE ---------------------------------------------
-  bool GameImpl::getKeyState(Key key) const
-  {
-    return getKeyState((int)key);
-  }
   //----------------------------------------------- GET FORCES -----------------------------------------------
   const Forceset& GameImpl::getForces() const
   {

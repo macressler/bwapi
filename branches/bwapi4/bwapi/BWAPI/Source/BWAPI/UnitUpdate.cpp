@@ -47,7 +47,7 @@ namespace BWAPI
         PlayerImpl* player = static_cast<PlayerImpl*>(Broodwar->getPlayer(i));
         if ( !o->sprite || !player )
           self->isVisible[i] = false;
-        else if (!BroodwarImpl._isReplay() && !BWAPI::BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation))
+        else if (!BroodwarImpl.isReplay() && !BWAPI::BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation))
           self->isVisible[i] = false;
         else if ( _getPlayer == player )
           self->isVisible[i] = true;

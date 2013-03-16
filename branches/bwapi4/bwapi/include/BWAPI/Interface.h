@@ -116,11 +116,12 @@ namespace BWAPI
     {
       interfaceEvents.push_back( InterfaceEvent<T>(action,condition,timesToRun,framesToCheck) );
     };
-
+    /// @overload
     void registerEvent(const InterfaceEvent<T> &evt)
     {
       interfaceEvents.push_back( evt );
     };
+    /// @overload
     void registerEvent(InterfaceEvent<T> &&evt)
     {
       interfaceEvents.push_back( std::move(evt) );

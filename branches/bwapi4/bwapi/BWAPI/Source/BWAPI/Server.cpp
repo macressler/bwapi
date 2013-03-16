@@ -504,11 +504,11 @@ namespace BWAPI
       
       // Copy the mouse states
       for(int i = 0; i < M_MAX; ++i)
-        data->mouseState[i]  = Broodwar->getMouseState(i);
+        data->mouseState[i]  = Broodwar->getMouseState((MouseButton)i);
       
       // Copy the key states
       for(int i = 0; i < K_MAX; ++i)
-        data->keyState[i]  = Broodwar->getKeyState(i);
+        data->keyState[i]  = Broodwar->getKeyState((Key)i);
 
       // Copy the screen position
       data->screenX  = Broodwar->getScreenPosition().x;

@@ -110,9 +110,7 @@ namespace BWAPI
       virtual double getAverageFPS() const override;
       virtual BWAPI::Position getMousePosition() const override;
       virtual bool getMouseState(MouseButton button) const override;
-      virtual bool getMouseState(int button) const override;
       virtual bool getKeyState(Key key) const override;
-      virtual bool getKeyState(int key) const override;
       virtual BWAPI::Position getScreenPosition() const override;
       virtual void setScreenPosition(int x, int y) override;
       virtual void pingMinimap(int x, int y) override;

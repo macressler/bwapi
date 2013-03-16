@@ -78,7 +78,7 @@ namespace BWAPI
 
     if ( _exists && 
          (BWAPI::BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation) ||
-          BroodwarImpl._isReplay() || 
+          BroodwarImpl.isReplay() || 
           isVisible()) )
     {
       UnitImpl *_getSource = UnitImpl::BWUnitToBWAPIUnit(bwOriginalBullet->sourceUnit);

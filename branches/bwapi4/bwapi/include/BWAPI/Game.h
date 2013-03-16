@@ -33,56 +33,62 @@ namespace BWAPI
   class Unitset;
   class UpgradeType;
 
-  /** The abstract Game class is implemented by BWAPI and offers many methods for retrieving information
-   * about the current Broodwar game, including the set of players, units, map information, as well as
-   * information about the user, such as mouse position, screen position, and the current selection of
-   * units. */
+  /// The abstract Game class is implemented by BWAPI and is the primary means of obtaining all
+  /// game state information from Starcraft Broodwar. Game state information includes all units,
+  /// resources, players, forces, bullets, terrain, fog of war, regions, etc.
   class Game : public Interface<Game>
   {
   protected:
     virtual ~Game() {};
   public :
-    /** Returns the set of all forces in the match. */
+    /// Retrieves the set of all teams/forces. Forces are commonly seen in @UMS game types and
+    /// some others such as @TvB and the team versions of game types.
+    ///
+    /// @returns Forceset containing all forces in the game.
     virtual const Forceset& getForces() const = 0;
 
-    /** Returns the set of all players in the match. Note that this includes the Neutral player, which owns
-     * all the neutral units such as minerals, critters, etc. */
+    /// Retrieves the set of all players in the match. This includes the neutral player, which
+    /// owns all the resources and critters by default.
+    ///
+    /// @returns Playerset containing all players in the game.
     virtual const Playerset& getPlayers() const = 0;
 
-    /** Returns all the visible units. If Flag::CompleteMapInformation is enabled, the set of all units
-     * is returned, not just visible ones. Note that units inside refineries are not included in this set
-     * yet
-	 *
-	 * Warning about multi-threaded AIs:
-	 *
-	 * If you are using multiple threads for your AI AND you are using units from this outside of the BWAPI
-	 * event thread, it is not recommended to use this function.  Currently you may run into heap corruption
-	 * related to the destruction of Vectorset.  One possible way around this is to do the following:
-	 *
-	 * Playerset players = Broodwar->getPlayers();
-	 * 
-	 * for (Playerset::iterator it = players.begin();it != players.end();it++)
-	 * {
-	 *    Player* player = *it;
-	 *    Unitset units = player->getUnits();
-	 *
-	 *    ... Do whatever you need to do with "units" ...
-	 * } */
+    /// Retrieves the set of all accessible units. If Flag::CompleteMapInformation is enabled,
+    /// then the set also includes units that are not visible to the player.
+    ///
+    /// @note Units that are inside refineries are not included in this set.
+    ///
+    /// @returns Unitset containing all known units in the game.
     virtual const Unitset& getAllUnits() const = 0;
 
-    /** Returns the set of all accessible mineral patches. */
+    /// Retrieves the set of all accessible @minerals in the game.
+    ///
+    /// @returns Unitset containing @minerals
     virtual const Unitset& getMinerals() const = 0;
 
-    /** Returns the set of all accessible vespene geysers. */
+    /// Retrieves the set of all accessible @geysers in the game.
+    ///
+    /// @returns Unitset containing @geysers
     virtual const Unitset& getGeysers() const = 0;
 
-    /** Returns the set of all accessible neutral units. */
+    /// Retrieves the set of all accessible neutral units in the game. This includes @minerals,
+    /// @geysers, and @critters.
+    ///
+    /// @returns Unitset containing all neutral units.
     virtual const Unitset& getNeutralUnits() const = 0;
 
-    /** Returns the set of all mineral patches (including mined out and other inaccessible ones). */
+    /// Retrieves the set of all @minerals that were available at the beginning of the game.
+    ///
+    /// @note This set includes resources that have been mined out or are inaccessible.
+    ///
+    /// @returns Unitset containing static @minerals
     virtual const Unitset& getStaticMinerals() const = 0;
 
-    /** Returns the set of all vespene geysers (including mined out and other inaccessible ones). */
+    /// Retrieves the set of all @geysers that were available at the beginning of the game.
+    ///
+    /// @note This set includes resources that are inaccessible.
+    ///
+    /// @returns Unitset containing static @geysers
     virtual const Unitset& getStaticGeysers() const = 0;
 
     /** Returns the set of all neutral units (including mined out and other inaccessible ones). */
@@ -140,7 +146,6 @@ namespace BWAPI
     /** Returns true if the specified mouse button is pressed. Returns false if Flag::UserInput is
      * disabled. */
     virtual bool getMouseState(MouseButton button) const = 0;
-    virtual bool getMouseState(int button) const = 0;
 
     /** Returns true if the specified key is pressed. Returns false if Flag::UserInput is disabled.
      * Unfortunately this does not read the raw keyboard input yet - when you hold down a key, the
@@ -148,7 +153,6 @@ namespace BWAPI
      * true and false (as if you were holding down the key in a text box). Hopefully this will be fixed in
      * a later version. */
     virtual bool getKeyState(Key key) const = 0;
-    virtual bool getKeyState(int key) const = 0;
 
     /** Returns the position of the top left corner of the screen on the map. Returns Positions::Unknown if
      * Flag::UserInput is disabled. */
@@ -635,18 +639,35 @@ namespace BWAPI
     virtual int getRemainingLatencyFrames() const = 0;
     virtual int getRemainingLatencyTime() const = 0;
 
-    /// Retrieves the current revisioni of BWAPI.
+    /// Retrieves the current revision of BWAPI.
     ///
     /// @returns The revision number of the current BWAPI interface.
+    ///
+    /// @threadsafe
     virtual int getRevision() const = 0;
 
-    /** Retrieves the debug state of the BWAPI build. */
+    /// Retrieves the debug state of the BWAPI build.
+    ///
+    /// @returns true if the BWAPI module is a DEBUG build, and false if it is a RELEASE build.
+    ///
+    /// @threadsafe
     virtual bool isDebug() const = 0;
 
-    /** Returns true if latency compensation is enabled */
+    /// Checks the state of latency compensation.
+    ///
+    /// @returns true if latency compensation is enabled, false if it is disabled.
+    /// @see setLatCom
     virtual bool isLatComEnabled() const = 0;
 
-    /** Use to enable or disable latency compensation. Default: Enabled */
+    /// Changes the state of latency compensation. Latency compensation modifies the state of
+    /// BWAPI's representation of units to reflect the implications of issuing a command
+    /// immediately after the command was performed, instead of waiting consecutive frames for the
+    /// results. Latency compensation is enabled by default.
+    ///
+    /// @param isEnabled
+    ///   Set whether the latency compensation feature will be enabled (true) or disabled (false).
+    ///
+    /// @see isLatComEnabled.
     virtual void setLatCom(bool isEnabled) = 0;
 
     /// Checks if the GUI is enabled. The GUI includes all drawing functions of BWAPI, as well
@@ -683,6 +704,8 @@ namespace BWAPI
     ///
     /// @returns
     ///   An integer value representing the instance number.
+    ///
+    /// @threadsafe
     virtual int getInstanceNumber() const = 0;
 
     /// Retrieves the Actions Per Minute (APM) that the bot is producing.
@@ -984,7 +1007,7 @@ namespace BWAPI
       ss << in;
       return *this;
     };
-
+    /// @overload
     typedef std::ostream& (*ostream_manipulator)(std::ostream&);
     GameWrapper &operator <<( const ostream_manipulator &fn )
     {

@@ -71,9 +71,7 @@ namespace BWAPI
 
       virtual Position  getMousePosition() const override;
       virtual bool      getMouseState(MouseButton button) const override;
-      virtual bool      getMouseState(int button) const override;
       virtual bool      getKeyState(Key key) const override;
-      bool              getKeyState(int key) const override;
 
       virtual Position  getScreenPosition() const override;
       virtual void      setScreenPosition(int x, int y) override;
@@ -211,10 +209,6 @@ namespace BWAPI
       bool inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2);
       bool inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, int x3, int y3);
       void lockFlags();
-      bool _isInGame() const;
-      bool _isSinglePlayer() const;
-      bool _isBattleNet() const;
-      bool _isReplay() const;
       void _changeRace(int slot, BWAPI::Race race);
       Race lastKnownRaceBeforeStart[8];
 
