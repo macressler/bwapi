@@ -2104,7 +2104,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechUnit(const Unit* thisUnit, BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechUnit(const Unit* thisUnit, BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2114,7 +2114,7 @@ namespace BWAPI
       if ( checkCanIssueCommandType && !canUseTechWithOrWithoutTarget(thisUnit, false) )
         return false;
 
-      if ( checkTargetsUnit && !canUseTechUnit(thisUnit, tech, false, false) )
+      if ( checkTargetsUnits && !canUseTechUnit(thisUnit, tech, false, false) )
         return false;
 
       if ( checkCanTargetUnit && !canTargetUnit(thisUnit, targetUnit, false) )
@@ -2267,6 +2267,24 @@ namespace BWAPI
         return false;
       if ( !tech.targetsPosition() )
         return Broodwar->setLastError(Errors::Incompatible_TechType);
+
+      return true;
+    }
+    static inline bool canUseTechPosition(const Unit* thisUnit, Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( checkCanIssueCommandType && !canUseTechWithOrWithoutTarget(thisUnit, false) )
+        return false;
+
+      if ( checkTargetsPositions && !canUseTechPosition(thisUnit, tech, false, false) )
+        return false;
+
+      if ( tech == TechTypes::Enum::Spider_Mines && !thisUnit->hasPath(target) )
+        return Broodwar->setLastError(Errors::Unreachable_Location);
 
       return true;
     }
@@ -2586,7 +2604,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN ISSUE COMMAND ------------------------------------------
-    static inline bool canIssueCommand(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canIssueCommand(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2726,7 +2744,7 @@ namespace BWAPI
           return canUseTechUnit(thisUnit, c.extra, c.target, checkCanTargetUnit, checkCanUseTechUnitOnUnits, false, false);
 
         case UnitCommandTypes::Enum::Use_Tech_Position:
-          return canUseTechPosition(thisUnit, c.extra, false, false);
+          return canUseTechPosition(thisUnit, c.getTargetPosition(), c.extra, checkCanUseTechPositionOnPositions, false, false);
 
         case UnitCommandTypes::Enum::Place_COP:
           return canPlaceCOP(thisUnit, BWAPI::TilePosition(c.x, c.y), false, false);
@@ -2734,7 +2752,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canIssueCommandGrouped(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canIssueCommandGrouped(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2877,7 +2895,7 @@ namespace BWAPI
           return canUseTechUnit(thisUnit, c.extra, c.target, checkCanTargetUnit, checkCanUseTechUnitOnUnits, false, false);
 
         case UnitCommandTypes::Enum::Use_Tech_Position:
-          return canUseTechPosition(thisUnit, c.extra, false, false);
+          return canUseTechPosition(thisUnit, c.getTargetPosition(), c.extra, checkCanUseTechPositionOnPositions, false, false);
 
         case UnitCommandTypes::Enum::Place_COP:
           return false;

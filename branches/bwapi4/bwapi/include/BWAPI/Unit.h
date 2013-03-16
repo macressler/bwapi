@@ -1025,6 +1025,12 @@ namespace BWAPI
     ///
     /// @param command
     ///   A UnitCommand to check.
+    /// @param checkCanUseTechPositionOnPositions
+    ///   Only used if the command type is UnitCommandTypes::Enum::Use_Tech_Position. A boolean
+    ///   for whether to perform cheap checks for whether the unit is unable to target any
+    ///   positions using the command's TechType (i.e. regardless of what the other command
+    ///   parameters are). You can set this to false if you know this check has already just been
+    ///   performed.
     /// @param checkCanUseTechUnitOnUnits
     ///   Only used if the command type is UnitCommandTypes::Enum::Use_Tech_Unit. A boolean for
     ///   whether to perform cheap checks for whether the unit is unable to target any units using
@@ -1051,7 +1057,7 @@ namespace BWAPI
     ///
     /// @see UnitCommandTypes, Game::getLastError, Unit::canCommand, Unit::canIssueCommandType,
     /// Unit::canTargetUnit
-    virtual bool canIssueCommand(UnitCommand command, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+    virtual bool canIssueCommand(UnitCommand command, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
     /// Checks whether the unit is able to execute the given command as part of a Unitset
     /// (even if none of the units in the Unitset are able to execute the command individually).
@@ -1076,7 +1082,7 @@ namespace BWAPI
     ///
     /// @see UnitCommandTypes, Game::getLastError, Unit::canIssueCommand,
     /// Unit::canCommandGrouped, Unit::canIssueCommandTypeGrouped, Unit::canTargetUnit
-    virtual bool canIssueCommandGrouped(UnitCommand command, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
+    virtual bool canIssueCommandGrouped(UnitCommand command, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
 
     /// Performs some cheap checks to attempt to quickly detect whether the unit is unable to
     /// execute any commands (eg the unit is stasised).
@@ -1525,12 +1531,18 @@ namespace BWAPI
     /// Checks whether the unit is able to execute a useTech command with a target unit.
     ///
     /// @see Game::getLastError, Unit::canIssueCommand, Unit::useTech
-    virtual bool canUseTechUnit(BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+    virtual bool canUseTechUnit(BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute a useTech command with an unspecified target
+    /// position.
+    ///
+    /// @see Game::getLastError, Unit::canIssueCommand, Unit::useTech
+    virtual bool canUseTechPosition(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
     /// Checks whether the unit is able to execute a useTech command with a target position.
     ///
     /// @see Game::getLastError, Unit::canIssueCommand, Unit::useTech
-    virtual bool canUseTechPosition(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+    virtual bool canUseTechPosition(Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
     /// Cheap checks for whether the unit is able to execute a placeCOP command.
     ///
