@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 #include <algorithm>
-#include <iostream>
+#include <iosfwd>
 #include <tuple>
 
 #include <BWAPI/Vectorset.h>

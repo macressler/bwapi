@@ -13,6 +13,7 @@
 #include "EventTest.h"
 #include "MicroTest.h"
 #include "DefaultTestModule.h"
+#include "../NewTestModule.h"
 
 extern "C" __declspec(dllexport) void gameInit(BWAPI::Game* game) { BWAPI::BroodwarPtr = game; }
 BOOL APIENTRY DllMain( HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved )
@@ -51,6 +52,8 @@ BOOL APIENTRY DllMain( HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
       return new EventTest();
     if ( map == "MicroTest.scm" )
       return new MicroTest();
+    if ( map == "generalTest.scx" )
+      return new NewTestModule();
   }
   return new DefaultTestModule();
 }

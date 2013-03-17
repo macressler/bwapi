@@ -24,7 +24,7 @@ namespace BWAPI
     friend class GameImpl;
 
     // Function manages events and updates it for the given frame
-    void updateEvents(int currentFrame)
+    void updateEvents()
     {
       auto e = interfaceEvents.begin();
       while ( e != interfaceEvents.end() )
@@ -35,7 +35,7 @@ namespace BWAPI
         }
         else
         {
-          e->execute(static_cast<T*>(this), currentFrame);
+          e->execute(static_cast<T*>(this));
           ++e;
         }
       }

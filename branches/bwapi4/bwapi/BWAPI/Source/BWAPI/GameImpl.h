@@ -103,7 +103,7 @@ namespace BWAPI
       virtual bool  hasPowerPrecise(int x, int y, UnitType unitType = UnitTypes::None ) const override;
 
       virtual bool  canBuildHere(TilePosition position, UnitType type, const Unit* builder = nullptr, bool checkExplored = false) override;
-      virtual bool  canMake(UnitType type, const Unit* builder = nullptr) override;
+      virtual bool  canMake(UnitType type, const Unit* builder = nullptr) const override;
       virtual bool  canResearch(TechType type, const Unit* unit = nullptr, bool checkCanIssueCommandType = true) override;
       virtual bool  canUpgrade(UpgradeType type, const Unit* unit = nullptr, bool checkCanIssueCommandType = true) override;
 

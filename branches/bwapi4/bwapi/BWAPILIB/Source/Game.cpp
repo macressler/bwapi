@@ -19,6 +19,33 @@ namespace BWAPI
 {
   GameWrapper Broodwar;
   Game *BroodwarPtr;
+
+  Game *GameWrapper::operator ->() const
+  {
+    return BroodwarPtr;
+  };
+
+  GameWrapper &GameWrapper::operator <<( const GameWrapper::ostream_manipulator &fn )
+  {
+    // Pass manipulator into the stream
+    ss << fn;
+
+    // Flush to Broodwar's printf if we see endl or ends
+    if ( fn == (ostream_manipulator)std::endl || fn == (ostream_manipulator)std::ends )
+      this->flush();
+    return *this;
+  };
+
+  void GameWrapper::flush()
+  {
+    if ( !BroodwarPtr )
+      return;
+
+    BroodwarPtr->printf("%s", ss.str().c_str() );
+    ss.str("");
+  };
+
+
   //------------------------------------ DAMAGE CALCULATION ------------------------------------------
   int damageRatio[DamageTypes::Enum::MAX][UnitSizeTypes::Enum::MAX] =
   {

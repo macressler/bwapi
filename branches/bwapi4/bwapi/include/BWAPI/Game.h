@@ -410,7 +410,7 @@ namespace BWAPI
     /** Returns true if the AI player has enough resources, supply, tech, and required units in order to
      * make the given unit type. If builder is not null, canMake will return true only if the builder unit
      * can build the given unit type. */
-    virtual bool canMake(UnitType type, const Unit *builder = nullptr) = 0;
+    virtual bool canMake(UnitType type, const Unit *builder = nullptr) const = 0;
 
     /** Returns true if the AI player has enough resources required to research the given tech type. If unit
      * is not null, canResearch will return true only if the given unit can research the given tech type. */
@@ -992,11 +992,11 @@ namespace BWAPI
   private:
     std::ostringstream ss;
   public:
+    /// definition of ostream_manipulator type for convenience
+    typedef std::ostream& (*ostream_manipulator)(std::ostream&);
+
     /// Member access operator to retain the original Broodwar-> behaviour.
-    Game *operator ->() const
-    {
-      return BroodwarPtr;
-    };
+    Game *operator ->() const;
 
     /// Output stream operator for printing text to Broodwar. Using this operator invokes
     /// Game::printf when a newline character is encountered.
@@ -1008,27 +1008,10 @@ namespace BWAPI
       return *this;
     };
     /// @overload
-    typedef std::ostream& (*ostream_manipulator)(std::ostream&);
-    GameWrapper &operator <<( const ostream_manipulator &fn )
-    {
-      // Pass manipulator into the stream
-      ss << fn;
-
-      // Flush to Broodwar's printf if we see endl or ends
-      if ( fn == (ostream_manipulator)std::endl || fn == (ostream_manipulator)std::ends )
-        this->flush();
-      return *this;
-    };
-
+    GameWrapper &operator <<( const ostream_manipulator &fn );    
+    
     /// Flushes the Broodwar stream, printing all text in the stream to the screen.
-    void flush()
-    {
-      if ( !BroodwarPtr )
-        return;
-
-      BroodwarPtr->printf("%s", ss.str().c_str() );
-      ss.str("");
-    };
+    void flush();
   };
 
   extern GameWrapper Broodwar;

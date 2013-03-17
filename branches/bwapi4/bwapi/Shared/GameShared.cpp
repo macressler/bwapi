@@ -83,7 +83,7 @@ namespace BWAPI
     return Templates::canBuildHere(builder,position,type,checkExplored);
   }
   //--------------------------------------------- CAN MAKE ---------------------------------------------------
-  bool GameImpl::canMake(UnitType type, const Unit* builder)
+  bool GameImpl::canMake(UnitType type, const Unit* builder) const
   {
     return Templates::canMake(builder,type);
   }

@@ -3,7 +3,7 @@
 #include <BWAPI.h>
 #include <BWAPI/Client.h>
 //#include <BWTA.h>
-
+#include <iostream>
 #include <windows.h>
 
 #include <string>

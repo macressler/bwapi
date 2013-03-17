@@ -138,34 +138,32 @@ namespace BWAPI
   //------------------------------------------- INTERFACE EVENT UPDATE ---------------------------------------
   void GameImpl::processInterfaceEvents()
   {
-    int currentFrame = this->getFrameCount();
-    
     // GameImpl events
-    this->updateEvents(currentFrame);
+    this->updateEvents();
     
     // UnitImpl events
     foreach(UnitImpl* u, this->accessibleUnits)
     {
-      u->exists() ? u->updateEvents(currentFrame) : u->interfaceEvents.clear();
+      u->exists() ? u->updateEvents() : u->interfaceEvents.clear();
     }
     
     // ForceImpl events
     foreach(ForceImpl* f,this->forces)
-      f->updateEvents(currentFrame);
+      f->updateEvents();
 
     // BulletImpl events
     foreach(BulletImpl* b, this->bullets)
     {
-      b->exists() ? b->updateEvents(currentFrame) : b->interfaceEvents.clear();
+      b->exists() ? b->updateEvents() : b->interfaceEvents.clear();
     }
 
     // RegionImpl events
     foreach(RegionImpl *r,this->regionsList)
-      r->updateEvents(currentFrame);
+      r->updateEvents();
 
     // PlayerImpl events
     foreach(PlayerImpl *p, this->playerSet)
-      p->updateEvents(currentFrame);
+      p->updateEvents();
   }
   //------------------------------------------------- ON MATCH START -----------------------------------------
   void GameImpl::onMatchStart()

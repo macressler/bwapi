@@ -2,18 +2,18 @@
 #include <BWAPI/UnaryFilter.h>
 #include <BWAPI/ComparisonFilter.h>
 #include <BWAPI/BestFilter.h>
+#include <BWAPI/UnitSizeType.h>
+#include <BWAPI/UpgradeType.h>
+#include <BWAPI/WeaponType.h>
+#include <BWAPI/Order.h>
+#include <BWAPI/Race.h>
 
 namespace BWAPI
 {
   // forwards
   class Unit;
-  class UpgradeType;
   class Player;
-  class Order;
-  class Race;
-  class WeaponType;
   class UnitType;
-  class UnitSizeType;
 
   // typedefs
   typedef UnaryFilter<Unit*> UnitFilter;
