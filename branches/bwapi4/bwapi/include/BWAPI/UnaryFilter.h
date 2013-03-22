@@ -3,11 +3,47 @@
 
 namespace BWAPI
 {
-  template<typename _PARAM>
+  template <typename PARAM>
+  class UnaryFilter_AndCombiner
+  {
+  public:
+    template <typename T, typename T2>
+    UnaryFilter_AndCombiner(const T& p1, const T2& p2) 
+      : pred1(p1), pred2(p2)
+    {}
+    
+    bool operator()(PARAM u)
+    {
+      return pred1(u) && pred2(u);
+    }
+  private:
+    std::function<bool(PARAM)> pred1;
+    std::function<bool(PARAM)> pred2;
+  };
+
+  template <typename PARAM>
+  class UnaryFilter_OrCombiner
+  {
+  public:
+    template <typename T, typename T2>
+    UnaryFilter_OrCombiner(const T& p1, const T2& p2) 
+      : pred1(p1), pred2(p2)
+    {}
+    
+    bool operator()(PARAM u)
+    {
+      return pred1(u) || pred2(u);
+    }
+  private:
+    std::function<bool(PARAM)> pred1;
+    std::function<bool(PARAM)> pred2;
+  };
+
+  template<typename PARAM>
   class UnaryFilter
   {
   private:
-    std::function<bool(_PARAM)> pred;
+    std::function<bool(PARAM)> pred;
   public:
     // Constructor
     template <typename _T>
@@ -49,12 +85,14 @@ namespace BWAPI
     template <typename _T>
     inline UnaryFilter operator &&(const _T& other) const
     {
-      return [&](_PARAM u){ return (*this)(u) && other(u); };
+      //return [=](PARAM u){ return (*this)(u) && other(u); };
+      return UnaryFilter_AndCombiner<PARAM>(pred, other);
     };
     template <typename _T>
     inline UnaryFilter operator ||(const _T& other) const
     {
-      return [&](_PARAM u){ return (*this)(u) || other(u); };
+      //return [=](PARAM u){ return (*this)(u) || other(u); };
+      return UnaryFilter_OrCombiner<PARAM>(pred,other);
     };
     inline UnaryFilter operator !() const
     {
@@ -64,7 +102,7 @@ namespace BWAPI
     };
 
     // call
-    inline bool operator()(_PARAM u) const
+    inline bool operator()(PARAM u) const
     {
       return pred(u);
     };
@@ -75,7 +113,7 @@ namespace BWAPI
       return (bool)pred;
     };
 
-    friend void swap(UnaryFilter<_PARAM> &a, UnaryFilter<_PARAM> &b);
+    friend void swap(UnaryFilter<PARAM> &a, UnaryFilter<PARAM> &b);
   };
 
   template <typename P>

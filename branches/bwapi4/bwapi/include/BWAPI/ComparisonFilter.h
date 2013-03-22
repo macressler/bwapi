@@ -6,11 +6,11 @@
 #include "UnaryFilter.h"
 
 #define BWAPI_COMPARE_FILTER_OP(op) UnaryFilter<_Param> operator op(const _Cmp &cmp) const               \
-                                    {   return [&](_Param u)->bool{ return (*this)(u) op cmp; };   }
+                                    {   return [=](_Param u)->bool{ return (*this)(u) op cmp; };   }
 
 #define BWAPI_ARITHMATIC_FILTER_OP(op) template <typename _T>                                            \
                                        CompareFilter<_Param,_Cmp> operator op(const _T &other) const     \
-                                       {   return [&](_Param u)->int{ return (*this)(u) op other(u); };   }
+                                       {   return [=](_Param u)->int{ return (*this)(u) op other(u); };   }
 
 namespace BWAPI
 {
@@ -53,14 +53,14 @@ namespace BWAPI
     template <typename _T>
     CompareFilter<_Param,_Cmp> operator /(const _T &other) const
     {   
-      return [&](_Param u)->int{ int rval = other(u);
+      return [=](_Param u)->int{ int rval = other(u);
                                  return rval == 0 ? std::numeric_limits<int>::max() : (*this)(u) / rval;
                                };
     };
     template <typename _T>
     CompareFilter<_Param,_Cmp> operator %(const _T &other) const
     {   
-      return [&](_Param u)->int{ int rval = other(u);
+      return [=](_Param u)->int{ int rval = other(u);
                                  return rval == 0 ? 0 : (*this)(u) % rval;
                                };
     };
