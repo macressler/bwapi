@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NewTestModule.h" />
+    <ClInclude Include="NewTestModuleFilters.h" />
     <ClInclude Include="Source\AttackMoveTest.h" />
     <ClInclude Include="Source\AttackUnitTest.h" />
     <ClInclude Include="Source\BuildingPlacer.h" />

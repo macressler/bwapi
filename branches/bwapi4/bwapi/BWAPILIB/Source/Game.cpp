@@ -780,7 +780,18 @@ namespace BWAPI
   {
     this->drawBox(CoordinateType::Screen, left, top, right, bottom, color, isSolid);
   }
-
+  void Game::drawBoxMap(Position leftTop, Position rightBottom, Color color, bool isSolid)
+  {
+    this->drawBoxMap(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y, color, isSolid);
+  }
+  void Game::drawBoxMouse(Position leftTop, Position rightBottom, Color color, bool isSolid)
+  {
+    this->drawBoxMouse(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y, color, isSolid);
+  }
+  void Game::drawBoxScreen(Position leftTop, Position rightBottom, Color color, bool isSolid)
+  {
+    this->drawBoxScreen(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y, color, isSolid);
+  }
   //------------------------------------------ DRAW TRIANGLE -----------------------------------------------
   void Game::drawTriangleMap(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid)
   {

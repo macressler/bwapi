@@ -11,7 +11,7 @@
 #define BWAPI_ARITHMATIC_FILTER_OP(op) template <typename T>                                            \
                                        CompareFilter<PType,RType,std::function<RType(PType)> > operator op(const T &other) const     \
                                        {   return [=](PType v)->int{ return (*this)(v) op other(v); };   }    \
-                                       CompareFilter<PType,RType,std::function<RType(PType)> > operator op(const RType &other) const     \
+                                       CompareFilter<PType,RType,std::function<RType(PType)> > operator op(RType other) const     \
                                        {   return [=](PType v)->int{ return (*this)(v) op other; };   }
 
 namespace BWAPI

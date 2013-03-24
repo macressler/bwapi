@@ -108,9 +108,10 @@ namespace BWAPI
         return false;
 
       // Frame check
-      if ( (--step) > 0 )
+      --step;
+      if ( step > 0 )
         return false;
-      this->step = this->runCount;
+      this->step = this->runFreq;
 
       // Conditional check
       if ( this->condProc )

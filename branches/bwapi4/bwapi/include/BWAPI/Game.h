@@ -550,6 +550,9 @@ namespace BWAPI
     void drawBoxMap(int left, int top, int right, int bottom, Color color, bool isSolid = false);
     void drawBoxMouse(int left, int top, int right, int bottom, Color color, bool isSolid = false);
     void drawBoxScreen(int left, int top, int right, int bottom, Color color, bool isSolid = false);
+    void drawBoxMap(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
+    void drawBoxMouse(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
+    void drawBoxScreen(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
 
     /** Draws a triangle on the screen. If isSolid is true, a solid triangle is drawn, otherwise just the
      * outline of the triangle will be drawn. */

@@ -1,6 +1,5 @@
 #include "NewTestModule.h"
-#include <queue>
-#include <functional>
+#include "NewTestModuleFilters.h"
 
 using namespace BWAPI;
 using namespace Filter;
@@ -12,18 +11,6 @@ void DebugUnit(Unit *pUnit, const char * const fxn)
 {
   Broodwar << fxn << ": " << pUnit->getType() << " owned by " << (pUnit->getPlayer() ? pUnit->getPlayer()->getName() : "unknown") << endl;
 }
-
-struct DrawBoxEvt
-{
-  int left, top, right, bottom;
-  DrawBoxEvt(int l, int t, int r, int b) 
-    : left(l), top(t), right(r), bottom(b)
-  {}
-  void operator() (Game*)
-  {
-    Broodwar->drawBoxMap(left, top, right, bottom, Colors::Green);
-  }
-};
 
 struct BuildAction
 {
@@ -39,33 +26,8 @@ struct BuildAction
     if ( Broodwar->getLastError() != Errors::None )
       Broodwar << Broodwar->getLastError() << endl;
     
-    Broodwar->registerEvent( DrawBoxEvt(targPos.x*32, targPos.y*32, targPos.x*32 + 4*32, targPos.y*32 + 3*32), nullptr, 100000 );
-  }
-};
-
-struct CompletedUnitCount
-{
-  UnitType type;
-  CompletedUnitCount(UnitType t) : type(t) {}
-  bool operator()(Unit *)
-  {
-    return self->completedUnitCount(type) > 0;
-  }
-};
-/*
-CompareFilter<Unit*> CompletedUnitCount(UnitType type)
-{
-  return [=](Unit*){ return self->completedUnitCount(type); };
-}*/
-
-struct TimeTest
-{
-  int endTime;
-
-  TimeTest(int t) : endTime(t) {}
-  bool operator() (Unit *)
-  {
-    return endTime < Broodwar->getFrameCount();
+    Position topLeft(targPos), botRight(targPos + type.tileSize());
+    Broodwar->registerEvent( [=](Game*){ Broodwar->drawBoxMap(topLeft,botRight, Colors::Green);}, nullptr, type.buildTime()/10 + 100 );
   }
 };
 
@@ -84,9 +46,8 @@ void addTestCase(Unit *pUnit, const std::function<void(Unit*)> &action, const Un
   if ( !pUnit )
     return;
   
-  int endTime = Broodwar->getFrameCount() + timeout;
   pUnit->registerEvent(action, IsCompleted && IsIdle, 1, 6);
-  pUnit->registerEvent(CompleteAction(completion), TimeTest(endTime), 1, 6);
+  pUnit->registerEvent(CompleteAction(completion), Timeout(timeout), 1, 6);
 }
 
 void NewTestModule::onStart()
@@ -135,7 +96,7 @@ void NewTestModule::onUnitCreate(BWAPI::Unit* unit)
   {
     Broodwar << unit->getType() << endl;
     UnitType toBuild = unit->getType().getRace().getCenter();
-    addTestCase(unit, BuildAction(toBuild), CompletedUnitCount(toBuild), 250);
+    addTestCase(unit, BuildAction(toBuild), Owns(1, toBuild), toBuild.buildTime()/10 + 100);
     //unit->registerEvent(BuildAction(toBuild), IsIdle && IsCompleted, 1, 6);
   }
 }
