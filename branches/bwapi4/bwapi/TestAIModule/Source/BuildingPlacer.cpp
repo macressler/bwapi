@@ -58,7 +58,7 @@ bool BuildingPlacer::canBuildHereWithSpace(BWAPI::TilePosition position, BWAPI::
   {
     BWAPI::Position start2( BWAPI::TilePosition(start.x-2, start.y) );
     BWAPI::Position end2( BWAPI::TilePosition(start.x, end.y) );
-    if ( !BWAPI::Broodwar->getUnitsInRectangle(start2.makeValid(), end2.makeValid(), !BWAPI::IsLifted && BWAPI::CanBuildAddon).empty() )
+    if ( !BWAPI::Broodwar->getUnitsInRectangle(start2.makeValid(), end2.makeValid(), !BWAPI::Filter::IsLifted && BWAPI::Filter::CanBuildAddon).empty() )
       return false;
   }
   return true;
@@ -137,7 +137,7 @@ bool BuildingPlacer::buildable(BWAPI::TilePosition position) const
   if ( !BWAPI::Broodwar->isBuildable(position) )
     return false;
 
-  if ( !BWAPI::Broodwar->getUnitsOnTile(position, BWAPI::IsBuilding && !BWAPI::IsLifted).empty() )
+  if ( !BWAPI::Broodwar->getUnitsOnTile(position, BWAPI::Filter::IsBuilding && !BWAPI::Filter::IsLifted).empty() )
     return false;
 
   return true;

@@ -1,7 +1,7 @@
 #pragma once
 #include <BWAPI.h>
 using namespace BWAPI;
-
+using namespace Filter;
 
 namespace ControlTypes
 {

@@ -5,6 +5,7 @@
 
 namespace BWAPI
 {
+  using namespace Filter;
   namespace Templates
   {
     //--------------------------------------------- FORWARD DECLARATIONS -------------------------------------

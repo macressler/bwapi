@@ -9,6 +9,7 @@
 #include "Location.h"
 
 using namespace BWAPI;
+using namespace Filter;
 
 void UpdateScripts();
 bool LoadAIBinary(const char *pszFileName);

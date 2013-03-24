@@ -17,6 +17,8 @@
 
 namespace BWAPI
 {
+  using namespace Filter;
+
   GameWrapper Broodwar;
   Game *BroodwarPtr;
 

@@ -13,6 +13,7 @@
 
 namespace BWAPI
 {
+  using namespace Filter;
   //------------------------------------------------ GET UNIT FROM INDEX -------------------------------------
   UnitImpl* GameImpl::getUnitFromIndex(int index)
   {

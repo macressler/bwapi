@@ -3,6 +3,7 @@
 #include <functional>
 
 using namespace BWAPI;
+using namespace Filter;
 using namespace std;
 
 Player *self;
@@ -18,7 +19,7 @@ struct DrawBoxEvt
   DrawBoxEvt(int l, int t, int r, int b) 
     : left(l), top(t), right(r), bottom(b)
   {}
-  void operator() ( Game*) 
+  void operator() (Game*)
   {
     Broodwar->drawBoxMap(left, top, right, bottom, Colors::Green);
   }
@@ -41,11 +42,6 @@ struct BuildAction
     Broodwar->registerEvent( DrawBoxEvt(targPos.x*32, targPos.y*32, targPos.x*32 + 4*32, targPos.y*32 + 3*32), nullptr, 100000 );
   }
 };
-/*
-std::function<void(Unit*)> BuildAction(UnitType type)
-{
-  return [=](Unit *u){ u->build(type, Broodwar->getBuildLocation(type, TilePosition(u->getPosition()))); Broodwar << Broodwar->getLastError() << endl; };
-}*/
 
 struct CompletedUnitCount
 {

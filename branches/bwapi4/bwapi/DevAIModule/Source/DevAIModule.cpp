@@ -4,6 +4,7 @@
 #include <algorithm>
 
 using namespace BWAPI;
+using namespace Filter;
 
 bool enabled;
 int mapH, mapW;
