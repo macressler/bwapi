@@ -101,11 +101,8 @@ namespace BWAPI
       }
       //------------------------------------------------------------------------------------------------------
       //_getType
-      u16 uId = o->unitType;
-      _getType = UnitType(uId);
-      if ( uId == UnitTypes::Resource_Mineral_Field ||
-           uId == UnitTypes::Resource_Mineral_Field_Type_2 ||
-           uId == UnitTypes::Resource_Mineral_Field_Type_3 )
+      _getType = UnitType(o->unitType);
+      if ( _getType.isMineralField() )
         _getType = UnitTypes::Resource_Mineral_Field;
 
       getBuildQueueSlot = o->buildQueueSlot; //getBuildQueueSlot
@@ -376,10 +373,7 @@ namespace BWAPI
       self->isBraking       = o->movementFlag(BW::MovementFlags::Braking);   //isBraking
       //------------------------------------------------------------------------------------------------------
       //isCarryingGas, isCarryingMinerals
-      if (_getType.isWorker())
-        self->carryResourceType = o->resourceType;
-      else
-        self->carryResourceType = 0;
+      self->carryResourceType = _getType.isWorker() ? o->resourceType : 0;
 
       self->isGathering     = _getType.isWorker() && o->statusFlag(BW::StatusFlags::IsGathering);   //isGatheringMinerals; isGatheringGas
       self->isLifted        = o->statusFlag(BW::StatusFlags::InAir) &&
@@ -401,7 +395,7 @@ namespace BWAPI
       self->hitPoints           = 0;      //getHitPoints
       self->shields             = 0;      //getShields
       self->energy              = 0;      //getEnergy
-      self->resources           = 0;      //getResources
+      //self->resources           = 0;      //getResources
       self->resourceGroup       = 0;      //getResourceGroup
       self->killCount           = 0;      //getKillCount
       self->defenseMatrixPoints = 0;      //getDefenseMatrixPoints

@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Assertions.cpp" />
     <ClCompile Include="NewTestModule.cpp" />
     <ClCompile Include="Source\AttackMoveTest.cpp" />
     <ClCompile Include="Source\AttackUnitTest.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="Source\ZergTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assertions.h" />
     <ClInclude Include="NewTestModule.h" />
     <ClInclude Include="NewTestModuleFilters.h" />
     <ClInclude Include="Source\AttackMoveTest.h" />

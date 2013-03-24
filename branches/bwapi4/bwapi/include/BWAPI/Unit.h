@@ -220,7 +220,8 @@ namespace BWAPI
     virtual int getEnergy() const = 0;
 
     /// Retrieves the resource amount from a resource container, such as a Mineral Field and
-    /// Vespene Geyser.
+    /// Vespene Geyser. If the unit is inaccessible, then the last known resource amount is
+    /// returned.
     ///
     /// @returns An integer representing the amount of resources remaining in this resource.
     ///

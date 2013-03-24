@@ -103,6 +103,13 @@ void DevAIModule::onFrame()
   // Display it
   bw->drawTextScreen(4, 4, "Best: %d GFPS\nCurrent: %d GFPS", bestFPS, tFPS);
   
+
+  Unitset resources = Broodwar->getStaticMinerals();
+  for ( auto u = resources.begin(); u != resources.end(); ++u )
+  {
+    Broodwar->drawTextMap(u->getInitialPosition(), "%d / %d", u->getResources(), u->getInitialResources());
+  }
+
   // Limit logical frames processed to prevent stacking commands
   if ( bw->getFrameCount() % bw->getLatencyFrames() != 0 )
     return;
@@ -115,6 +122,7 @@ void DevAIModule::onFrame()
       u->gather( u->getClosestUnit(IsMineralField) );
     }
   }
+
 }
 
 void DevAIModule::onSendText(std::string text)

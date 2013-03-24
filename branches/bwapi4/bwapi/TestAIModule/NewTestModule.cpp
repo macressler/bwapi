@@ -1,5 +1,6 @@
 #include "NewTestModule.h"
 #include "NewTestModuleFilters.h"
+#include "Assertions.h"
 
 using namespace BWAPI;
 using namespace Filter;
@@ -54,6 +55,8 @@ void NewTestModule::onStart()
 {
   Broodwar->enableFlag(Flag::UserInput);
   self = Broodwar->self();
+
+  Assert.start();
 }
 void NewTestModule::onEnd(bool isWinner)
 {
@@ -91,13 +94,19 @@ void NewTestModule::onUnitHide(BWAPI::Unit* unit)
 }
 void NewTestModule::onUnitCreate(BWAPI::Unit* unit)
 {
-  DebugUnit(unit, __FUNCTION__);
-  if ( unit->getPlayer() == self && unit->getType().isWorker() )
+  //DebugUnit(unit, __FUNCTION__);
+  if ( unit->getPlayer() == self )
   {
-    Broodwar << unit->getType() << endl;
-    UnitType toBuild = unit->getType().getRace().getCenter();
-    addTestCase(unit, BuildAction(toBuild), Owns(1, toBuild), toBuild.buildTime()/10 + 100);
-    //unit->registerEvent(BuildAction(toBuild), IsIdle && IsCompleted, 1, 6);
+    if ( unit->getType().isWorker() )
+    {
+      UnitType toBuild = unit->getType().getRace().getCenter();
+      addTestCase(unit, BuildAction(toBuild), Owns(1, toBuild), toBuild.buildTime()/10 + 100);
+    }
+    else if ( unit->isSieged() )
+    {
+      auto myUnits = unit->getUnitsInWeaponRange(WeaponTypes::Arclite_Shock_Cannon);
+      TEST(Assert, std::find_if(myUnits.begin(), myUnits.end(), Filter::GetType != UnitTypes::Terran_Civilian) != myUnits.end() || myUnits.size() != 3 );
+    }
   }
 }
 void NewTestModule::onUnitDestroy(BWAPI::Unit* unit)

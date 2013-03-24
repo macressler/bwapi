@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include <Util/Foreach.h>
+#include <Util/Convenience.h>
 
 #include <BWAPI/Player.h>
 #include <BWAPI/Order.h>
@@ -50,6 +51,7 @@ namespace BWAPI
       , lastImmediateCommand()
       , id(-1)
   {
+    MemZero(data);
     clear();
   }
   //--------------------------------------------- DESTRUCTOR -------------------------------------------------
