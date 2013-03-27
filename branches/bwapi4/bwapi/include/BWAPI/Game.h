@@ -226,34 +226,65 @@ namespace BWAPI
     /// @retval false always if Flag::UserInput is disabled.
     virtual bool getMouseState(MouseButton button) const = 0;
 
-    /** Returns true if the specified key is pressed. Returns false if Flag::UserInput is disabled.
-     * Unfortunately this does not read the raw keyboard input yet - when you hold down a key, the
-     * getKeyState function is true for a frame, then false for a few frames, and then alternates between
-     * true and false (as if you were holding down the key in a text box). Hopefully this will be fixed in
-     * a later version. */
+    /// Retrieves the state of the given keyboard key.
+    ///
+    /// @param key
+    ///   A Key enum member indicating which key on the keyboard to check.
+    ///
+    /// @return A bool indicating the state of the given \p key. true if the key was pressed
+    /// and false if it was not.
+    /// @retval false always if Flag::UserInput is disabled.
     virtual bool getKeyState(Key key) const = 0;
 
-    /** Returns the position of the top left corner of the screen on the map. Returns Positions::Unknown if
-     * Flag::UserInput is disabled. */
+    /// Retrieves the top left position of the viewport from the top left corner of the map, in
+    /// pixels.
+    ///
+    /// @returns Position containing the coordinates of the top left corner of the game's viewport.
+    /// @retval Positions::Unknown always if Flag::UserInput is disabled.
+    /// @see setScreenPosition
     virtual BWAPI::Position getScreenPosition() const = 0;
 
-    /** Moves the screen to the given position on the map. The position specified where the top left corner
-     * of the screen will be. */
+    /// Moves the top left corner of the viewport to the provided position relative to the map's
+    /// origin (top left (0,0)).
+    ///
+    /// @param x
+    ///   The x coordinate to move the screen to, in pixels.
+    /// @param y
+    ///   The y coordinate to move the screen to, in pixels.
+    /// @see getScreenPosition
     virtual void setScreenPosition(int x, int y) = 0;
     /// @overload
     void setScreenPosition(BWAPI::Position p);
 
-    /** Pings the given position on the minimap. */
+    /// Pings the minimap at the given position. Minimap pings are visible to allied players.
+    ///
+    /// @param x
+    ///   The x coordinate to ping at, in pixels, from the map's origin (left).
+    /// @param y
+    ///   The y coordinate to ping at, in pixels, from the map's origin (top).
     virtual void pingMinimap(int x, int y) = 0;
     /// @overload
     void pingMinimap(BWAPI::Position p);
 
-    /** Returns true if the given flag has been enabled. Note that flags can only be enabled at the
-     * beginning of a match, during the AIModule::onStart callback. */
+    /// Checks if the state of the given flag is enabled or not.
+    ///
+    /// @note Flags may only be enabled at the start of the match during the AIModule::onStart
+    /// callback.
+    ///
+    /// @param flag
+    ///   The Flag::Enum entry describing the flag's effects on BWAPI.
+    /// @returns true if the given \p flag is enabled, false if the flag is disabled.
+    /// @todo Take Flag::Enum as parameter instead of int
     virtual bool isFlagEnabled(int flag) const = 0;
 
-    /** Enables the specified flag. Note that flags can only be enabled at the beginning of a match, during
-     * the AIModule::onStart callback. */
+    /// Enables the state of a given flag.
+    ///
+    /// @note Flags may only be enabled at the start of the match during the AIModule::onStart
+    /// callback.
+    ///
+    /// @param flag
+    ///   The Flag::Enum entry describing the flag's effects on BWAPI.
+    /// @todo Take Flag::Enum as parameter instead of int
     virtual void enableFlag(int flag) = 0;
 
     /** Returns the set of accessible units that are on the given build tile. */
@@ -398,7 +429,21 @@ namespace BWAPI
     /// @overload
     bool isWalkable(BWAPI::WalkPosition position) const;
 
-    /** Returns the ground height of the given build tile. 0 = normal, 1 = high ground.  2 = very high ground. */
+    /// Returns the ground height at the given tile position.
+    ///
+    /// @param tileX
+    ///   X position to query, in tiles
+    /// @param tileY
+    ///   Y position to query, in tiles
+    ///
+    /// @returns The tile height as an integer. Possible values are:
+    ///     - 0: Low ground
+    ///     - 1: Low ground doodad
+    ///     - 2: High ground
+    ///     - 3: High ground doodad
+    ///     - 4: Very high ground
+    ///     - 5: Very high ground doodad
+    ///     .
     virtual int  getGroundHeight(int tileX, int tileY) const = 0;
     /// @overload
     int  getGroundHeight(TilePosition position) const;
