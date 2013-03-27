@@ -627,8 +627,20 @@ namespace BWAPI
     ///   value of 1.
     virtual void setTextSize(int size = 1) = 0;
 
-    /** Draws text on the screen at the given position. Text can be drawn in different colors by using the
-     * following control characters: TODO: add image from wiki.*/
+    /// Draws text on the screen at the given coordinates. Text can be drawn in different colors
+    /// or formatted using the Text::Enum members.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param x
+    ///   The x coordinate, in pixels, relative to ctype.
+    /// @param y
+    ///   The y coordinate, in pixels, relative to ctype.
+    /// @param format
+    ///   The string formatting portion. This is the same as printf style formatting.
+    /// @param arg
+    ///   Arglist containing the intermediate list of arguments to format before finally sending
+    ///   the string to Broodwar.
     virtual void vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg) = 0;
     /// @overload
     void drawText(CoordinateType::Enum ctype, int x, int y, const char *format, ...);
@@ -645,8 +657,23 @@ namespace BWAPI
     /// @overload
     void drawTextScreen(Position p, const char *format, ...);
 
-    /** Draws a box on the screen, with the given color. If isSolid is true, the entire box will be
-     * rendered, otherwise just the outline will be drawn. */
+    /// Draws a rectangle on the screen with the given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param left
+    ///   The x coordinate, in pixels, relative to ctype, of the left edge of the rectangle.
+    /// @param top
+    ///   The y coordinate, in pixels, relative to ctype, of the top edge of the rectangle.
+    /// @param right
+    ///   The x coordinate, in pixels, relative to ctype, of the right edge of the rectangle.
+    /// @param bottom
+    ///   The y coordinate, in pixels, relative to ctype, of the bottom edge of the rectangle.
+    /// @param color
+    ///   The color of the rectangle.
+    /// @param isSolid (optional)
+    ///   If true, then the shape will be filled and drawn as a solid, otherwise it will be drawn
+    ///   as an outline. If omitted, this value will default to false.
     virtual void drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) = 0;
     /// @overload
     void drawBoxMap(int left, int top, int right, int bottom, Color color, bool isSolid = false);
@@ -661,8 +688,27 @@ namespace BWAPI
     /// @overload
     void drawBoxScreen(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
 
-    /** Draws a triangle on the screen. If isSolid is true, a solid triangle is drawn, otherwise just the
-     * outline of the triangle will be drawn. */
+    /// Draws a triangle on the screen with the given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param ax
+    ///   The x coordinate, in pixels, relative to ctype, of the first point.
+    /// @param ay
+    ///   The y coordinate, in pixels, relative to ctype, of the first point.
+    /// @param bx
+    ///   The x coordinate, in pixels, relative to ctype, of the second point.
+    /// @param by
+    ///   The y coordinate, in pixels, relative to ctype, of the second point.
+    /// @param cx
+    ///   The x coordinate, in pixels, relative to ctype, of the third point.
+    /// @param cy
+    ///   The y coordinate, in pixels, relative to ctype, of the third point.
+    /// @param color
+    ///   The color of the triangle.
+    /// @param isSolid (optional)
+    ///   If true, then the shape will be filled and drawn as a solid, otherwise it will be drawn
+    ///   as an outline. If omitted, this value will default to false.
     virtual void drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) = 0;
     /// @overload
     void drawTriangleMap(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
@@ -677,8 +723,21 @@ namespace BWAPI
     /// @overload
     void drawTriangleScreen(Position a, Position b, Position c, Color color, bool isSolid = false);
 
-    /** Draws a circle on the screen, with the given color. If isSolid is true, a solid circle is drawn,
-     * otherwise just the outline of a circle will be drawn. */
+    /// Draws a circle on the screen with the given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param x
+    ///   The x coordinate, in pixels, relative to ctype.
+    /// @param y
+    ///   The y coordinate, in pixels, relative to ctype.
+    /// @param radius
+    ///   The radius of the circle, in pixels.
+    /// @param color
+    ///   The color of the circle.
+    /// @param isSolid (optional)
+    ///   If true, then the shape will be filled and drawn as a solid, otherwise it will be drawn
+    ///   as an outline. If omitted, this value will default to false.
     virtual void drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid = false) = 0;
     /// @overload
     void drawCircleMap(int x, int y, int radius, Color color, bool isSolid = false);
@@ -693,8 +752,23 @@ namespace BWAPI
     /// @overload
     void drawCircleScreen(Position p, int radius, Color color, bool isSolid = false);
 
-    /** Draws an ellipse on the screen, with the given color. If isSolid is true, a solid ellipse is drawn,
-     * otherwise just the outline of an ellipse will be drawn. */
+    /// Draws an ellipse on the screen with the given color.
+    ///
+    /// @param ctype
+    ///   The coordinate type. Indicates the relative position to draw the shape.
+    /// @param x
+    ///   The x coordinate, in pixels, relative to ctype.
+    /// @param y
+    ///   The y coordinate, in pixels, relative to ctype.
+    /// @param xrad
+    ///   The x radius of the ellipse, in pixels.
+    /// @param yrad
+    ///   The y radius of the ellipse, in pixels.
+    /// @param color
+    ///   The color of the ellipse.
+    /// @param isSolid (optional)
+    ///   If true, then the shape will be filled and drawn as a solid, otherwise it will be drawn
+    ///   as an outline. If omitted, this value will default to false.
     virtual void drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) = 0;
     /// @overload
     void drawEllipseMap(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
@@ -761,10 +835,36 @@ namespace BWAPI
     /// @overload
     void drawLineScreen(Position a, Position b, Color color);
 
-    /** Retrieves latency values for the game. Includes latency, speed, and mode */
+    /// Retrieves the maximum delay, in number of frames, between a command being issued and the
+    /// command being executed by Broodwar.
+    ///
+    /// @note In Broodwar, latency is used to keep the game synchronized between players without
+    /// introducing lag.
+    ///
+    /// @returns Difference in frames between commands being sent and executed.
+    /// @see getLatencyTime, getRemainingLatencyFrames
     virtual int getLatencyFrames() const = 0;
+
+    /// Retrieves the maximum delay, in milliseconds, between a command being issued and the
+    /// command being executed by Broodwar.
+    ///
+    /// @returns Difference in milliseconds between commands being sent and executed.
+    /// @see getLatencyFrames, getRemainingLatencyTime
     virtual int getLatencyTime() const = 0;
+
+    /// Retrieves the number of frames it will take before a command sent in the current frame
+    /// will be executed by the game.
+    ///
+    /// @returns Number of frames until a command is executed if it were sent in the current
+    /// frame.
+    /// @see getRemainingLatencyTime, getLatencyFrames
     virtual int getRemainingLatencyFrames() const = 0;
+    
+    /// Retrieves the number of milliseconds it will take before a command sent in the current
+    /// frame will be executed by Broodwar.
+    ///
+    /// @returns Amount of time, in milliseconds, until a command is executed if it were sent in
+    /// the current frame.
     virtual int getRemainingLatencyTime() const = 0;
 
     /// Retrieves the current revision of BWAPI.
