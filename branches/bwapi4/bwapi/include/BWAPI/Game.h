@@ -91,60 +91,139 @@ namespace BWAPI
     /// @returns Unitset containing static @geysers
     virtual const Unitset& getStaticGeysers() const = 0;
 
-    /** Returns the set of all neutral units (including mined out and other inaccessible ones). */
+    /// Retrieves the set of all units owned by the neutral player (resources, critters, etc.)
+    /// that were available at the beginning of the game.
+    ///
+    /// @note This set includes units that are inaccessible.
+    ///
+    /// @returns Unitset containing static neutral units
     virtual const Unitset& getStaticNeutralUnits() const = 0;
 
-    /** Returns all visible bullets. If Flag::CompleteMapInformation is enabled, the set of all bullets is
-     * returned, not just visible ones. */
+    /// Retrieves the set of all accessible bullets.
+    ///
+    /// @returns Bulletset containing all accessible Bullet objects.
     virtual const Bulletset& getBullets() const = 0;
 
-   /** Returns all visible nuke dots. If Flag::CompleteMapInformation is enabled, the set of all nuke dots
-     * is returned, not just visible ones. */
+    /// Retrieves the set of all accessible @Nuke dots.
+    ///
+    /// @note Nuke dots are the red dots painted by a @Ghost when using the nuclear strike ability.
+    ///
+    /// @returns Set of Positions giving the coordinates of nuke locations.
     virtual const Position::set& getNukeDots() const = 0;
 
-    /** Returns the list of events */
+    /// Retrieves the list of all unhandled game events.
+    ///
+    /// @returns std::list containing Event objects.
     virtual const std::list< Event >& getEvents() const = 0;
 
-    /** Returns the force with the given ID, or nullptr if no force has the given ID */
+    /// Retrieves the Force interface object associated with a given identifier.
+    ///
+    /// @param forceID
+    ///   The identifier for the Force object.
+    ///
+    /// @returns Force interface object mapped to the given \p forceID.
+    /// @retval nullptr if the given identifier is invalid.
     virtual Force* getForce(int forceID) const = 0;
 
-    /** Returns the player with the given ID, or nullptr if no player has the given ID */
+    /// Retrieves the Player interface object associated with a given identifier.
+    ///
+    /// @param playerID
+    ///   The identifier for the Player object.
+    ///
+    /// @returns Player interface object mapped to the given \p playerID.
+    /// @retval nullptr if the given identifier is invalid.
     virtual Player* getPlayer(int playerID) const = 0;
 
-    /** Returns the unit with the given ID, or nullptr if no unit has the given ID */
+    /// Retrieves the Unit interface object associated with a given identifier.
+    ///
+    /// @param unitID
+    ///   The identifier for the Unit object.
+    ///
+    /// @returns Unit interface object mapped to the given \p unitID.
+    /// @retval nullptr if the given identifier is invalid.
     virtual Unit* getUnit(int unitID) const = 0;
 
-    /** Returns a pointer to a Unit given an index. */
+    /// Retrieves a Unit interface object from a given unit index. The value given as an index
+    /// maps directly to Broodwar's unit array index and matches the index found in replay files.
+    /// In order to use this function, CompleteMapInformation must be enabled.
+    ///
+    /// @param unitIndex
+    ///   The unitIndex to identify the Unit with. A valid index is 0 <= unitIndex & 0x7FF < 1700.
+    ///
+    /// @returns Unit interface object that matches the given \p unitIndex.
+    /// @retval nullptr if the given index is invalid.
     virtual Unit* indexToUnit(int unitIndex) const = 0;
 
-    /** Returns the Region with the given ID, or nullptr if no region has the given ID */
+    /// Retrieves the Region interface object associated with a given identifier.
+    ///
+    /// @param regionID
+    ///   The identifier for the Region object.
+    ///
+    /// @returns Region interface object mapped to the given \p regionID.
+    /// @retval nullptr if the given ID is invalid.
     virtual Region* getRegion(int regionID) const = 0;
 
-    /** Returns the game type */
+    /// Retrieves the @GameType of the current game.
+    ///
+    /// @returns GameType indicating the rules of the match.
+    /// @see GameType
     virtual GameType getGameType() const = 0;
 
-    /** Returns the amount of latency the current game has. Currently only returns Latency::SinglePlayer,
-     * Latency::LanLow, Latency::LanMedium, or Latency::LanHigh. */
+    /// Retrieves the current latency setting that the game is set to. Latency indicates the delay
+    /// between issuing a command and having it processed.
+    ///
+    /// @returns The latency setting of the game, which is of Latency::Enum.
+    /// @todo Change return type to Latency::Enum without breaking everything.
     virtual int getLatency() const = 0;
 
-    /** Returns the number of logical frames since the match started. If the game is paused,
-     * Game::getFrameCount will not increase however AIModule::onFrame will still be called while paused.
-     * On Fastest, there are about 23.8 - 24 frames per second. */
+    /// Retrieves the number of logical frames since the beginning of the match. If the game is
+    /// paused, then getFrameCount will not increase.
+    ///
+    /// @returns Number of logical frames that have elapsed since the game started as an integer.
     virtual int getFrameCount() const = 0;
 
-    /** Retrieves the number of frames in the replay */
+    /// Retrieves the maximum number of logical frames that have been recorded in a replay. If
+    /// the game is not a replay, then the value returned is undefined.
+    ///
+    /// @returns The number of logical frames that the replay contains.
     virtual int getReplayFrameCount() const = 0;
 
-    /** Returns the Frames Per Second (FPS) that the game is currently running at */
+    /// Retrieves the logical frame rate of the game in frames per second (FPS).
+    ///
+    /// Example:
+    /// @code
+    ///   BWAPI::Broodwar->setLocalSpeed(0);
+    ///   
+    ///   // Log and display the best logical FPS seen in the game
+    ///   static int bestFPS = 0;
+    ///   bestFPS = std::max(bestFPS, BWAPI::Broodwar->getFPS());
+    ///   BWAPI::Broodwar->drawTextScreen(BWAPI::Positions::Origin, "%cBest: %d GFPS\nCurrent: %d GFPS", BWAPI::Text::White, bestFPS, BWAPI::Broodwar->getFPS());
+    /// @endcode
+    /// @returns Logical frames per second that the game is currently running at as an integer.
+    /// @see getAverageFPS
     virtual int getFPS() const = 0;
+
+    /// Retrieves the average logical frame rate of the game in frames per second (FPS).
+    ///
+    /// @returns Average logical frames per second that the game is currently running at as a
+    /// double.
+    /// @see getFPS
     virtual double getAverageFPS() const = 0;
 
-    /** Returns the position of the mouse on the screen. Returns Positions::Unknown if Flag::UserInput is
-     * disabled. */
+    /// Retrieves the position of the user's mouse on the screen, in Position coordinates.
+    ///
+    /// @returns Position indicating the location of the mouse.
+    /// @retval Positions::Unknown if Flag::UserInput is disabled.
     virtual Position getMousePosition() const = 0;
 
-    /** Returns true if the specified mouse button is pressed. Returns false if Flag::UserInput is
-     * disabled. */
+    /// Retrieves the state of the given mouse button.
+    ///
+    /// @param button
+    ///   A MouseButton enum member indicating which button on the mouse to check.
+    ///
+    /// @return A bool indicating the state of the given \p button. true if the button was pressed
+    /// and false if it was not.
+    /// @retval false always if Flag::UserInput is disabled.
     virtual bool getMouseState(MouseButton button) const = 0;
 
     /** Returns true if the specified key is pressed. Returns false if Flag::UserInput is disabled.
@@ -161,10 +240,12 @@ namespace BWAPI
     /** Moves the screen to the given position on the map. The position specified where the top left corner
      * of the screen will be. */
     virtual void setScreenPosition(int x, int y) = 0;
+    /// @overload
     void setScreenPosition(BWAPI::Position p);
 
     /** Pings the given position on the minimap. */
     virtual void pingMinimap(int x, int y) = 0;
+    /// @overload
     void pingMinimap(BWAPI::Position p);
 
     /** Returns true if the given flag has been enabled. Note that flags can only be enabled at the
@@ -177,10 +258,12 @@ namespace BWAPI
 
     /** Returns the set of accessible units that are on the given build tile. */
     Unitset getUnitsOnTile(int tileX, int tileY, const UnitFilter &pred = nullptr) const;
+    /// @overload
     Unitset getUnitsOnTile(BWAPI::TilePosition tile, const UnitFilter &pred = nullptr) const;
 
     /** Returns the set of accessible units that are in or overlapping the given rectangle. */
     virtual Unitset getUnitsInRectangle(int left, int top, int right, int bottom, const UnitFilter &pred = nullptr) const = 0;
+    /// @overload
     Unitset getUnitsInRectangle(BWAPI::Position topLeft, BWAPI::Position bottomRight, const UnitFilter &pred = nullptr) const;
 
     /** Returns the set of accessible units within or overlapping a circle at the given point with the given radius. */
@@ -427,14 +510,19 @@ namespace BWAPI
 
     /** Prints text on the screen. Text is not sent to other players in multiplayer games. */
     virtual void vPrintf(const char *format, va_list arg) = 0;
+    ///
     void printf(const char *format, ...);
 
     /** Sends text to other players - as if it were entered in chat. In single player games and replays,
      * this will just print the text on the screen. If the game is a single player match and not a replay,
      * then this function can be used to execute cheat codes, i.e. Broodwar->sendText("show me the money"). */
     void sendText(const char *format, ...);
+    ///
     void vSendText(const char *format, va_list arg);
+
+    /// 
     void sendTextEx(bool toAllies, const char *format, ...);
+    ///
     virtual void vSendTextEx(bool toAllies, const char *format, va_list arg) = 0;
 
     /** Used to change the race while in a lobby. Note that there is no onLobbyEnter callback yet, so this
@@ -463,18 +551,21 @@ namespace BWAPI
      * function cannot be used at this time. */
     virtual void startGame() = 0;
 
-    /** Pauses the game. If the game is paused, Game::getFrameCount will not increase however
-     * AIModule::onFrame will still be called while paused. */
+    /// Pauses the game. While paused, Game::getFrameCount will not increase, but AIModule::onFrame
+    /// will still be called.
+    /// @see resumeGame
     virtual void pauseGame() = 0;
 
-    /** Resumes the game. */
+    /// Resumes the game from a paused state.
+    /// @see pauseGame
     virtual void resumeGame() = 0;
 
-    /** Leaves the current match and goes to the after-game stats screen. */
+    /// Leaves the current game by surrendering and enters the post-game statistics/score screen.
     virtual void leaveGame() = 0;
 
-    /** Restarts the match. Works the same way as if you restarted the match from the menu screen. Only
-     * available in single player mode. */
+    /// Restarts the match. Works the same as if the match was restarted from the in-game menu
+    /// (F10). This option is only available in single player games.
+    /// @todo return a bool indicating success, document error code for invalid state
     virtual void restartGame() = 0;
 
     /** Sets the speed of the game to the given number. Lower numbers are faster. 0 is the fastest speed
@@ -513,7 +604,10 @@ namespace BWAPI
      * return nullptr. */
     virtual Player* enemy() const = 0;
 
-    /** Returns a pointer to the neutral player. */
+    /// Retrieves a pointer to the Player interface object representing the neutral player. The
+    /// neutral player owns all the resources and critters on the map by default.
+    ///
+    /// @returns Player interface indicating the neutral player.
     virtual Player* neutral() const = 0;
 
     /** Returns a set of all the ally players that have not left or been defeated. Does not include self. */
@@ -536,52 +630,83 @@ namespace BWAPI
     /** Draws text on the screen at the given position. Text can be drawn in different colors by using the
      * following control characters: TODO: add image from wiki.*/
     virtual void vDrawText(CoordinateType::Enum ctype, int x, int y, const char *format, va_list arg) = 0;
+    /// @overload
     void drawText(CoordinateType::Enum ctype, int x, int y, const char *format, ...);
+    /// @overload
     void drawTextMap(int x, int y, const char *format, ...);
-    void drawTextMouse(int x, int y, const char *format, ...);
-    void drawTextScreen(int x, int y, const char *format, ...);
+    /// @overload
     void drawTextMap(Position p, const char *format, ...);
+    /// @overload
+    void drawTextMouse(int x, int y, const char *format, ...);
+    /// @overload
     void drawTextMouse(Position p, const char *format, ...);
+    /// @overload
+    void drawTextScreen(int x, int y, const char *format, ...);
+    /// @overload
     void drawTextScreen(Position p, const char *format, ...);
 
     /** Draws a box on the screen, with the given color. If isSolid is true, the entire box will be
      * rendered, otherwise just the outline will be drawn. */
     virtual void drawBox(CoordinateType::Enum ctype, int left, int top, int right, int bottom, Color color, bool isSolid = false) = 0;
+    /// @overload
     void drawBoxMap(int left, int top, int right, int bottom, Color color, bool isSolid = false);
-    void drawBoxMouse(int left, int top, int right, int bottom, Color color, bool isSolid = false);
-    void drawBoxScreen(int left, int top, int right, int bottom, Color color, bool isSolid = false);
+    /// @overload
     void drawBoxMap(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
+    /// @overload
+    void drawBoxMouse(int left, int top, int right, int bottom, Color color, bool isSolid = false);
+    /// @overload
     void drawBoxMouse(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
+    /// @overload
+    void drawBoxScreen(int left, int top, int right, int bottom, Color color, bool isSolid = false);
+    /// @overload
     void drawBoxScreen(Position leftTop, Position rightBottom, Color color, bool isSolid = false);
 
     /** Draws a triangle on the screen. If isSolid is true, a solid triangle is drawn, otherwise just the
      * outline of the triangle will be drawn. */
     virtual void drawTriangle(CoordinateType::Enum ctype, int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false) = 0;
+    /// @overload
     void drawTriangleMap(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
-    void drawTriangleMouse(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
-    void drawTriangleScreen(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
+    /// @overload
     void drawTriangleMap(Position a, Position b, Position c, Color color, bool isSolid = false);
+    /// @overload
+    void drawTriangleMouse(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
+    /// @overload
     void drawTriangleMouse(Position a, Position b, Position c, Color color, bool isSolid = false);
+    /// @overload
+    void drawTriangleScreen(int ax, int ay, int bx, int by, int cx, int cy, Color color, bool isSolid = false);
+    /// @overload
     void drawTriangleScreen(Position a, Position b, Position c, Color color, bool isSolid = false);
 
     /** Draws a circle on the screen, with the given color. If isSolid is true, a solid circle is drawn,
      * otherwise just the outline of a circle will be drawn. */
     virtual void drawCircle(CoordinateType::Enum ctype, int x, int y, int radius, Color color, bool isSolid = false) = 0;
+    /// @overload
     void drawCircleMap(int x, int y, int radius, Color color, bool isSolid = false);
-    void drawCircleMouse(int x, int y, int radius, Color color, bool isSolid = false);
-    void drawCircleScreen(int x, int y, int radius, Color color, bool isSolid = false);
+    /// @overload
     void drawCircleMap(Position p, int radius, Color color, bool isSolid = false);
+    /// @overload
+    void drawCircleMouse(int x, int y, int radius, Color color, bool isSolid = false);
+    /// @overload
     void drawCircleMouse(Position p, int radius, Color color, bool isSolid = false);
+    /// @overload
+    void drawCircleScreen(int x, int y, int radius, Color color, bool isSolid = false);
+    /// @overload
     void drawCircleScreen(Position p, int radius, Color color, bool isSolid = false);
 
     /** Draws an ellipse on the screen, with the given color. If isSolid is true, a solid ellipse is drawn,
      * otherwise just the outline of an ellipse will be drawn. */
     virtual void drawEllipse(CoordinateType::Enum ctype, int x, int y, int xrad, int yrad, Color color, bool isSolid = false) = 0;
+    /// @overload
     void drawEllipseMap(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
-    void drawEllipseMouse(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
-    void drawEllipseScreen(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
+    /// @overload
     void drawEllipseMap(Position p, int xrad, int yrad, Color color, bool isSolid = false);
+    /// @overload
+    void drawEllipseMouse(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
+    /// @overload
     void drawEllipseMouse(Position p, int xrad, int yrad, Color color, bool isSolid = false);
+    /// @overload
+    void drawEllipseScreen(int x, int y, int xrad, int yrad, Color color, bool isSolid = false);
+    /// @overload
     void drawEllipseScreen(Position p, int xrad, int yrad, Color color, bool isSolid = false);
 
     /// Draws a dot on the map or screen with a given color.
@@ -598,13 +723,13 @@ namespace BWAPI
     /// @overload
     void drawDotMap(int x, int y, Color color);
     /// @overload
-    void drawDotMouse(int x, int y, Color color);
-    /// @overload
-    void drawDotScreen(int x, int y, Color color);
-    /// @overload
     void drawDotMap(Position p, Color color);
     /// @overload
+    void drawDotMouse(int x, int y, Color color);
+    /// @overload
     void drawDotMouse(Position p, Color color);
+    /// @overload
+    void drawDotScreen(int x, int y, Color color);
     /// @overload
     void drawDotScreen(Position p, Color color);
 
@@ -626,13 +751,13 @@ namespace BWAPI
     /// @overload
     void drawLineMap(int x1, int y1, int x2, int y2, Color color);
     /// @overload
-    void drawLineMouse(int x1, int y1, int x2, int y2, Color color);
-    /// @overload
-    void drawLineScreen(int x1, int y1, int x2, int y2, Color color);
-    /// @overload
     void drawLineMap(Position a, Position b, Color color);
     /// @overload
+    void drawLineMouse(int x1, int y1, int x2, int y2, Color color);
+    /// @overload
     void drawLineMouse(Position a, Position b, Color color);
+    /// @overload
+    void drawLineScreen(int x1, int y1, int x2, int y2, Color color);
     /// @overload
     void drawLineScreen(Position a, Position b, Color color);
 

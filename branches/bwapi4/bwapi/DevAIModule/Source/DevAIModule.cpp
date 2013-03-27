@@ -10,7 +10,6 @@ bool enabled;
 int mapH, mapW;
 
 DWORD dwCount = 0;
-int bestFPS;
 
 Player *self;
 void onResearchComplete(Player *player, TechType tech);
@@ -95,13 +94,10 @@ void DevAIModule::onFrame()
   if ( bw->isReplay() ) // ignore everything if in a replay
     return;
 
-  // Get the best logical FPS
-  int tFPS = bw->getFPS();
-  if ( tFPS > bestFPS )
-    bestFPS = tFPS;
-
-  // Display it
-  bw->drawTextScreen(4, 4, "Best: %d GFPS\nCurrent: %d GFPS", bestFPS, tFPS);
+  // Log and display the best logical FPS seen in the game
+  static int bestFPS = 0;
+  bestFPS = std::max(bestFPS, BWAPI::Broodwar->getFPS());
+  BWAPI::Broodwar->drawTextScreen(BWAPI::Positions::Origin, "%cBest: %d GFPS\nCurrent: %d GFPS", BWAPI::Text::White, bestFPS, BWAPI::Broodwar->getFPS());
   
 
   Unitset resources = Broodwar->getStaticMinerals();

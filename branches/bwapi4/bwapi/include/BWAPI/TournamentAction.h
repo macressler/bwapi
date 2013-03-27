@@ -12,7 +12,6 @@ namespace BWAPI
       PauseGame,
       ResumeGame,
       LeaveGame,
-      RestartGame,
       SetLocalSpeed,
       SetTextSize,
       SetLatCom,

@@ -106,7 +106,6 @@ bool ExampleTournamentModule::onAction(BWAPI::Tournament::ActionID actionType, v
     // Allow other flags if we add more that don't affect gameplay specifically
     return true;
   case Tournament::PauseGame:
-  case Tournament::RestartGame:
   case Tournament::ResumeGame:
   case Tournament::SetFrameSkip:
   case Tournament::SetGUI:

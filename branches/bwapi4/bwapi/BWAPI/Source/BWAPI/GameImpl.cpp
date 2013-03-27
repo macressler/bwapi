@@ -593,8 +593,6 @@ namespace BWAPI
     }
 
     this->setLastError();
-    if ( !this->tournamentCheck(Tournament::RestartGame) )
-      return;
     QUEUE_COMMAND(BW::Orders::RestartGame);
   }
   //--------------------------------------------- SET ALLIANCE -----------------------------------------------
