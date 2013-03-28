@@ -749,12 +749,6 @@ namespace BWAPI
         if (Broodwar->isInGame())
           Broodwar->sendText("%s", data->strings[v1]);
         break;
-      case BWAPIC::CommandType::ChangeRace:
-        Broodwar->changeRace(Race(v1));
-        break;
-      case BWAPIC::CommandType::StartGame:
-        Broodwar->startGame();
-        break;
       case BWAPIC::CommandType::PauseGame:
         if (Broodwar->isInGame())
           Broodwar->pauseGame();

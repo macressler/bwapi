@@ -448,15 +448,35 @@ namespace BWAPI
     /// @overload
     int  getGroundHeight(TilePosition position) const;
 
-    /** Returns true if the specified build tile is buildable. Note that this just uses the static map data.
-     * You will also need to make sure no ground units on the tile to see if its currently buildable. To do
-     * this, see unitsOnTile. */
+    /// Checks if a given tile position is buildable. This means that, if all other requirements
+    /// are met, a structure can be placed on this tile. This function uses static map data.
+    ///
+    /// @param tileX
+    ///   The x value of the tile to check.
+    /// @param tileY
+    ///   The y value of the tile to check.
+    /// @param includeBuildings (optional)
+    ///   If this is true, then this function will also check if any visible structures are
+    ///   occupying the space. If this value is false, then it only checks the static map data
+    ///   for tile buildability. This value is false by default.
+    ///
+    /// @returns boolean identifying if the given tile position is buildable (true) or not (false).
+    /// If \p includeBuildings was provided, then it will return false if a structure is currently
+    /// occupying the tile.
     virtual bool isBuildable(int tileX, int tileY, bool includeBuildings = false) const = 0;
     /// @overload
     bool isBuildable(TilePosition position, bool includeBuildings = false) const;
 
-    /** Returns true if the specified build tile is visible. If the tile is concealed by fog of war, the
-     * function will return false. */
+    /// Checks if a given tile position is visible to the current player.
+    ///
+    /// @param tileX
+    ///   The x value of the tile to check.
+    /// @param tileY
+    ///   The y value of the tile to check.
+    /// 
+    /// @returns boolean identifying the visibility of the tile. If the given tile is visible, then
+    /// the value is true. If the given tile is concealed by the fog of war, then this value will
+    /// be false.
     virtual bool isVisible(int tileX, int tileY) const = 0;
     /// @overload
     bool isVisible(TilePosition position) const;
@@ -535,22 +555,58 @@ namespace BWAPI
      * discarded when determining whether or not any ground units are blocking the build location. */
     virtual bool canBuildHere(TilePosition position, UnitType type, const Unit *builder = nullptr, bool checkExplored = false) = 0;
 
-    /** Returns true if the AI player has enough resources, supply, tech, and required units in order to
-     * make the given unit type. If builder is not null, canMake will return true only if the builder unit
-     * can build the given unit type. */
+    /// Checks all the requirements in order to make a given unit type for the current player.
+    /// These include resources, supply, technology tree, availability, and required units.
+    ///
+    /// @param type
+    ///   The UnitType to check.
+    /// @param builder (optional)
+    ///   The Unit that will be used to build/train the provided unit \p type. If this value is
+    ///   nullptr or excluded, then the builder will be excluded in the check.
+    ///
+    /// @returns true indicating that the type can be made. If \p builder is provided, then it is
+    /// only true if \p builder can make the \p type. Otherwise it will return false, indicating
+    /// that the unit type can not be made.
     virtual bool canMake(UnitType type, const Unit *builder = nullptr) const = 0;
 
-    /** Returns true if the AI player has enough resources required to research the given tech type. If unit
-     * is not null, canResearch will return true only if the given unit can research the given tech type. */
+    /// Checks all the requirements in order to research a given technology type for the current
+    /// player. These include resources, technology tree, availability, and required units.
+    ///
+    /// @param type
+    ///   The TechType to check.
+    /// @param unit (optional)
+    ///   The Unit that will be used to research the provided technology \p type. If this value is
+    ///   nullptr or excluded, then the unit will be excluded in the check.
+    /// @param checkCanIssueCommandType (optional)
+    ///   @todo fill this in
+    ///
+    /// @returns true indicating that the type can be researched. If \p unit is provided, then it is
+    /// only true if \p unit can research the \p type. Otherwise it will return false, indicating
+    /// that the technology can not be researched.
     virtual bool canResearch(TechType type, const Unit *unit = nullptr, bool checkCanIssueCommandType = true) = 0;
 
-    /** Returns true if the AI player has enough resources required to upgrade the given upgrade type. If
-     * unit is not null, canUpgrade will return true only if the given unit can upgrade the given upgrade
-     * type. */
+    /// Checks all the requirements in order to upgrade a given upgrade type for the current
+    /// player. These include resources, technology tree, availability, and required units.
+    ///
+    /// @param type
+    ///   The UpgradeType to check.
+    /// @param unit (optional)
+    ///   The Unit that will be used to upgrade the provided upgrade \p type. If this value is
+    ///   nullptr or excluded, then the unit will be excluded in the check.
+    /// @param checkCanIssueCommandType (optional)
+    ///   @todo fill this in
+    ///
+    /// @returns true indicating that the type can be upgraded. If \p unit is provided, then it is
+    /// only true if \p unit can upgrade the \p type. Otherwise it will return false, indicating
+    /// that the upgrade can not be upgraded.
     virtual bool canUpgrade(UpgradeType type, const Unit *unit = nullptr, bool checkCanIssueCommandType = true) = 0;
 
-    /** Returns the set of starting locations for the given map. To determine the starting location for the
-     * players in the current match, see Player::getStartLocation. */
+    /// Retrieves the set of all starting locations for the current map. A starting location is
+    /// essentially a candidate for a player's spawn point.
+    ///
+    /// @returns A TilePosition::set containing all the TilePosition objects that indicate a start
+    /// location.
+    /// @see Player::getStartLocation
     virtual const TilePosition::set& getStartLocations() const = 0;
 
     /** Prints text on the screen. Text is not sent to other players in multiplayer games. */
@@ -570,34 +626,35 @@ namespace BWAPI
     ///
     virtual void vSendTextEx(bool toAllies, const char *format, va_list arg) = 0;
 
-    /** Used to change the race while in a lobby. Note that there is no onLobbyEnter callback yet, so this
-     * function cannot be used at this time. */
-    virtual void changeRace(Race race) = 0;
-
-    /** Returns true if Broodwar is in a game. Returns false for lobby and menu screens */
+    /// Checks if the current client is inside a game.
+    ///
+    /// @returns true if the client is in a game, and false if it is not.
     virtual bool isInGame() const = 0;
 
-    /** Returns true if Broodwar is in a multiplayer game. Returns false for single player games and
-     * replays. */
+    /// Checks if the current client is inside a multiplayer game.
+    ///
+    /// @returns true if the client is in a multiplayer game, and false if it is a single player
+    /// game, a replay, or some other state.
     virtual bool isMultiplayer() const = 0;
 
-    /** Returns true if Broodwar is in a BNet multiplayer game.
-    */
+    /// Checks if the client is in a game that was created through the Battle.net multiplayer 
+    /// gaming service.
+    ///
+    /// @returns true if the client is in a multiplayer Battle.net game and false if it is not.
     virtual bool isBattleNet() const = 0;
 
-    /** Returns true if Broodwar is paused. If the game is paused, Game::getFrameCount will continue to
-     * increase and AIModule::onFrame will still be called while paused. */
+    /// Checks if the current game is paused. While paused, AIModule::onFrame will still be called.
+    ///
+    /// @returns true if the game is paused and false otherwise
+    /// @see pauseGame, resumeGame
     virtual bool isPaused() const = 0;
 
-    /** Returns true if Broodwar is in a replay. */
+    /// Checks if the client is watching a replay.
+    ///
+    /// @returns true if the client is watching a replay and false otherwise
     virtual bool isReplay() const = 0;
 
-    /** Used to start the game while in a lobby. Note that there is no onLobbyEnter callback yet, so this
-     * function cannot be used at this time. */
-    virtual void startGame() = 0;
-
-    /// Pauses the game. While paused, Game::getFrameCount will not increase, but AIModule::onFrame
-    /// will still be called.
+    /// Pauses the game. While paused, AIModule::onFrame will still be called.
     /// @see resumeGame
     virtual void pauseGame() = 0;
 

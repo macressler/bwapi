@@ -7,8 +7,6 @@ namespace BWAPI
     enum ActionID
     {
       EnableFlag,
-      ChangeRace,
-      StartGame,
       PauseGame,
       ResumeGame,
       LeaveGame,

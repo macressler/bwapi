@@ -113,7 +113,6 @@ bool ExampleTournamentModule::onAction(BWAPI::Tournament::ActionID actionType, v
   case Tournament::SetMap:
     return false; // Disallow these actions
   case Tournament::LeaveGame:
-  case Tournament::ChangeRace:
   case Tournament::SetLatCom:
   case Tournament::SetTextSize:
     return true; // Allow these actions

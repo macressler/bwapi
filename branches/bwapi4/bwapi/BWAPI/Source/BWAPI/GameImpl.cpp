@@ -511,14 +511,6 @@ namespace BWAPI
       } // isInGame
     } // multi
   }
-  //---------------------------------------------- CHANGE RACE -----------------------------------------------
-  void GameImpl::changeRace(BWAPI::Race race)
-  {
-    this->setLastError();
-    if ( !this->tournamentCheck(Tournament::ChangeRace, &race) )
-      return;
-    this->_changeRace(this->BWAPIPlayer->getIndex(),race);
-  }
   //------------------------------------------------ IS IN GAME ----------------------------------------------
   bool GameImpl::isInGame() const
   {
@@ -545,12 +537,9 @@ namespace BWAPI
     return *BW::BWDATA::InReplay != 0;
   }
   //----------------------------------------------- START GAME -----------------------------------------------
-  void GameImpl::startGame()
+  void GameImpl::_startGame()
   {
     // Starts the game as a lobby host 
-    this->setLastError();
-    if ( !this->tournamentCheck(Tournament::StartGame) )
-      return;
     QUEUE_COMMAND(BW::Orders::StartGame);
   }
   //----------------------------------------------- PAUSE GAME -----------------------------------------------

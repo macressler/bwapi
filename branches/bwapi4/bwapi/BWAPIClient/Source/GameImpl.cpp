@@ -628,11 +628,6 @@ namespace BWAPI
   {
     return; //todo: implement
   }
-  //---------------------------------------------- CHANGE RACE -----------------------------------------------
-  void GameImpl::changeRace(Race race)
-  {
-    addCommand(BWAPIC::Command(BWAPIC::CommandType::ChangeRace));
-  }
   //----------------------------------------------- IS IN GAME -----------------------------------------------
   bool GameImpl::isInGame() const
   {
@@ -657,11 +652,6 @@ namespace BWAPI
   bool GameImpl::isReplay() const
   {
     return data->isReplay;
-  }
-  //----------------------------------------------- START GAME -----------------------------------------------
-  void GameImpl::startGame()
-  {
-    addCommand(BWAPIC::Command(BWAPIC::CommandType::StartGame));
   }
   //----------------------------------------------- PAUSE GAME -----------------------------------------------
   void GameImpl::pauseGame()

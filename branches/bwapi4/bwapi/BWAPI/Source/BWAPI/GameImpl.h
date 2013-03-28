@@ -112,14 +112,12 @@ namespace BWAPI
       virtual void vPrintf(const char *format, va_list arg) override;
       virtual void vSendTextEx(bool toAllies, const char *format, va_list arg) override;
 
-      virtual void changeRace(BWAPI::Race race) override;
       virtual bool isInGame() const override;
       virtual bool isMultiplayer() const override;
       virtual bool isBattleNet() const override;
       virtual bool isPaused() const override;
       virtual bool isReplay() const override;
 
-      virtual void startGame() override;
       virtual void pauseGame() override;
       virtual void resumeGame() override;
       virtual void leaveGame() override;
@@ -209,6 +207,7 @@ namespace BWAPI
       bool inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2);
       bool inScreen(CoordinateType::Enum ctype, int x1, int y1, int x2, int y2, int x3, int y3);
       void lockFlags();
+      void _startGame();
       void _changeRace(int slot, BWAPI::Race race);
       Race lastKnownRaceBeforeStart[8];
 
