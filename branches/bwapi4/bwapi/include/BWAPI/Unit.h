@@ -157,6 +157,7 @@ namespace BWAPI
     ///     }
     ///   }
     /// @endcode
+    /// @implies exists
     BWAPI::Region *getRegion() const;
 
     /// Retrieves the X coordinate of the unit's left boundry, measured in pixels from the left
@@ -223,7 +224,8 @@ namespace BWAPI
     /// Vespene Geyser. If the unit is inaccessible, then the last known resource amount is
     /// returned.
     ///
-    /// @returns An integer representing the amount of resources remaining in this resource.
+    /// @returns An integer representing the last known amount of resources remaining in this
+    /// resource.
     ///
     /// @see getInitialResources
     virtual int getResources() const = 0;
@@ -256,8 +258,8 @@ namespace BWAPI
     /// the given target.
     ///
     /// @note This function only takes into account the terrain data, and does not include
-    /// buildings when determining if a path is available. However, the time it takes to execute
-    /// this function is O(1), and no extensive calculations are necessary.
+    /// buildings when determining if a path is available. However, the complexity of this
+    /// function is constant ( O(1) ), and no extensive calculations are necessary.
     ///
     /// @note If the current unit is an air unit, then this function will always return true.
     ///
@@ -269,26 +271,53 @@ namespace BWAPI
     /// island).
     bool hasPath(PositionOrUnit target) const;
 
-    /** Returns the frame of the last successful command. Frame is comparable to Game::getFrameCount(). */
+    /// Retrieves the frame number that sent the last successful command.
+    /// 
+    /// @note This value is comparable to Game::getFrameCount.
+    ///
+    /// @returns The frame number that sent the last successfully processed command to BWAPI.
+    /// @see Game::getFrameCount, getLastCommand
     virtual int getLastCommandFrame() const = 0;
 
-    /** Returns the last successful command. */
+    /// Retrieves the last successful command that was sent to BWAPI.
+    ///
+    /// @returns A UnitCommand object containing information about the command that was processed.
+    /// @see getLastCommandFrame
     virtual UnitCommand getLastCommand() const = 0;
 
-    /** Returns the player that last attacked this unit. */
+    /// Retrieves the Player that last attacked this unit.
+    /// 
+    /// @returns Player interface object representing the player that last attacked this unit.
+    /// @retval nullptr If this unit was not attacked.
+    /// @implies exists()
     virtual BWAPI::Player *getLastAttackingPlayer() const = 0;
 
-    /** Returns the initial type of the unit or Unknown if it wasn't a neutral unit at the beginning of the
-     * game. */
+    /// Retrieves the initial type of the unit. This is the type that the unit starts as in the
+    /// beginning of the game. This is used to access the types of static neutral units such as
+    /// mineral fields when they are not visible.
+    ///
+    /// @returns UnitType of this unit as it was when it was created.
+    /// @retval UnitTypes::Unknown if this unit was not a static neutral unit in the beginning of
+    /// the game.
     virtual UnitType getInitialType() const = 0;
 
-    /** Returns the initial position of the unit on the map, or Positions::Unknown if the unit wasn't a
-     * neutral unit at the beginning of the game. */
+    /// Retrieves the initial position of this unit. This is the position that the unit starts at
+    /// in the beginning of the game. This is used to access the positions of static neutral units
+    /// such as mineral fields when they are not visible.
+    ///
+    /// @returns Position indicating the unit's initial position when it was created.
+    /// @retval Positions::Unknown if this unit was not a static neutral unit in the beginning of
+    /// the game.
     virtual Position getInitialPosition() const = 0;
 
-    /** Returns the initial build tile position of the unit on the map, or TilePositions::Unknown if the
-     * unit wasn't a neutral unit at the beginning of the game. The tile position is of the top left corner
-     * of the building. */
+    /// Retrieves the initial build tile position of this unit. This is the tile position that the
+    /// unit starts at in the beginning of the game. This is used to access the tile positions of
+    /// static neutral units such as mineral fields when they are not visible. The build tile
+    /// position corresponds to the upper left corner of the unit.
+    ///
+    /// @returns TilePosition indicating the unit's initial tile position when it was created.
+    /// @retval TilePositions::Unknown if this unit was not a static neutral unit in the beginning of
+    /// the game.
     virtual TilePosition getInitialTilePosition() const = 0;
 
     /** Returns the unit's initial amount of hit points, or 0 if it wasn't a neutral unit at the beginning
@@ -444,17 +473,29 @@ namespace BWAPI
     virtual Unit* getNydusExit() const = 0;
 
     /// Retrieves the power-up that the worker unit is holding. Power-ups are special units such
-    /// as the flag in the Capture the Flag game type, which can be picked up by worker units.
+    /// as the @Flag in the @CTF game type, which can be picked up by worker units.
     ///
     /// @note If your bot is strictly melee/1v1, then this method is not necessary.
     ///
-    /// @return The Unit interface that represents the power-up.
+    /// @returns The Unit interface object that represents the power-up.
     /// @retval nullptr If the unit is not carrying anything.
+    ///
+    /// Example
+    /// @code
+    ///   BWAPI::Unitset myUnits = BWAPI::Broodwar->self()getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///   {
+    ///     // If we are carrying a flag
+    ///     if ( u->getPowerUp() && u->getPowerUp()->getType() == BWAPI::UnitTypes::Powerup_Flag )
+    ///       u->move( u->getClosestUnit(BWAPI::Filter::IsFlagBeacon && BWAPI::Filter::IsOwned) );  // return it to our flag beacon to score
+    ///   }
+    /// @endcode
+    /// @implies getType().isWorker(), isCompleted()
     virtual Unit* getPowerUp() const = 0;
 
     /// Retrieves the @Transport or @Bunker unit that has this unit loaded inside of it.
     ///
-    /// @returns @Transport containing this unit.
+    /// @returns Unit interface object representing the @Transport containing this unit.
     /// @retval nullptr if this unit is not in a @Transport.
     virtual Unit* getTransport() const = 0;
 
@@ -554,28 +595,70 @@ namespace BWAPI
     /// @see Unit::build, Unit::cancelConstruction, Unit::haltConstruction, Unit::isConstructing
     bool isBeingConstructed() const;
 
-    /** Returns true if the unit is a mineral patch or refinery that is being gathered. */
+    /// Checks this @Mineral_Field or @Refinery is currently being gathered from.
+    ///
+    /// @returns true if this unit is a resource container and being harvested by a worker, and
+    /// false otherwise
     virtual bool isBeingGathered() const = 0;
 
-    /** Returns true if the unit is currently being healed by a Terran Medic, or repaired by a Terran SCV. */
+    /// Checks if this unit is currently being healed by a @Medic or repaired by a @SCV.
+    ///
+    /// @returns true if this unit is being healed, and false otherwise.
     virtual bool isBeingHealed() const = 0;
 
-    /** Returns true if the unit is currently blind from a Medic's Optical Flare. */
+    /// Checks if this unit is currently blinded by a @Medic 's @Optical_Flare ability. Blinded
+    /// units have reduced sight range and cannot detect other units.
+    ///
+    /// @returns true if this unit is blind, and false otherwise
     virtual bool isBlind() const = 0;
 
-    /** Returns true if the unit is currently braking/slowing down. */
+    /// Checks if the current unit is slowing down to come to a stop.
+    ///
+    /// @returns true if this unit is breaking, false if it has stopped or is still moving at full
+    /// speed.
     virtual bool isBraking() const = 0;
 
-    /** Returns true if the unit is a Zerg unit that is current burrowed.
-     * \see Unit::burrow, Unit::unburrow. */
+    /// Checks if the current unit is burrowed, either using the @Burrow ability, or is an armed
+    /// @Spider_Mine .
+    ///
+    /// @returns true if this unit is burrowed, and false otherwise
+    /// @see burrow, unburrow
     virtual bool isBurrowed() const = 0;
 
-    /** Returns true if the unit is a worker that is carrying gas.
-     * \see Unit::returnCargo, Unit::isGatheringGas. */
+    /// Checks if this worker unit is carrying some vespene gas.
+    ///
+    /// @returns true if this is a worker unit carrying vespene gas, and false if it is either
+    /// not a worker, or not carrying gas.
+    ///
+    /// Example
+    /// @code
+    ///   BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///   {
+    ///     if ( u->isIdle() && (u->isCarryingGas() || u->isCarryingMinerals()) )
+    ///       u->returnCargo();
+    ///   }
+    /// @endcode
+    /// @implies isCompleted(), getType().isWorker()
+    /// @see returnCargo, isGatheringGas, isCarryingMinerals
     virtual bool isCarryingGas() const = 0;
 
-    /** Returns true if the unit is a worker that is carrying minerals.
-     * \see Unit::returnCargo, Unit::isGatheringMinerals. */
+    /// Checks if this worker unit is carrying some minerals.
+    ///
+    /// @returns true if this is a worker unit carrying minerals, and false if it is either
+    /// not a worker, or not carrying minerals.
+    ///
+    /// Example
+    /// @code
+    ///   BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///   {
+    ///     if ( u->isIdle() && (u->isCarryingGas() || u->isCarryingMinerals()) )
+    ///       u->returnCargo();
+    ///   }
+    /// @endcode
+    /// @implies isCompleted(), getType().isWorker()
+    /// @see returnCargo, isGatheringMinerals, isCarryingMinerals
     virtual bool isCarryingMinerals() const = 0;
 
     /** Returns true if the unit is cloaked.
@@ -640,21 +723,19 @@ namespace BWAPI
     /// Checks if this unit is not doing anything. This function is particularly useful when
     /// checking for units that aren't doing any tasks.
     ///
-    /// @note This implies that the unit is completed, so if this returns true, then
-    /// Unit::isCompleted should also return true.
-    ///
     /// @code
     ///   BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
     ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
     ///   {
     ///     // Order idle worker to gather from closest mineral field
     ///     if ( u->getType().isWorker() && u->isIdle() )
-    ///       u->gather( u->getClosestUnit( BWAPI::IsMineralField ) );
+    ///       u->gather( u->getClosestUnit( BWAPI::Filter::IsMineralField ) );
     ///   }
     /// @endcode
     ///
-    /// @retval true if this unit is idle
-    /// @retval false if this unit is performing some action such as moving or attacking
+    /// @returns true if this unit is idle, and false if this unit is performing any action, such
+    /// as moving or attacking
+    /// @implies isCompleted
     /// @see Unit::stop
     virtual bool isIdle() const = 0;
 
@@ -673,20 +754,15 @@ namespace BWAPI
     ///
     /// Example usage:
     /// @code
-    ///   void AIModule::onFrame()
+    ///   BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    ///   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
     ///   {
-    ///     if ( !BWAPI::Broodwar->self() )   // safety first
-    ///       return;
-    ///     BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
-    ///     for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///     if ( u->isIrradiated() && u->getIrradiateTimer > 50 && BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Restoration) )
     ///     {
-    ///       if ( u->isIrradiated() && u->getIrradiateTimer > 50 && BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Restoration) )
-    ///       {
-    ///         BWAPI::Unit medic = u->getClosestUnit( BWAPI::Filter::GetType == BWAPI::UnitTypes::Terran_Medic &&
-    ///                                                BWAPI::Filter::Energy >= BWAPI::TechTypes::Restoration.energyCost() );
-    ///         if ( medic )
-    ///           medic->useTech(BWAPI::TechTypes::Restoration, *u);
-    ///       }
+    ///       BWAPI::Unit medic = u->getClosestUnit( BWAPI::Filter::GetType == BWAPI::UnitTypes::Terran_Medic &&
+    ///                                              BWAPI::Filter::Energy >= BWAPI::TechTypes::Restoration.energyCost() );
+    ///       if ( medic )
+    ///         medic->useTech(BWAPI::TechTypes::Restoration, *u);
     ///     }
     ///   }
     /// @endcode
@@ -697,6 +773,8 @@ namespace BWAPI
     /// generally implies this->getType().isBuilding() and this->isCompleted() both return true.
     ///
     /// @returns true if this unit is a @Terran structure lifted off the ground.
+    /// @implies isCompleted, getType().isFlyingBuilding()
+    /// @see isFlying
     virtual bool isLifted() const = 0;
 
     /** Return true if the unit is loaded into a Terran Bunker, Terran Dropship, Protoss Shuttle, or Zerg

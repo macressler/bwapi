@@ -535,14 +535,14 @@ namespace BWAPI
     ///
     /// @code
     ///   BWAPI::Position myBasePosition( BWAPI::Broodwar->self()->getStartLocation() );
-    ///   BWAPI::UnitSet unitsAroundTheBase = BWAPI::Broodwar->getUnitsInRadius(myBasePosition, 1024, GetPlayer != BWAPI::Broodwar->self());
-    ///   for ( auto i = unitsAroundTheBase.begin(); i != unitsAroundTheBase.end(); ++i )
+    ///   BWAPI::UnitSet unitsAroundTheBase = BWAPI::Broodwar->getUnitsInRadius(myBasePosition, 1024, !BWAPI::Filter::IsOwned && !BWAPI::Filter::IsParasited);
+    ///   for ( auto u = unitsAroundTheBase.begin(); u != unitsAroundTheBase.end(); ++u )
     ///   {
-    ///     if ( i->getType().isCritter() && !i->isInvincible() )
+    ///     if ( u->getType().isCritter() && !u->isInvincible() )
     ///     {
-    ///       BWAPI::Unit *myQueen = i->getClosestUnit(GetType == BWAPI::UnitTypes::Zerg_Queen && GetPlayer == BWAPI::Broodwar->self());
+    ///       BWAPI::Unit *myQueen = u->getClosestUnit(BWAPI::Filter::GetType == BWAPI::UnitTypes::Zerg_Queen && BWAPI::Filter::IsOwned);
     ///       if ( myQueen )
-    ///         myQueen->useTech(BWAPI::TechTypes::Spawn_Broodlings, *i);
+    ///         myQueen->useTech(BWAPI::TechTypes::Parasite, *u);
     ///     }
     ///   }
     /// @endcode
