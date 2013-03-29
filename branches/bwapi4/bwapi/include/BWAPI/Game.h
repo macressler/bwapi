@@ -701,9 +701,13 @@ namespace BWAPI
     /// @endcode
     virtual Player* self() const = 0;
 
-    /** Returns a pointer to the enemy player. If there is more than one enemy, this returns a pointer to
-     * just one enemy (see enemies to get all enemies still in game). In replays this will
-     * return nullptr. */
+    /// Retrieves the Player interface that represents the enemy player. If there is more than one
+    /// enemy, and that enemy is destroyed, then this function will still retrieve the same,
+    /// defeated enemy. If you wish to handle multiple opponents, see the Game::enemies function.
+    ///
+    /// @returns Player interface representing an enemy player.
+    /// @retval nullptr If there is no enemy or the current game is a replay.
+    /// @see enemies
     virtual Player* enemy() const = 0;
 
     /// Retrieves a pointer to the Player interface object representing the neutral player. The
@@ -712,13 +716,22 @@ namespace BWAPI
     /// @returns Player interface indicating the neutral player.
     virtual Player* neutral() const = 0;
 
-    /** Returns a set of all the ally players that have not left or been defeated. Does not include self. */
+    /// Retrieves a set of all the current player's remaining allies.
+    ///
+    /// @returns Playerset containing all allied players.
     virtual Playerset& allies() = 0;
 
-    /** Returns a set of all the enemy players that have not left or been defeated. */
+    /// Retrieves a set of all the current player's remaining enemies.
+    ///
+    /// @returns Playerset containing all enemy players.
     virtual Playerset& enemies() = 0;
 
-    /** Returns a set of all the observer players that have not left. */
+    /// Retrieves a set of all players currently observing the game. An observer is defined
+    /// typically in a @UMS game type as not having any impact on the game. This means an
+    /// observer cannot start with any units, and cannot have any active trigger actions that
+    /// create units for it.
+    ///
+    /// @returns Playerset containing all currently active observer players
     virtual Playerset& observers() = 0;
 
     /// Sets the size of the text for all calls to drawText following this one.
@@ -1344,6 +1357,7 @@ namespace BWAPI
     void flush();
   };
 
+  /// The primary Game interface, used to access any Game information or perform Game actions
   extern GameWrapper Broodwar;
 
 }

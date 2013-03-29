@@ -602,11 +602,10 @@ namespace BWAPI
     /// @retval false if the unit is not ensnared
     bool isEnsnared() const;
 
-    /// This macro function checks if the units is in the air. That is, the unit is either a flyer
+    /// This macro function checks if this unit is in the air. That is, the unit is either a flyer
     /// or a flying building.
     ///
-    /// @retval true if it is in the air
-    /// @retval false if it is on the ground
+    /// @returns true if this unit is in the air, and false if it is on the ground
     /// @see UnitType::isFlyer, Unit::isLifted
     bool isFlying() const;
 
@@ -624,17 +623,20 @@ namespace BWAPI
      * \see Unit::isCarryingMinerals. */
     virtual bool isGatheringMinerals() const = 0;
 
-    /** Returns true for hallucinated units, false for normal units. Returns true for hallucinated enemy
-     * units only if Complete Map Information is enabled.
-     * \see Unit::getRemoveTimer. */
+    /// Checks if this unit is a hallucination. Hallucinations are created by the @High_Templar
+    /// using the @Hallucination ability. Enemy hallucinations are unknown if
+    /// Flag::CompleteMapInformation is disabled. Hallucinations have a time limit until they are
+    /// destroyed (see Unit::getRemoveTimer). 
+    ///
+    /// @returns true if the unit is a hallucination and false otherwise.
+    /// @see getRemoveTimer
     virtual bool isHallucination() const = 0;
 
     /** Returns true if the unit is holding position
      * \see Unit::holdPosition. */
+    /// @todo may currently be wrong
     bool isHoldingPosition() const;
 
-    /** Returns true if the unit is not doing anything.
-     * \see Unit::stop. */
     /// Checks if this unit is not doing anything. This function is particularly useful when
     /// checking for units that aren't doing any tasks.
     ///
@@ -665,12 +667,36 @@ namespace BWAPI
     /** Returns true if the unit can attack a specified target from its current position. */
     bool isInWeaponRange(Unit *target) const;
 
-    /** Returns true if the unit is being irradiated by a Terran Science Vessel.
-     * \see Unit::getIrradiateTimer. */
+    /// Checks if this unit is irradiated by a @Science_Vessel 's @Irradiate ability.
+    ///
+    /// @returns true if this unit is irradiated, and false otherwise
+    ///
+    /// Example usage:
+    /// @code
+    ///   void AIModule::onFrame()
+    ///   {
+    ///     if ( !BWAPI::Broodwar->self() )   // safety first
+    ///       return;
+    ///     BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    ///     for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    ///     {
+    ///       if ( u->isIrradiated() && u->getIrradiateTimer > 50 && BWAPI::Broodwar->self()->hasResearched(BWAPI::TechTypes::Restoration) )
+    ///       {
+    ///         BWAPI::Unit medic = u->getClosestUnit( BWAPI::Filter::GetType == BWAPI::UnitTypes::Terran_Medic &&
+    ///                                                BWAPI::Filter::Energy >= BWAPI::TechTypes::Restoration.energyCost() );
+    ///         if ( medic )
+    ///           medic->useTech(BWAPI::TechTypes::Restoration, *u);
+    ///       }
+    ///     }
+    ///   }
+    /// @endcode
+    /// @see getIrradiateTimer
     bool isIrradiated() const;
 
-    /** Returns true if the unit is a Terran building that is currently lifted off the ground.
-     * \see Unit::lift,Unit::land. */
+    /// Checks if this unit is a @Terran building and lifted off the ground. This function
+    /// generally implies this->getType().isBuilding() and this->isCompleted() both return true.
+    ///
+    /// @returns true if this unit is a @Terran structure lifted off the ground.
     virtual bool isLifted() const = 0;
 
     /** Return true if the unit is loaded into a Terran Bunker, Terran Dropship, Protoss Shuttle, or Zerg

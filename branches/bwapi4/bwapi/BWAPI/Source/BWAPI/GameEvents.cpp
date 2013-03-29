@@ -98,13 +98,14 @@ namespace BWAPI
     }
     else
     {
-      /* Get the current player */
+      // Get the current player
       BWAPI::PlayerImpl *thisPlayer = this->_getPlayer(_currentPlayerId());
       if ( !thisPlayer )
         return;
 
       this->BWAPIPlayer = thisPlayer;
-      /* find the opponent player */
+
+      // find the opponent player
       for ( int i = 0; i < PLAYABLE_PLAYER_COUNT; ++i )
       {
         if ( (this->players[i]->getType() == PlayerTypes::Computer ||
