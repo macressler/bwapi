@@ -69,7 +69,9 @@ namespace BWAPI
   /// Namespace containing bullet types
   namespace BulletTypes
   {
-    /** Returns the set of all the BulletTypes. */
+    /// Retrieves the set of all the BulletTypes.
+    ///
+    /// @returns Set of BulletTypes.
     const BulletType::const_set& allBulletTypes();
 
 #ifdef BWAPI_DECL

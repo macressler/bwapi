@@ -31,7 +31,9 @@ namespace BWAPI
   /// Namespace containing damage types
   namespace DamageTypes
   {
-    /** Returns the set of all the DamageTypes. */
+    /// Retrieves the set of all the DamageTypes.
+    ///
+    /// @returns Set of DamageTypes.
     const DamageType::const_set& allDamageTypes();
 
 #ifdef BWAPI_DECL

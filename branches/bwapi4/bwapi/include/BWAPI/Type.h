@@ -6,6 +6,7 @@
 
 namespace BWAPI
 {
+  // @TODO Get rid of this eventually.
   template<class _T>
   class Typeset : public Vectorset<_T>
   {
@@ -45,7 +46,7 @@ namespace BWAPI
     };
   };
 
-  /// Base class for all BWAPI Types.
+  /// Base superclass for all BWAPI Types.
   template<class _T, int __unk>
   class Type
   {
@@ -85,8 +86,7 @@ namespace BWAPI
     ///
     /// A type is valid if it is between 0 and Unknown (inclusive).
     ///
-    /// @retval true If this type is valid.
-    /// @retval false if this type is invalid.
+    /// @returns true If this type is valid and false otherwise.
     inline bool isValid() const { return this->tid >= 0 && this->tid <= __unk; };
 
     /// Retrieves the variable name of the type.
@@ -128,30 +128,26 @@ namespace BWAPI
     /// @TODO: Test. This may be incorrect.
     static _T getType(const std::string &name)
     {
+      // Check against each type
       for ( int i = 0; i < __unk; ++i )
       {
         const std::string &str = typeNames[i];
         std::string::const_iterator ita, itb;
         
-        for ( ita = name.begin(), itb = str.begin(); 
-              ita != name.end() && itb != str.end();
+        // Iterate the given name with the current type string
+        for ( ita = name.cbegin(), itb = str.cbegin(); 
+              ita != name.cend() && itb != str.cend();
               ++ita, ++itb )
         {
-          if ( isspace(*ita) || *ita == '_' ) // Ignore spaces for iterator a
-          {
+          while ( ita != name.cend() && (isspace(*ita) || *ita == '_') ) // Ignore spaces for iterator a
             ++ita;
-            continue;
-          }
-          if ( isspace(*itb) || *itb == '_' ) // Ignore spaces for iterator b
-          {
+          while ( itb != str.cend() && (isspace(*itb) || *itb == '_') ) // Ignore spaces for iterator b
             ++itb;
-            continue;
-          }
 
           if ( tolower(*ita) != tolower(*itb) ) // If matching differs at some point
             break;
         }
-        if ( ita == name.end() && itb == str.end() ) // found perfect match
+        if ( ita == name.cend() && itb == str.cend() ) // found perfect match
           return _T(i);
       }
       return _T(__unk);

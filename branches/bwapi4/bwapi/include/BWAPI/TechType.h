@@ -59,54 +59,85 @@ namespace BWAPI
       };
     };
   }
+  /// The TechType (or Technology Type, also referred to as an Ability) represents a Unit's ability
+  /// which can be researched with Unit::research or used with Unit::useTech. In order for a Unit
+  /// to use its own specialized ability, it must first be available and researched.
   class TechType : public Type<TechType, TechTypes::Enum::Unknown>
   {
     public:
       /// @copydoc Type::Type(int)
       TechType(int id = TechTypes::Enum::None);
 
-      /** Returns the race that uses the TechType. For example, TechTypes::Scanner_Sweep?.getRace() will
-       * return Races::Terran. */
+      /// Retrieves the race that is required to research or use the TechType.
+      ///
+      /// @note There is an exception where @Infested_Kerrigan can use @Psi_Storm. This does not
+      /// apply to the behavior of this function.
+      ///
+      /// @returns Race object indicating which race is designed to use this technology type.
       Race getRace() const;
 
-      /** Returns the mineral cost of the tech type. */
+      /// Retrieves the mineral cost of researching this technology.
+      ///
+      /// @returns Amount of minerals needed in order to research this technology.
       int mineralPrice() const;
 
-      /** Returns the vespene gas price of the tech type. */
+      /// Retrieves the vespene gas cost of researching this technology.
+      ///
+      /// @returns Amount of vespene gas needed in order to research this technology.
       int gasPrice() const;
 
-      /** Returns the number of frames needed to research the tech type. */
+      /// Retrieves the number of frames needed to research the tech type.
+      ///
+      /// @rerturns The time, in frames, it will take for the research to complete.
+      /// @see Unit::getRemainingResearchTime
       int researchTime() const;
 
-      /** Returns the amount of energy used each time this tech type is used. */
+      /// Retrieves the amount of energy needed to use this TechType as an ability.
+      ///
+      /// @returns Energy cost of the ability.
+      /// @see Unit::getEnergy
       int energyCost() const;
 
-      /** Returns the type of unit that researches this tech type. If this tech type is available for free
-       * (does not need to be researched), then this method will return UnitTypes::None. */
+      /// Retrieves the UnitType that can research this technology.
+      ///
+      /// @returns UnitType that is able to research the technology in the game.
+      /// @retval UnitTypes::None If the technology/ability is either provided for free or never
+      /// available.
       UnitType whatResearches() const;
 
-      /** Returns the corresponding weapon for this tech type, or TechTypes::None if no corresponding weapon
-       * exists. For example, TechTypes::Dark_Swarm.getWeapon() will return a pointer to
-       * WeaponTypes::Dark_Swarm. */
+      /// Retrieves the Weapon that is attached to this tech type. A technology's WeaponType
+      /// is used to indicate the range and behaviour of the ability when used by a Unit.
+      ///
+      /// @returns WeaponType containing information about the ability's behavior.
+      /// @retval WeaponTypes::None If there is no corresponding WeaponType.
       WeaponType getWeapon() const;
 
-      /** Returns true if this tech type must be used on another unit (i.e. Irradiate) */
+      /// Checks if this ability can be used on other units.
+      ///
+      /// @returns true if the ability can be used on other units, and false if it can not.
       bool targetsUnit() const;
 
-      /** Returns true if this tech type must be specified a position (i.e. Dark Swarm) */
+      /// Checks if this ability can be used on the terrain (ground).
+      ///
+      /// @returns true if the ability can be used on the terrain.
       bool targetsPosition() const;
 
-      /** Returns the set of units that can use this tech type. Usually this will just be a set of one unit
-       * type, however in some cases, such as TechTypes::Burrowing, several unit types will be returned. */
+      /// Retrieves the set of all UnitTypes that are capable of using this ability.
+      ///
+      /// @returns Set of UnitTypes that can use this ability when researched.
       const UnitType::const_set& whatUses() const;
 
-      /** Returns the order used to execute this tech type as an action. */
+      /// Retrieves the Order that a Unit uses when using this ability.
+      ///
+      /// @returns Order representing the action a Unit uses to perform this ability
       Order getOrder() const;
   };
   /// Namespace containing tech types
   namespace TechTypes
   {
-    /** Returns the set of all the TechTypes. */
+    /// Retrieves the set of all the TechTypes.
+    ///
+    /// @returns Set of all available TechTypes.
     const TechType::const_set& allTechTypes();
 
 #ifdef BWAPI_DECL

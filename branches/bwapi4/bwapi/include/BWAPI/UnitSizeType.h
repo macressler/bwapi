@@ -32,7 +32,9 @@ namespace BWAPI
   /// Namespace containing unit size types
   namespace UnitSizeTypes
   {
-    /** Returns the set of all the sizes, which are listed below: */
+    /// Retrieves the set of all UnitSizeTypes.
+    ///
+    /// @returns Set of all UnitSizeTypes.
     const UnitSizeType::const_set& allUnitSizeTypes();
     
 #ifdef BWAPI_DECL

@@ -260,7 +260,8 @@ namespace BWAPI
     /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
     ///
     /// @note In Starcraft, the supply for each race is separate. Having a @Pylon and an @Overlord
-    /// will not give you 32. It will instead give you 16 @Protoss supply and 16 @Zerg supply.
+    /// will not give you 32 supply. It will instead give you 16 @Protoss supply and 16 @Zerg
+    /// supply.
     ///
     /// @param race (optional)
     ///   The race to query the total supply for. If this is omitted, then the player's current

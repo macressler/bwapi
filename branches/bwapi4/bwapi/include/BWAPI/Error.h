@@ -61,7 +61,9 @@ namespace BWAPI
   /// Namespace containing error codes
   namespace Errors
   {
-    /** The set of all the error codes. */
+    /// Retrieves the set of all the error codes.
+    ///
+    /// @returns Set of error types.
     const Error::const_set& allErrors();
 
 #ifdef BWAPI_DECL

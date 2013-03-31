@@ -31,9 +31,6 @@
     <ClCompile Include="Source\TechType.cpp">
       <Filter>Types\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Type.cpp">
-      <Filter>Types\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UnitSizeType.cpp">
       <Filter>Types\Source Files</Filter>
     </ClCompile>

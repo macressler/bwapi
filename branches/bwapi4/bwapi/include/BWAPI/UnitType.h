@@ -259,130 +259,225 @@ namespace BWAPI
         MAX
       };
 
-
     };
   }
-  /** The UnitType class is used to get information about a particular type of unit, such as the build time
-   * of a Lurker, or the mineral price of an Ultralisk. TODO Add the unittype table from the wiki*/
+  /// The UnitType is used to get information about a particular type of unit, such as its cost,
+  /// build time, weapon, hit points, abilities, etc.
+  ///
+  /// @see Unit::getType
   class UnitType : public Type<UnitType, UnitTypes::Enum::Unknown>
   {
   public:
     /// @copydoc Type::Type(int)
     UnitType(int id = UnitTypes::Enum::None);
 
-    /** Returns the race that the unit belongs to. For example UnitTypes::Terran_SCV.getRace() will return
-     * Races::Terran. */
+    /// Retrieves the Race that the unit type belongs to.
+    ///
+    /// @returns Race indicating the race that owns this unit type.
+    /// @retval Race::None indicating that the unit type does not belong to any particular race (a
+    /// critter for example).
     Race getRace() const;
 
-    /** Returns what builds this unit type. The second number will usually be 1 unless the unit type is
-     * Protoss_Archon or Protoss_Dark_Archon. Units that cannot be created, such as critters and mineral
-     * fields, will return a pair where the unit type is UnitTypes::None, and the second component is 0.
-     *
-     * Example: UnitTypes::Terran_Marine.whatBuilds() will return an std::pair, where the first component
-     * is UnitTypes::Terran_Barracks. */
+    /// Obtains the source unit type that is used to build or train this unit type, as well as the
+    /// amount of them that are required.
+    ///
+    /// @returns std::pair in which the first value is the UnitType that builds this unit type, and
+    /// the second value is the number of those types that are required (this value is 2 for
+    /// @Archons, and 1 for all other types).
+    /// @retval pair(UnitTypes::None,0) If this unit type cannot be made by the player.
     const std::pair< UnitType, int > whatBuilds() const;
 
-    /** Returns the units the player is required to have before it can train or build the given unit type.
-     *
-     * Example: UnitTypes::Terran_Battlecruiser.requiredUnits() will return a map of three keys:
-     * UnitTypes::Terran_Starport, UnitTypes::Terran_Control_Tower, and UnitTypes::Terran_Physics_Lab. */
+    /// Retrieves the immediate technology tree requirements to make this unit type.
+    ///
+    /// @returns std::map containing a UnitType to number mapping of UnitTypes required.
     const std::map< UnitType, int >& requiredUnits() const;
 
-    /** Included in the API for completeness, since the only units that actually needs tech to be trained
-     * are the Zerg_Lurker and Zerg_Lurker_Egg. The tech type needed is TechTypes::Lurker_Aspect. */
+    /// Identifies the required TechType in order to create certain units.
+    ///
+    /// @note The only unit that requires a technology is the @Lurker, which needs @Lurker_Aspect.
+    /// @returns TechType indicating the technology that must be researched in order to create this
+    /// unit type.
+    /// @retval TechTypes::None If creating this unit type does not require a technology to be
+    /// researched.
     TechType requiredTech() const;
-
-    /** Returns the tech used to cloak the unit, or TechTypes::None if the unit cannot cloak or is
-        permanently cloaked */
+    
+    /// Retrieves the cloaking technology associated with certain units.
+    ///
+    /// @returns TechType referring to the cloaking technology that this unit type uses as an
+    /// ability.
+    /// @retval TechTypes::None If this unit type does not have an active cloak ability.
     TechType cloakingTech() const;
 
-    /** Returns the set of tech types this unit can use, provided the tech types have been researched and
-     * the unit has enough energy. */
+    /// Retrieves the set of abilities that this unit can use, provided it is available to you in
+    /// the game.
+    ///
+    /// @returns Set of TechTypes containing ability information.
     const ConstVectorset<TechType>& abilities() const;
 
-    /** Returns the set of upgrade types that can affect this unit. */
+    /// Retrieves the set of upgrades that this unit can use to enhance its fighting ability.
+    ///
+    /// @return Set of UpgradeTypes containing upgrade types that will impact this unit type.
     const ConstVectorset<UpgradeType>& upgrades() const;
 
-    /** Returns the upgrade that increase's the unit's armor, or UpgradeTypes::None if no upgrade
-     * increase's this unit's armor. For example UnitTypes::Terran_Marine.armorUpgrade() will return a
-     * pointer to UpgradeTypes::Terran_Infantry_Armor. */
+    /// Retrieves the upgrade type used to increase the armor of this unit type. For each upgrade,
+    /// this unit type gains +1 additional armor.
+    ///
+    /// @returns UpgradeType indicating the upgrade that increases this unit type's armor amount.
     UpgradeType armorUpgrade() const;
 
-    /** Returns the maximum amount of hit points the unit type can have. */
+    /// Retrieves the default maximum amount of hit points that this unit type can have.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns Integer indicating the maximum amount of hit points for this unit type.
     int maxHitPoints() const;
 
-    /** Returns the maximum amount of shields the unit type can have. */
+    /// Retrieves the default maximum amount of shield points that this unit type can have.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns Integer indicating the maximum amount of shield points for this unit type.
+    /// @retval 0 If this unit type does not have shields.
     int maxShields() const;
 
-    /** Returns the maximum amount of energy the unit type can have. */
+    /// Retrieves the maximum amount of energy this unit type can have by default.
+    ///
+    /// @returns Integer indicating the maximum amount of energy for this unit type.
+    /// @retval 0 If this unit does not gain energy for abilities.
     int maxEnergy() const;
 
-    /** Returns the amount of armor the non-upgraded unit type has. */
+    /// Retrieves the default amount of armor that the unit type starts with, excluding upgrades.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns The amount of armor the unit type has.
     int armor() const;
 
-    /** Returns the mineral price of the unit.
-     *
-     * Example: UnitTypes::Siege_Tank_Tank_Mode.mineralPrice() returns 150. */
+    /// Retrieves the default mineral price of purchasing the unit.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns Mineral cost of the unit.
     int mineralPrice() const;
 
-    /** UnitTypes::Siege_Tank_Tank_Mode.gasPrice() returns 100. */
+    /// Retrieves the default vespene gas price of purchasing the unit.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns Vespene gas cost of the unit.
     int gasPrice() const;
 
-    /** Returns the number of frames needed to make this unit type. */
+    /// Retrieves the default time, in frames, needed to train, morph, or build the unit.
+    ///
+    /// @note This value may not necessarily match the value seen in the @UMS game type.
+    ///
+    /// @returns Number of frames needed in order to build the unit.
+    /// @see Unit::getRemainingBuildTime
     int buildTime() const;
 
-    /** Returns the amount of supply used by this unit. Supply counts returned by BWAPI are double what you
-     *  would expect to see from playing the game. This is because zerglings take up 0.5 in-game supply. */
+    /// Retrieves the amount of supply that this unit type will use when created. It will use the
+    /// supply pool that is appropriate for its Race.
+    ///
+    /// @note In Starcraft programming, the managed supply values are double than what they appear
+    /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
+    ///
+    /// @returns Integer containing the supply required to build this unit.
+    /// @see supplyProvided, Player::supplyTotal, Player::supplyUsed
     int supplyRequired() const;
 
-    /** Returns the amount of supply produced by this unit (i.e. for a Protoss_Pylon). Supply counts
-     * returned by BWAPI are double what you would expect to see from playing the game. This is because
-     * zerglings take up 0.5 in-game supply. */
+    /// Retrieves the amount of supply that this unit type produces for its appropriate Race's
+    /// supply pool.
+    ///
+    /// @note In Starcraft programming, the managed supply values are double than what they appear
+    /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
+    ///
+    /// @see supplyRequired, Player::supplyTotal, Player::supplyUsed
     int supplyProvided() const;
 
-    /** Returns the amount of space this unit type takes up inside a bunker or transport unit. */
+    /// Retrieves the amount of space required by this unit type to fit inside a @Bunker or
+    /// @Transport.
+    ///
+    /// @returns Amount of space required by this unit type for transport.
+    /// @retval 255 If this unit type can not be transported.
+    /// @see spaceProvided
     int spaceRequired() const;
 
-    /** Returns the amount of space this unit type provides. */
+    /// Retrieves the amount of space provided by this @Bunker or @Transport for unit
+    /// transportation.
+    /// 
+    /// @returns The number of slots provided by this unit type.
+    /// @see spaceRequired
     int spaceProvided() const;
 
-    /** Returns the score which is used to determine the total scores in the after-game stats screen. */
+    /// Retrieves the amount of score points awarded for constructing this unit type. This value is
+    /// used for calculating scores in the post-game score screen.
+    ///
+    /// @returns Number of points awarded for constructing this unit type.
+    /// @see destroyScore
     int buildScore() const;
 
-    /** Returns the score which is used to determine the total scores in the after-game stats screen. */
+    /// Retrieves the amount of score points awarded for killing this unit type. This value is
+    /// used for calculating scores in the post-game score screen.
+    ///
+    /// @returns Number of points awarded for killing this unit type.
+    /// @see buildScore
     int destroyScore() const;
 
-    /** Returns the size of the unit - either Small, Medium, Large, or Independent. */
+    /// Retrieves the UnitSizeType of this unit, which is used in calculations along with weapon
+    /// damage types to determine the amount of damage that will be dealt to this type.
+    ///
+    /// @returns UnitSizeType indicating the conceptual size of the unit type.
+    /// @see WeaponType::damageType
     UnitSizeType size() const;
 
-    /** Returns the tile width of the unit. Useful for determining the size of buildings. For example
-     * UnitTypes::Terran_Supply_Depot.tileWidth() will return 3. */
+    /// Retrieves the width of this unit type, in tiles. Used for determining the tile size of
+    /// structures.
+    ///
+    /// @returns Width of this unit type, in tiles.
     int tileWidth() const;
 
-    /** Returns the tile height of the unit. Useful for determining the size of buildings. For example
-     * UnitTypes::Terran_Supply_Depot.tileHeight() will return 2. */
+    /// Retrieves the height of this unit type, in tiles. Used for determining the tile size of
+    /// structures.
+    ///
+    /// @returns Height of this unit type, in tiles.
     int tileHeight() const;
 
+    /// Retrieves the tile size of this unit type. Used for determining the tile size of
+    /// structures.
+    ///
+    /// @returns TilePosition containing the width (x) and height (y) of the unit type, in tiles.
     TilePosition tileSize() const;
 
-    /** Distance from the center of the unit to the left edge of the unit, measured in pixels. */
+    /// Retrieves the distance from the center of the unit type to its left edge.
+    ///
+    /// @returns Distance to this unit type's left edge from its center, in pixels.
     int dimensionLeft() const;
 
-    /** Distance from the center of the unit to the top edge of the unit, measured in pixels. */
+    /// Retrieves the distance from the center of the unit type to its top edge.
+    ///
+    /// @returns Distance to this unit type's top edge from its center, in pixels.
     int dimensionUp() const;
 
-    /** Distance from the center of the unit to the right edge of the unit, measured in pixels. */
+    /// Retrieves the distance from the center of the unit type to its right edge.
+    ///
+    /// @returns Distance to this unit type's right edge from its center, in pixels.
     int dimensionRight() const;
 
-    /** Distance from the center of the unit to the bottom edge of the unit, measured in pixels. */
+    /// Retrieves the distance from the center of the unit type to its bottom edge.
+    ///
+    /// @returns Distance to this unit type's bottom edge from its center, in pixels.
     int dimensionDown() const;
 
     /// A macro for retrieving the width of the unit type, which is calculated using
     /// dimensionLeft + dimensionRight + 1.
+    ///
+    /// @returns Width of the unit, in pixels.
     int width() const;
 
     /// A macro for retrieving the height of the unit type, which is calculated using
     /// dimensionUp + dimensionDown + 1.
+    ///
+    /// @returns Height of the unit, in pixels.
     int height() const;
 
     /** Returns the range at which the unit will start targeting enemy units, measured in pixels. */
@@ -531,8 +626,11 @@ namespace BWAPI
     /** Returns true if the unit is one of the three mineral field types. */
     bool isMineralField() const;
 
-    /// Returns true if this unit type is a neutral critter.
+    /// Checks if this unit type is a neutral critter.
     ///
+    /// @returns true if this unit type is a critter, and false otherwise.
+    ///
+    /// Example usage:
     /// @code
     ///   BWAPI::Position myBasePosition( BWAPI::Broodwar->self()->getStartLocation() );
     ///   BWAPI::UnitSet unitsAroundTheBase = BWAPI::Broodwar->getUnitsInRadius(myBasePosition, 1024, !BWAPI::Filter::IsOwned && !BWAPI::Filter::IsParasited);
@@ -548,10 +646,11 @@ namespace BWAPI
     /// @endcode
     bool isCritter() const;
 
-    /// Returns true if the unit is capable of constructing an add-on. An add-on is an extension
+    /// Checks if this unit type is capable of constructing an add-on. An add-on is an extension
     /// or attachment for @Terran structures, specifically the @Command_Center, @Factory,
     /// @Starport, and @Science_Facility.
     ///
+    /// @returns true if this unit type can construct an add-on, and false if it can not.
     /// @see isAddon
     bool canBuildAddon() const;
   };

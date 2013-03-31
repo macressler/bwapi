@@ -70,7 +70,9 @@ namespace BWAPI
   /// Namespace containing unit command types
   namespace UnitCommandTypes
   {
-    /** Returns the set of all the sizes, which are listed below: */
+    /// Retrieves the set of all UnitCommandTypes.
+    ///
+    /// @returns Set of UnitCommandTypes.
     const UnitCommandType::const_set& allUnitCommandTypes();
     
 #ifdef BWAPI_DECL

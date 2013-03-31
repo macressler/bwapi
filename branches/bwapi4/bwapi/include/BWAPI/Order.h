@@ -206,11 +206,12 @@ namespace BWAPI
       };
     }
   }
-  /** To get detailed information about what a unit is doing, you can use the Unit::getOrder method, which
-   * will return an Order object. Note that a single command, like gather minerals, can consist of several
-   * orders ( MoveToMinerals, HarvestMinerals2, MiningMinerals, ReturnMinerals, etc) which will indicate what
-   * state the unit is in while executing the command. For information about how to issue commands to units,
-   * go to Unit. */
+  /// An Order (Order type) represents a Unit's current action and can be retrieved with
+  /// Unit::getOrder. It can also be used to identify the current state of the unit during
+  /// command execution (gathering minerals can consist of Orders::MoveToMinerals,
+  /// Orders::WaitForMinerals, Orders::MiningMinerals, etc.).
+  ///
+  /// @see Unit::getOrder
   class Order : public Type<Order, Orders::Enum::Unknown>
   {
     public:
@@ -220,7 +221,9 @@ namespace BWAPI
   /// Namespace containing unit orders
   namespace Orders
   {
-    /** Returns the set of all the Orders. */
+    /// Retrieves the set of all the Orders.
+    ///
+    /// @returns Set of all Order types.
     const Order::const_set& allOrders();
 
 #ifdef BWAPI_DECL

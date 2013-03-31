@@ -50,7 +50,9 @@ namespace BWAPI
   /// Namespace containing explosion types
   namespace ExplosionTypes
   {
-    /** Returns the set of all ExplosionTypes. */
+    /// Retrieves the set of all ExplosionTypes.
+    ///
+    /// @returns Set of ExplosionTypes.
     const ExplosionType::const_set& allExplosionTypes();
 
 #ifdef BWAPI_DECL

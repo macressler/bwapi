@@ -40,7 +40,9 @@ namespace BWAPI
   /// Namespace containing player types (player controllers)
   namespace PlayerTypes
   {
-    /** Returns the set of all the PlayerTypes. */
+    /// Retrieves the set of all the PlayerTypes.
+    ///
+    /// @returns Set consisting of all valid PlayerTypes.
     const PlayerType::const_set& allPlayerTypes();
     
 #ifdef BWAPI_DECL

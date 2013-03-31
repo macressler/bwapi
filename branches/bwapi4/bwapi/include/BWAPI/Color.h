@@ -21,9 +21,12 @@ namespace BWAPI
       ///
       /// @note This function computes the distance of the RGB values and may not be accurate.
       ///
-      /// @param red The amount of red.
-      /// @param green The amount of green.
-      /// @param blue The amount of blue.
+      /// @param red
+      ///   The amount of red.
+      /// @param green
+      ///   The amount of green.
+      /// @param blue
+      ///   The amount of blue.
       Color(int red, int green, int blue);
 
       /// Retrieves the red component of the color.

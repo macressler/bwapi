@@ -44,7 +44,9 @@ namespace BWAPI
   /// Namespace containing game types
   namespace GameTypes
   {
-    /** Returns the set of all the GameTypes. */
+    /// Retrieves the set of all the valid GameTypes.
+    ///
+    /// @returns Set of available GameTypes.
     const GameType::const_set& allGameTypes();
     
 #ifdef BWAPI_DECL

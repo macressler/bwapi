@@ -43,12 +43,12 @@ std::function<void(Player*)> OnUpgradeAct(UpgradeType upg)
 // User callbacks
 void onResearchComplete(Player *player, TechType tech)
 {
-  Broodwar << player->getName() << " has researched " << tech << std::endl;
+  //Broodwar << player->getName() << " has researched " << tech << std::endl;
 }
 
 void onUpgradeComplete(Player *player, UpgradeType upgrade, int level)
 {
-  Broodwar << player->getName() << " has upgraded " << upgrade << " to level " << level << std::endl;
+  //Broodwar << player->getName() << " has upgraded " << upgrade << " to level " << level << std::endl;
 }
 ////////////////////////////////
 
@@ -81,6 +81,11 @@ void DevAIModule::onStart()
 
   // set command optimization
   bw->setCommandOptimizationLevel(3);
+
+  
+  Broodwar << UnitType::getType("Terran Marine") << std::endl;
+  Broodwar << UnitType::getType("Protoss Observer") << std::endl;
+  Broodwar << UnitType::getType("Zerg Hatchery") << std::endl;
 }
 
 void DevAIModule::onEnd(bool isWinner)
@@ -168,7 +173,7 @@ void newOnUnitComplete(BWAPI::Unit *unit);
 void DevAIModule::onUnitCreate(BWAPI::Unit* unit)
 {
   unit->registerEvent(newOnUnitComplete, IsCompleted, 1);
-  Broodwar << __FUNCTION__ " -- " << unit->getPlayer()->getName() << ": " << unit->getType() << std::endl;
+  //Broodwar << __FUNCTION__ " -- " << unit->getPlayer()->getName() << ": " << unit->getType() << std::endl;
 }
 
 void DevAIModule::onUnitDestroy(BWAPI::Unit* unit)
@@ -189,10 +194,10 @@ void DevAIModule::onSaveGame(std::string gameName)
 
 void DevAIModule::onUnitComplete(BWAPI::Unit *unit)
 {
-  Broodwar << __FUNCTION__ << " -- " << unit->getType() << std::endl;
+  //Broodwar << __FUNCTION__ << " -- " << unit->getType() << std::endl;
 }
 
 void newOnUnitComplete(BWAPI::Unit *unit)
 {
-  Broodwar << __FUNCTION__ " -- " << unit->getType() << std::endl;
+  //Broodwar << __FUNCTION__ " -- " << unit->getType() << std::endl;
 }
