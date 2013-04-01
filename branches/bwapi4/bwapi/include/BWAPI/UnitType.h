@@ -480,22 +480,42 @@ namespace BWAPI
     /// @returns Height of the unit, in pixels.
     int height() const;
 
-    /** Returns the range at which the unit will start targeting enemy units, measured in pixels. */
+    /// Retrieves the range at which this unit type will start targeting enemy units.
+    ///
+    /// @returns Distance at which this unit type begins to seek out enemy units, in pixels.
     int seekRange() const;
 
-    /** Returns how far the un-upgraded unit type can see into the fog of war, measured in pixels. */
+    /// Retrieves the sight range of this unit type.
+    ///
+    /// @returns Sight range of this unit type, measured in pixels.
     int sightRange() const;
 
-    /** Returns the unit's ground weapon. */
+    /// Retrieves this unit type's weapon type used when attacking targets on the ground.
+    ///
+    /// @returns WeaponType used as this unit type's ground weapon.
+    /// @see maxGroundHits, airWeapon
     WeaponType groundWeapon() const;
 
-    // TODO: add doc
+    /// Retrieves the maximum number of hits this unit can deal to a ground target using its
+    /// ground weapon. This value is multiplied by the ground weapon's damage to calculate the
+    /// unit type's damage potential.
+    ///
+    /// @returns Maximum number of hits given to ground targets.
+    /// @see groundWeapon, maxAirHits
     int maxGroundHits() const;
 
-    /** Returns the unit's air weapon. */
+    /// Retrieves this unit type's weapon type used when attacking targets in the air.
+    ///
+    /// @returns WeaponType used as this unit type's air weapon.
+    /// @see maxAirHits, groundWeapon
     WeaponType airWeapon() const;
 
-    // TODO: add doc
+    /// Retrieves the maximum number of hits this unit can deal to a flying target using its
+    /// air weapon. This value is multiplied by the air weapon's damage to calculate the
+    /// unit type's damage potential.
+    ///
+    /// @returns Maximum number of hits given to air targets.
+    /// @see airWeapon, maxGroundHits
     int maxAirHits() const;
 
     /** Returns the unit's non-upgraded top speed in pixels per frame. For Terran buildings that can lift
