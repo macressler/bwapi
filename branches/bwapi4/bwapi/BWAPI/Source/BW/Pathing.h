@@ -50,7 +50,11 @@ namespace BW
     /*0x04*/u16       tileCount;
     /*0x06*/u8        pathCount;
     /*0x07*/u8        neighborCount;
-    /*0x08*/u32       unk_8;
+    /*0x08*/union
+            {
+              void  *node;      // pointer to associated path node structure in path generation
+              int   relation;   // used in string-pulling/area-fixup routines
+            } user;             // Data in user is cleared after its use in a subroutine
     /*0x0C*/u16       *neighbors; // allocated array of IDs for neighbors
     /*0x10*/u32       rgnCenterX; // must >> 8; in pixels
     /*0x14*/u32       rgnCenterY; // must >> 8; in pixels

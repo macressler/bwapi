@@ -56,10 +56,17 @@ SolidCompression=True
 Compression=lzma2/ultra
 InternalCompressLevel=ultra
 DisableProgramGroupPage=yes
-AppVersion=4.0.0 Beta
+AppVersion=4.0.0
 ShowLanguageDialog=no
 AlwaysShowComponentsList=False
 ShowComponentSizes=False
+PrivilegesRequired=poweruser
+LanguageDetectionMethod=locale
+VersionInfoVersion=4.0.0
+VersionInfoTextVersion=4.0.0
+VersionInfoProductVersion=4.0.0
+VersionInfoProductTextVersion=4.0.0
+OutputBaseFilename=BWAPI_Setup
 
 [Components]
 Name: "Binaries"; Description: "Binaries"

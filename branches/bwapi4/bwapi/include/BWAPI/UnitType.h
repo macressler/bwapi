@@ -518,9 +518,13 @@ namespace BWAPI
     /// @see airWeapon, maxGroundHits
     int maxAirHits() const;
 
-    /** Returns the unit's non-upgraded top speed in pixels per frame. For Terran buildings that can lift
-     * off and the Zerg Infested Command Center, this returns how fast the building moves when it is
-     * lifted. */
+    /// Retrieves this unit type's top movement speed with no upgrades.
+    ///
+    /// @note That some units have inconsistent movement and this value is sometimes an
+    /// approximation.
+    ///
+    /// @returns The approximate top speed, in pixels per frame, as a double. For liftable @Terran
+    /// structures, this function returns their movement speed while lifted.
     double topSpeed() const;
 
     /** Returns how fast the unit can accelerate to its top speed. What units this quantity is measured in
@@ -549,30 +553,50 @@ namespace BWAPI
      * which can move once lifted. */
     bool canMove() const;
 
-    /** Returns true for flying/air units. */
+    /// Checks if this unit type is a flying unit. Flying units ignore ground pathing and
+    /// collisions.
+    /// 
+    /// @returns true if this unit type is in the air by default, and false otherwise
     bool isFlyer() const;
 
-    /** Returns true for units that regenerate health (i.e. zerg units). */
+    /// Checks if this unit type can regenerate hit points. This generally applies to @Zerg units.
+    ///
+    /// @returns true if this unit type regenerates its hit points, and false otherwise.
     bool regeneratesHP() const;
 
-    /** Returns true if the unit type is capable of casting spells / using technology. */
+    /// Checks if this unit type has the capacity to store energy and use it for special abilities.
+    ///
+    /// @returns true if this unit type generates energy, and false if it does not have an energy
+    /// pool.
     bool isSpellcaster() const;
 
-    /** Returns true for the two units that are permanently cloaked - Protoss Observer and Protoss Dark
-     * Templar. */
+    /// Checks if this unit type is permanently cloaked. This means the unit type is always
+    /// cloaked and requires a detector in order to see it.
+    ///
+    /// @returns true if this unit type is permanently cloaked, and false otherwise.
     bool hasPermanentCloak() const;
 
-    /** Returns true for units that cannot be destroyed (i.e. Terran Nuclear Missile, Mineral Field,
-     * Vespene Geyser, etc) */
+    /// Checks if this unit type is invincible by default. Invincible units cannot be destroyed by
+    /// other units' attacks.
+    ///
+    /// @returns true if this unit type is invincible, and false if it is vulnerable to attacks.
     bool isInvincible() const;
 
-    /** Returns true if the unit is organic, such as a Terran Marine. */
+    /// Checks if this unit is an organic unit. The organic property is required for some abilities
+    /// such as @Heal.
+    ///
+    /// @returns true if this unit type has the organic property, and false otherwise.
     bool isOrganic() const;
 
-    /** Returns true if the unit is mechanical such as a Terran Vulture. */
+    /// Checks if this unit is mechanical. The mechanical property is required for some actions
+    /// such as @Repair.
+    ///
+    /// @returns true if this unit type has the mechanical property, and false otherwise.
     bool isMechanical() const;
 
-    /** Returns true for the four robotic Protoss units - Probe, Shuttle, Reaver, and Observer. */
+    /// Checks if this unit is robotic. The robotic property is @todo finish this
+    ///
+    /// @returns true if this unit type has the robotic property, and false otherwise.
     bool isRobotic() const;
 
     /** Returns true for the seven units that can detect cloaked units - Terran Science Vessel, Spell
