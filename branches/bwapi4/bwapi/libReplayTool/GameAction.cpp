@@ -1,6 +1,7 @@
 #include "GameAction.h"
 #include <cstdio>
 #include "DefaultActions.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -39,11 +40,10 @@ GameAction::GameAction(PlayerID _player, ActionID _action)
 
 string GameAction::toString() const
 {
-  const size_t BUFF_SIZE = 128;
-  char buffer[BUFF_SIZE];
   const char* actionName = action < ReplayTool::Max ? ReplayTool::pszActionNames[action] : "INVALID";
-
-  sprintf_s(buffer, BUFF_SIZE, "(P%d) %s: ", player, actionName);
-
-  return buffer;
+  
+  ostringstream ss("(P");
+  ss << player << ") " << actionName << ": ";
+  
+  return ss.str();
 }

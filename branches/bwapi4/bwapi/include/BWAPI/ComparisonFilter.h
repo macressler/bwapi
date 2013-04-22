@@ -1,4 +1,8 @@
 #pragma once
+// Prevent warnings if someone includes windows.h
+#ifdef max
+#undef max
+#endif
 
 #include <functional>
 #include <limits>

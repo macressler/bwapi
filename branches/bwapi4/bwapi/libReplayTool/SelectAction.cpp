@@ -3,6 +3,7 @@
 #include "AbstractReplayReader.h"
 #include "StrUtil.h"
 #include <cassert>
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -59,18 +60,10 @@ void SelectAction::read(AbstractReplayReader &reader)
 
 string SelectAction::toString() const
 {
-  const size_t BUFF_SIZE = 128;
-  char buffer[BUFF_SIZE];
-  string str = GameAction::toString();
-
-  sprintf_s(buffer, BUFF_SIZE, "%u", unitsCount);
-  str += buffer;
-
+  ostringstream ss(GameAction::toString());
+  ss << unitsCount;
   for (unsigned i = 0; i < unitsCount; ++i)
-  {
-    sprintf_s(buffer, BUFF_SIZE, ", %u:%02X", selectedUnits[i].unitID, selectedUnits[i].data);
-    str += buffer;
-  }
+    ss << ", " << selectedUnits[i].unitID << ":" << selectedUnits[i].data;
 
-  return str;
+  return ss.str();
 }

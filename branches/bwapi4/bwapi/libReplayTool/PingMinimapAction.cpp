@@ -2,6 +2,7 @@
 #include "DefaultActions.h"
 #include "AbstractReplayReader.h"
 #include "StrUtil.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -30,8 +31,7 @@ void PingMinimapAction::read(AbstractReplayReader &reader)
 
 string PingMinimapAction::toString() const
 {
-  string str = GameAction::toString();
-  str += StrUtil::format("(%d, %d)", x, y);
-
-  return str;
+  ostringstream ss(GameAction::toString());
+  ss << Position(x,y);
+  return ss.str();
 }

@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BWAPI", "BWAPI\BWAPI.vcxproj", "{001204EC-33B7-427D-AF9B-68F222C97349}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BF01C290-133F-4BE9-83CE-B09A0E6805FA} = {BF01C290-133F-4BE9-83CE-B09A0E6805FA}
@@ -35,12 +35,18 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PKLib", "PKLib\PKLib.vcxproj", "{BB8B0BBC-2D1A-4976-A5E0-95D9B5757551}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Replay_Tool", "Replay_Tool\Replay_Tool.vcxproj", "{33D9CC15-ACCC-45E4-A947-5D30E0A8E943}"
+	ProjectSection(ProjectDependencies) = postProject
+		{02027215-F122-4174-A0A8-248A28A43980} = {02027215-F122-4174-A0A8-248A28A43980}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CopyToTarget", "CopyToTarget\CopyToTarget.vcxproj", "{BF01C290-133F-4BE9-83CE-B09A0E6805FA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libReplayTool", "libReplayTool\libReplayTool.vcxproj", "{02027215-F122-4174-A0A8-248A28A43980}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libReplayToolTest", "libReplayToolTest\libReplayToolTest.vcxproj", "{5C4BE4F1-9D4A-4ECA-B64B-ABDB58199F5C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{02027215-F122-4174-A0A8-248A28A43980} = {02027215-F122-4174-A0A8-248A28A43980}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

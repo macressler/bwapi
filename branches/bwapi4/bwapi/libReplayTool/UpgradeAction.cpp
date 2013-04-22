@@ -1,6 +1,7 @@
 #include "UpgradeAction.h"
 #include "DefaultActions.h"
 #include "AbstractReplayReader.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -27,12 +28,7 @@ void UpgradeAction::read(AbstractReplayReader &reader)
 
 string UpgradeAction::toString() const
 {
-  const size_t BUFF_SIZE = 128;
-  char buffer[BUFF_SIZE];
-  string str = GameAction::toString();
-
-  sprintf_s(buffer, BUFF_SIZE, "%s", upgradeType.c_str());
-  str += buffer;
-
-  return str;
+  ostringstream ss(GameAction::toString());
+  ss << upgradeType;
+  return ss.str();
 }

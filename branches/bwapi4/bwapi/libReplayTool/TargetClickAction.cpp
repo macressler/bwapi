@@ -2,6 +2,7 @@
 #include "DefaultActions.h"
 #include "StrUtil.h"
 #include "AbstractReplayReader.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -40,8 +41,7 @@ void TargetClickAction::read(AbstractReplayReader &reader)
 
 string TargetClickAction::toString() const
 {
-  string str = GameAction::toString();
-  str += StrUtil::format("(%d, %d), %u:%02X, %s, %s%s", x, y, targetID & 0x7FF, targetID >> 12, unitType.c_str(), orderType.c_str(), how ? ", Queued" : "");
-
-  return str;
+  ostringstream ss(GameAction::toString());
+  ss << Position(x,y) << ", " << (targetID & 0x7FF) << ":" << (targetID >> 12) << ", " << unitType << ", " << orderType << (how ? ", Queued" : "");
+  return ss.str();
 }

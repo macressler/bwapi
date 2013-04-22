@@ -2,6 +2,7 @@
 #include "DefaultActions.h"
 #include "StrUtil.h"
 #include "AbstractReplayReader.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -30,8 +31,7 @@ void LiftOffAction::read(AbstractReplayReader &reader)
 
 string LiftOffAction::toString() const
 {
-  string str = GameAction::toString();
-  str += StrUtil::format("(%d, %d)", x, y);
-
-  return str;
+  ostringstream ss(GameAction::toString());
+  ss << Position(x,y);
+  return ss.str();
 }

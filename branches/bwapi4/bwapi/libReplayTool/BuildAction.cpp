@@ -2,6 +2,7 @@
 #include "DefaultActions.h"
 #include "AbstractReplayReader.h"
 #include "StrUtil.h"
+#include <sstream>
 
 using namespace std;
 using namespace BWAPI;
@@ -34,9 +35,8 @@ void BuildAction::read(AbstractReplayReader &reader)
 
 string BuildAction::toString() const
 {
-  string str = GameAction::toString();
+  ostringstream ss(GameAction::toString());
+  ss << orderType << ", " << Position(x,y) << ", " << unitType;
 
-  str += StrUtil::format("%s, (%d, %d), %s", orderType.c_str(), x, y, unitType.c_str());
-
-  return str;
+  return ss.str();
 }
