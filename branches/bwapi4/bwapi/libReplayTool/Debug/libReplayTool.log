@@ -1,0 +1,31 @@
+﻿  GameAction.cpp
+  ActionParser.cpp
+  BuildAction.cpp
+  ChatReplayAction.cpp
+  SelectAction.cpp
+  BurrowAction.cpp
+  CloakAction.cpp
+  FileReader.cpp
+  FileWriter.cpp
+  LatencyAction.cpp
+  LeaveGameAction.cpp
+  LiftOffAction.cpp
+  PingMinimapAction.cpp
+  ReplayTool.cpp
+  Logger.cpp
+  PKShared.cpp
+  Replay.cpp
+  ReplayReader.cpp
+  RightClickAction.cpp
+c:\fili\development\gp\rtsairesearch\bwapi\bwapi\include\bwapi\comparisonfilter.h(63): warning C4003: not enough actual parameters for macro 'max'
+c:\fili\development\gp\rtsairesearch\bwapi\bwapi\include\bwapi\comparisonfilter.h(63): warning C4003: not enough actual parameters for macro 'max'
+  SetReplaySpeedAction.cpp
+c:\fili\development\gp\rtsairesearch\bwapi\bwapi\include\bwapi\comparisonfilter.h(63): warning C4003: not enough actual parameters for macro 'max'
+  SetSpeedAction.cpp
+  StopAction.cpp
+  StrUtil.cpp
+  TargetClickAction.cpp
+  UnloadAllAction.cpp
+  TankSiegeAction.cpp
+  UpgradeAction.cpp
+  libReplayTool.vcxproj -> C:\Fili\Development\GP\RtsAiResearch\bwapi\bwapi\Debug\libReplayTool.lib
