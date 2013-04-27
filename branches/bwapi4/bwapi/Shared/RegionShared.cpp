@@ -23,9 +23,9 @@ namespace BWAPI
     return self->priority;
   }
   // ----------------------------------- WALKABLE ------------------------------------------------------------
-  bool RegionImpl::isWalkable() const
+  bool RegionImpl::isAccessible() const
   {
-    return self->isWalkable;
+    return self->isAccessible;
   }
   // ------------------------------------ GET ID -------------------------------------------------------------
   int RegionImpl::getID() const

@@ -160,7 +160,7 @@ namespace BWAPI
     /// @implies exists
     BWAPI::Region *getRegion() const;
 
-    /// Retrieves the X coordinate of the unit's left boundry, measured in pixels from the left
+    /// Retrieves the X coordinate of the unit's left boundary, measured in pixels from the left
     /// side of the map.
     ///
     /// @returns An integer representing the position of the left side of the unit.
@@ -168,7 +168,7 @@ namespace BWAPI
     /// @see getTop, getRight, getBottom
     int getLeft() const;
 
-    /// Retrieves the Y coordinate of the unit's top boundry, measured in pixels from the top of
+    /// Retrieves the Y coordinate of the unit's top boundary, measured in pixels from the top of
     /// the map.
     ///
     /// @returns An integer representing the position of the top side of the unit.
@@ -176,7 +176,7 @@ namespace BWAPI
     /// @see getLeft, getRight, getBottom
     int getTop() const;
 
-    /// Retrieves the X coordinate of the unit's right boundry, measured in pixels from the left
+    /// Retrieves the X coordinate of the unit's right boundary, measured in pixels from the left
     /// side of the map.
     ///
     /// @returns An integer representing the position of the right side of the unit.
@@ -184,7 +184,7 @@ namespace BWAPI
     /// @see getLeft, getTop, getBottom
     int getRight() const;
 
-    /// Retrieves the Y coordinate of the unit's bottom boundry, measured in pixels from the top
+    /// Retrieves the Y coordinate of the unit's bottom boundary, measured in pixels from the top
     /// of the map.
     ///
     /// @returns An integer representing the position of the bottom side of the unit.

@@ -671,9 +671,30 @@ namespace BWAPI
     /// @see Player::getStartLocation
     virtual const TilePosition::set& getStartLocations() const = 0;
 
-    /** Prints text on the screen. Text is not sent to other players in multiplayer games. */
-    virtual void vPrintf(const char *format, va_list arg) = 0;
+    /// Prints text to the screen as a notification. This function is intended to forward an
+    /// already-existing argument list. See printf for more information.
+    /// 
+    /// @param format
+    ///   The text formatting.
+    /// @param args
+    ///   The argument list that will be formatted.
     ///
+    /// @see printf, Text::Enum
+    virtual void vPrintf(const char *format, va_list args) = 0;
+    
+    /// Prints text to the screen as a notification. This function allows text formatting using
+    /// Text::Enum members. The behaviour of this function is the same as printf, located in 
+    /// <cstdio>.
+    /// 
+    /// @note That text printed through this function is not seen by other players or in replays.
+    /// 
+    /// @param format
+    ///   Text formatting. See printf for more information. Please refrain from passing non-const
+    ///   strings directly in this parameter.
+    /// @param ...
+    ///   The arguments that will be formatted using the given text formatting.
+    ///
+    /// @see Text::Enum
     void printf(const char *format, ...);
 
     /** Sends text to other players - as if it were entered in chat. In single player games and replays,

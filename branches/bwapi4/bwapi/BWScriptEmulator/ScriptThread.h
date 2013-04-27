@@ -109,7 +109,7 @@ private:
   DWORD             dwSleepTime;      // the number of frames remaining before the thread continues execution
   DWORD             dwPlayerID;       // the player index that owns the thread
 
-  Location          location;         // the location boundry that the script is being executed in
+  Location          location;         // the location boundary that the script is being executed in
   void              *pTown;           // town information
   DWORD             dwFlags;          // the flags for the thread behaviour (contains baseID*8, flags are &7)
   BYTE              bTotBuildCount[UnitTypes::Enum::MAX]; // not included

@@ -23,7 +23,7 @@ namespace BWAPI
     self->center_x        = r->getCenter().x;
     self->center_y        = r->getCenter().y;
 
-    self->isWalkable      = r->accessabilityFlags != 0x1FFD;
+    self->isAccessible      = r->accessabilityFlags != 0x1FFD;
     self->isHigherGround  = r->accessabilityFlags == 0x1FF9;
     self->priority        = r->defencePriority & 0x7F;
     self->leftMost        = r->rgnBox.left;
