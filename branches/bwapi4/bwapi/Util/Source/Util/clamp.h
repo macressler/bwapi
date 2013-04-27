@@ -5,7 +5,7 @@
 #include <algorithm>
 
 template <typename _T>
-static _T clamp(const _T &val, const _T &low, const _T &high)
+static inline _T clamp(const _T &val, const _T &low, const _T &high)
 {
   return std::min(std::max(val,low), high);
 }

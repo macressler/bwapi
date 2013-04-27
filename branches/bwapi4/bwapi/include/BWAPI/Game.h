@@ -287,17 +287,55 @@ namespace BWAPI
     /// @todo Take Flag::Enum as parameter instead of int
     virtual void enableFlag(int flag) = 0;
 
-    /** Returns the set of accessible units that are on the given build tile. */
+    /// Retrieves the set of accessible units that are on a given build tile.
+    ///
+    /// @param tileX
+    ///   The X position, in tiles.
+    /// @param tileY
+    ///   The Y position, in tiles.
+    /// @param pred (optional)
+    ///   A function predicate that indicates which units are included in the returned set.
+    ///
+    /// @returns A Unitset object consisting of all the units that have any part of them on the
+    /// given build tile.
     Unitset getUnitsOnTile(int tileX, int tileY, const UnitFilter &pred = nullptr) const;
     /// @overload
     Unitset getUnitsOnTile(BWAPI::TilePosition tile, const UnitFilter &pred = nullptr) const;
 
-    /** Returns the set of accessible units that are in or overlapping the given rectangle. */
+    /// Retrieves the set of accessible units that are in a given rectangle.
+    ///
+    /// @param left
+    ///   The X coordinate of the left position of the bounding box, in pixels.
+    /// @param top
+    ///   The Y coordinate of the top position of the bounding box, in pixels.
+    /// @param right
+    ///   The X coordinate of the right position of the bounding box, in pixels.
+    /// @param bottom
+    ///   The Y coordinate of the bottom position of the bounding box, in pixels.
+    /// @param pred (optional)
+    ///   A function predicate that indicates which units are included in the returned set.
+    ///
+    /// @returns A Unitset object consisting of all the units that have any part of them within the
+    /// given rectangle bounds.
     virtual Unitset getUnitsInRectangle(int left, int top, int right, int bottom, const UnitFilter &pred = nullptr) const = 0;
     /// @overload
     Unitset getUnitsInRectangle(BWAPI::Position topLeft, BWAPI::Position bottomRight, const UnitFilter &pred = nullptr) const;
 
-    /** Returns the set of accessible units within or overlapping a circle at the given point with the given radius. */
+    /// Retrieves the set of accessible units that are within a given radius of a position.
+    ///
+    /// @param x
+    ///   The x coordinate of the center, in pixels.
+    /// @param y
+    ///   The y coordinate of the center, in pixels.
+    /// @param radius
+    ///   The radius from the center, in pixels, to include units.
+    /// @param pred (optional)
+    ///   A function predicate that indicates which units are included in the returned set.
+    ///
+    /// @returns A Unitset object consisting of all the units that have any part of them within the
+    /// given radius from the center position.
+    Unitset getUnitsInRadius(int x, int y, int radius, const UnitFilter &pred = nullptr) const;
+    /// @overload
     Unitset getUnitsInRadius(BWAPI::Position center, int radius, const UnitFilter &pred = nullptr) const;
 
     /// Retrieves the closest unit to center that matches the criteria of the callback pred within
@@ -421,10 +459,18 @@ namespace BWAPI
     /// @TODO: Note on replays.
     virtual std::string mapHash() const = 0;
 
-    /** Returns true if the specified walk tile is walkable. The values of x and y are in walk tile
-     * coordinates (different from build tile coordinates). Note that this just uses the static map data.
-     * You will also need to make sure no ground units are on the coresponding build tile to see if its
-     * currently walkable. To do this, see unitsOnTile. */
+    /// Checks if the given mini-tile position is walkable.
+    ///
+    /// @note This function only checks if the static terrain is walkable. Its current occupied
+    /// state is excluded from this check. To see if the space is currently occupied or not, then
+    /// see ::getUnitsInRectangle .
+    ///
+    /// @param walkX
+    ///   The x coordinate of the mini-tile, in mini-tile units (8 pixels).
+    /// @param walkY
+    ///   The y coordinate of the mini-tile, in mini-tile units (8 pixels).
+    ///
+    /// @returns true if the mini-tile is walkable and false if it is impassable for ground units.
     virtual bool isWalkable(int walkX, int walkY) const = 0;
     /// @overload
     bool isWalkable(BWAPI::WalkPosition position) const;
@@ -550,9 +596,25 @@ namespace BWAPI
     /// @overload
     bool hasPower(TilePosition position, int tileWidth, int tileHeight, UnitType unitType = UnitTypes::None) const;
 
-    /** Returns true if the given unit type can be built at the given build tile position. Note the tile
-     * position specifies the top left tile of the building. If builder is not null, the unit will be
-     * discarded when determining whether or not any ground units are blocking the build location. */
+    /// Checks if the given unit type can be built at the given build tile position. This function
+    /// checks for creep, power, and resource distance requirements in addition to the tiles'
+    /// buildability and possible units obstructing the build location.
+    ///
+    /// @param position
+    ///   Indicates the tile position that the top left corner of the structure is intended to go.
+    /// @param type
+    ///   The UnitType to check for.
+    /// @param builder (optional)
+    ///   The intended unit that will build the structure. If specified, then this function will
+    ///   also check if there is a path to the build site and exclude the builder from the set of
+    ///   units that may be blocking the build site.
+    /// @param checkExplored (optional)
+    ///   If this parameter is true, it will also check if the target position has been explored
+    ///   by the current player. This value is false by default, ignoring the explored state of
+    ///   the build site.
+    ///
+    /// @returns true indicating that the structure can be placed at the given tile position, and
+    /// false if something may be obstructing the build location.
     virtual bool canBuildHere(TilePosition position, UnitType type, const Unit *builder = nullptr, bool checkExplored = false) = 0;
 
     /// Checks all the requirements in order to make a given unit type for the current player.

@@ -171,6 +171,7 @@ namespace BWAPI
         checkUnoccupied = false;
       else
         checkUnoccupied = !builder || !builder->getType().isBuilding() || ( !type.isAddon() && !type.isFlagBeacon() );
+
       for ( int x = lt.x; x < rb.x; ++x )
       {
         for ( int y = lt.y; y < rb.y; ++y )

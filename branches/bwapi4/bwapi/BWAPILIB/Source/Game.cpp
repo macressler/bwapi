@@ -691,13 +691,17 @@ namespace BWAPI
     Position p(tile); // convert to pixel position
     return this->getUnitsInRectangle(p.x, p.y, p.x + 32, p.y + 32, pred);
   }
+  Unitset Game::getUnitsInRadius(int x, int y, int radius, const UnitFilter &pred) const
+  {
+    return this->getUnitsInRectangle(x - radius,
+                                     y - radius,
+                                     x + radius,
+                                     y + radius,
+                                     [&x,&y,&radius,&pred](Unit *u){ return u->getDistance(Position(x,y)) <= radius && (!pred.isValid() || pred(u)); });
+  }
   Unitset Game::getUnitsInRadius(Position center, int radius, const UnitFilter &pred) const
   {
-    return this->getUnitsInRectangle(center.x - radius,
-                                     center.y - radius,
-                                     center.x + radius,
-                                     center.y + radius,
-                                     [&center,&radius,&pred](Unit *u){ return u->getDistance(center) <= radius && (!pred.isValid() || pred(u)); });
+    return this->getUnitsInRadius(center.x, center.y, radius, pred);
   }
   Unitset Game::getUnitsInRectangle(BWAPI::Position topLeft, BWAPI::Position bottomRight, const UnitFilter &pred) const
   {
