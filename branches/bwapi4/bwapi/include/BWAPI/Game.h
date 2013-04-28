@@ -671,17 +671,6 @@ namespace BWAPI
     /// @see Player::getStartLocation
     virtual const TilePosition::set& getStartLocations() const = 0;
 
-    /// Prints text to the screen as a notification. This function is intended to forward an
-    /// already-existing argument list. See printf for more information.
-    /// 
-    /// @param format
-    ///   The text formatting.
-    /// @param args
-    ///   The argument list that will be formatted.
-    ///
-    /// @see printf, Text::Enum
-    virtual void vPrintf(const char *format, va_list args) = 0;
-    
     /// Prints text to the screen as a notification. This function allows text formatting using
     /// Text::Enum members. The behaviour of this function is the same as printf, located in 
     /// <cstdio>.
@@ -689,7 +678,7 @@ namespace BWAPI
     /// @note That text printed through this function is not seen by other players or in replays.
     /// 
     /// @param format
-    ///   Text formatting. See printf for more information. Please refrain from passing non-const
+    ///   Text formatting. See printf for more information. Refrain from passing non-constant
     ///   strings directly in this parameter.
     /// @param ...
     ///   The arguments that will be formatted using the given text formatting.
@@ -697,17 +686,58 @@ namespace BWAPI
     /// @see Text::Enum
     void printf(const char *format, ...);
 
-    /** Sends text to other players - as if it were entered in chat. In single player games and replays,
-     * this will just print the text on the screen. If the game is a single player match and not a replay,
-     * then this function can be used to execute cheat codes, i.e. Broodwar->sendText("show me the money"). */
+    /// @copydoc printf
+    ///
+    /// This function is intended to forward an already-existing argument list.
+    ///
+    /// @param args
+    ///   The argument list that will be formatted.
+    ///
+    /// @see printf
+    virtual void vPrintf(const char *format, va_list args) = 0;
+    
+    /// Sends a text message to all other players in the game. The behaviour of this function is
+    /// the same as printf, located in <cstdio>.
+    ///
+    /// @note In a single player game this function can be used to execute cheat codes.
+    ///
+    /// @param format
+    ///   Text formatting. See printf for more information. Refrain from passing non-constant
+    ///   strings directly in this parameter.
+    /// @see sendTextEx
     void sendText(const char *format, ...);
+    
+    /// @copydoc sendText
     ///
-    void vSendText(const char *format, va_list arg);
+    /// This function is intended to forward an already-existing argument list.
+    ///
+    /// @param args
+    ///   The argument list that will be formatted.
+    ///
+    /// @see sendText
+    void vSendText(const char *format, va_list args);
 
-    /// 
-    void sendTextEx(bool toAllies, const char *format, ...);
+    /// An extended version of Game::sendText which allows messages to be forwarded to allies.
+    /// The behaviour of this function is the same as printf, located in <cstdio>.
     ///
-    virtual void vSendTextEx(bool toAllies, const char *format, va_list arg) = 0;
+    /// @param toAllies
+    ///   If this parameter is set to true, then the message is only sent to allied players,
+    ///   otherwise it will be sent to all players.
+    /// @param format
+    ///   Text formatting. See printf for more information. Refrain from passing non-constant
+    ///   strings directly in this parameter.
+    /// @see sendText
+    void sendTextEx(bool toAllies, const char *format, ...);
+    
+    /// @copydoc sendText
+    ///
+    /// This function is intended to forward an already-existing argument list.
+    ///
+    /// @param args
+    ///   The argument list that will be formatted.
+    ///
+    /// @see sendTextEx
+    virtual void vSendTextEx(bool toAllies, const char *format, va_list args) = 0;
 
     /// Checks if the current client is inside a game.
     ///
@@ -753,12 +783,42 @@ namespace BWAPI
     /// @todo return a bool indicating success, document error code for invalid state
     virtual void restartGame() = 0;
 
-    /** Sets the speed of the game to the given number. Lower numbers are faster. 0 is the fastest speed
-     * StarCraft can handle (which is about as fast as the fastest speed you can view a replay at). Any
-     * negative value will reset the speed to the StarCraft default. */
+    /// Sets the number of milliseconds Broodwar spends in each frame. The default values are as
+    /// follows:
+    ///   - Fastest: 42ms/frame
+    ///   - Faster: 48ms/frame
+    ///   - Fast: 56ms/frame
+    ///   - Normal: 67ms/frame
+    ///   - Slow: 83ms/frame
+    ///   - Slower: 111ms/frame
+    ///   - Slowest: 167ms/frame
+    ///
+    /// @note Specifying a value of 0 will not guarantee that logical frames are executed as fast
+    /// as possible. If that is the intention, use this in combination with ::setFrameSkip.
+    ///
+    /// @bug Changing this value will cause the execution of @UMS scenario triggers to glitch.
+    /// This will only happen in campaign maps and custom scenarios (non-melee).
+    ///
+    /// @param speed
+    ///   The time spent per frame, in milliseconds. A value of 0 indicates that frames are
+    ///   executed immediately with no delay. Negative values will restore the default value
+    ///   as listed above.
+    ///
+    /// @see setFrameSkip, getFPS
     virtual void setLocalSpeed(int speed) = 0;
 
-    /** Issues a command to a group of units */
+    /// Issues a given command to a set of units. This function automatically splits the set into
+    /// groups of 12 and issues the same command to each of them. If a unit is not capable of
+    /// executing the command, then it is simply ignored.
+    ///
+    /// @param units
+    ///   A Unitset containing all the units to issue the command for.
+    /// @param command
+    ///   A UnitCommand object containing relevant information about the command to be issued.
+    ///   The Unit interface object associated with the command will be ignored.
+    ///
+    /// @returns true if any one of the units in the Unitset were capable of executing the
+    /// command, and false if none of the units were capable of executing the command.
     virtual bool issueCommand(const Unitset& units, UnitCommand command) = 0;
 
     /// Retrieves the set of units that are currently selected by the user outside of BWAPI. This
