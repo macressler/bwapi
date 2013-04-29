@@ -1700,7 +1700,7 @@ namespace BWAPI
   }
   const std::map<UnitType, int>& UnitType::requiredUnits() const
   {
-    static std::vector< std::map<UnitType,int> > reqUnitsMap( reqUnitsInit() );
+    static const std::vector< std::map<UnitType,int> > reqUnitsMap( reqUnitsInit() );
     return reqUnitsMap[this->getID()];
   }
   TechType UnitType::requiredTech() const

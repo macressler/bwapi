@@ -1,45 +1,47 @@
 #pragma once
 #include <string>
 #include <cctype>
+#include <unordered_map>
+#include <algorithm>
 
 #include <BWAPI/Vectorset.h>
 
 namespace BWAPI
 {
   // @TODO Get rid of this eventually.
-  template<class _T>
-  class Typeset : public Vectorset<_T>
+  template<class T>
+  class Typeset : public Vectorset<T>
   {
   public:
     // Constructors
     Typeset() : Vectorset() {};
     // copy ctor
-    Typeset(const Typeset<_T> &other) : Vectorset( other ) {};
-    Typeset(const ConstVectorset<_T> &other) : Vectorset( other ) {};
+    Typeset(const Typeset<T> &other) : Vectorset( other ) {};
+    Typeset(const ConstVectorset<T> &other) : Vectorset( other ) {};
 
     // move ctor
-    Typeset(Typeset<_T> &&other) : Vectorset( std::forward< Typeset<_T> >(other) ) {};
+    Typeset(Typeset<T> &&other) : Vectorset( std::forward< Typeset<T> >(other) ) {};
     // type ctor
-    Typeset(const _T &val) : Vectorset() { this->push_back(val); };
+    Typeset(const T &val) : Vectorset() { this->push_back(val); };
     // array ctor
-    Typeset(const _T *pArray, size_t size) : Vectorset(pArray, size) {};
-    Typeset(const int *pArray, size_t size) : Vectorset((const _T*)pArray, size) {};
+    Typeset(const T *pArray, size_t size) : Vectorset(pArray, size) {};
+    Typeset(const int *pArray, size_t size) : Vectorset((const T*)pArray, size) {};
 
     ~Typeset() {};
 
     // Operators (adding elements)
-    Typeset operator |(const _T &val) const
+    Typeset operator |(const T &val) const
     {
       Typeset newset(*this);
       newset.insert(val);
       return newset;
     };
-    Typeset &operator |=(const _T &val)
+    Typeset &operator |=(const T &val)
     {
       this->insert(val);
       return *this;
     };
-    Typeset &operator |=(const Typeset<_T> &val)
+    Typeset &operator |=(const Typeset<T> &val)
     {
       this->insert(val);
       return *this;
@@ -47,16 +49,34 @@ namespace BWAPI
   };
 
   /// Base superclass for all BWAPI Types.
-  template<class _T, int __unk>
+  template<class T, int UnknownId>
   class Type
   {
   protected:
-    /// Primitive storage unit for the type identifier
+    /// Primitive storage unit for the type identifier (t id)
     int tid;
 
     /// Array of strings containing the type names.
-    static const std::string typeNames[__unk+1];
-    
+    static const std::string typeNames[UnknownId+1];
+
+    typedef std::unordered_map<std::string,T> typeMapT;
+
+  private:
+    static typeMapT typeMapInit()
+    {
+      typeMapT result(UnknownId+1);
+      for ( int i = 0; i < UnknownId + 1; ++i ) // include unknown
+      {
+        std::string n( typeNames[i] );
+
+        // erase-remove idiom, eliminates spaces and underscores from the string
+        n.erase( std::remove_if(n.begin(), n.end(), [](char const &c){ return isspace(c) || c == '_'; }), n.end() );
+
+        result.insert( typeMapT::value_type(n, T(i)) );
+      }
+      return result;
+    }
+
   public:
     /// Expected type constructor. If the type is an invalid type, then it becomes Types::Unknown.
     /// A type is invalid if its value is less than 0 or greater than Types::Unknown.
@@ -65,13 +85,13 @@ namespace BWAPI
     ///   The id that corresponds to this type. It is typically an integer value that corresponds
     ///   to an internal Broodwar type. If the given id is invalid, then it becomes Types::Unknown.
     ///   If it is omitted, then it becomes Types::None.
-    explicit Type(int id) : tid( id < 0 || id > __unk ? __unk : id ) {};
+    explicit Type(int id) : tid( id < 0 || id > UnknownId ? UnknownId : id ) {};
     
     /// The set that contains the current type.
-    typedef Typeset<_T> set;
+    typedef Typeset<T> set;
 
     /// The constant set that contains the current type.
-    typedef ConstVectorset<_T> const_set;
+    typedef ConstVectorset<T> const_set;
 
     /// Conversion/convenience operator to convert this type to its primitive type.
     inline operator int() const { return this->tid; };
@@ -87,14 +107,14 @@ namespace BWAPI
     /// A type is valid if it is between 0 and Unknown (inclusive).
     ///
     /// @returns true If this type is valid and false otherwise.
-    inline bool isValid() const { return this->tid >= 0 && this->tid <= __unk; };
+    inline bool isValid() const { return this->tid >= 0 && this->tid <= UnknownId; };
 
     /// Retrieves the variable name of the type.
     ///
     /// @returns Reference to std::string object containing the name.
     inline const std::string &getName() const
     {
-      return typeNames[this->isValid() ? this->tid : __unk];
+      return typeNames[this->isValid() ? this->tid : UnknownId];
     };
 
     /// @copydoc Type::getName
@@ -114,7 +134,7 @@ namespace BWAPI
 
     /// Output stream operator overload. Allows printing of the type without calling
     /// Type::getName.
-    friend inline std::ostream &operator << (std::ostream &out, const Type<_T,__unk> &t)
+    friend inline std::ostream &operator << (std::ostream &out, const Type<T,UnknownId> &t)
     {
       return out << t.getName();
     };
@@ -125,32 +145,21 @@ namespace BWAPI
     ///     A string containing the name of the type.
     ///
     /// @returns The type that resolves to the given name.
-    /// @TODO: Test. This may be incorrect.
-    static _T getType(const std::string &name)
+    static T getType(std::string name)
     {
-      // Check against each type
-      for ( int i = 0; i < __unk; ++i )
-      {
-        const std::string &str = typeNames[i];
-        std::string::const_iterator ita, itb;
-        
-        // Iterate the given name with the current type string
-        for ( ita = name.cbegin(), itb = str.cbegin(); 
-              ita != name.cend() && itb != str.cend();
-              ++ita, ++itb )
-        {
-          while ( ita != name.cend() && (isspace(*ita) || *ita == '_') ) // Ignore spaces for iterator a
-            ++ita;
-          while ( itb != str.cend() && (isspace(*itb) || *itb == '_') ) // Ignore spaces for iterator b
-            ++itb;
+      // Mapping of strings to types
+      static const typeMapT typeMap( typeMapInit() );
+    
+      // erase-remove idiom, eliminates spaces and underscores from the string to search
+      name.erase( std::remove_if(name.begin(), name.end(), [](char const &c){ return isspace(c) || c == '_'; }), name.end() );
 
-          if ( tolower(*ita) != tolower(*itb) ) // If matching differs at some point
-            break;
-        }
-        if ( ita == name.cend() && itb == str.cend() ) // found perfect match
-          return _T(i);
-      }
-      return _T(__unk);
+      // Find the type
+      auto it = typeMap.find(name);
+      if ( it != typeMap.end() )
+        return it->second;
+
+      // Return unknown if it wasn't found
+      return T(UnknownId);
     };
   };
 
