@@ -11,6 +11,7 @@
  * Added the /fps command.
  * The documentation has been extensively reworked and is now included as offline HTML files.
  * A proper installer is now distributed for BWAPI.
+ * BWTA is no longer compatible with BWAPI.
 
 === AI/Tournament Module ===
  * Type data is no longer initialized by the module, and can now be retrieved properly at any time.
