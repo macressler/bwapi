@@ -109,7 +109,6 @@ var sBroodwarPath : String;
 // Get the location of the Starcraft folder.
 function GetBroodwarPath(): Boolean;
 var
-  i:      Integer;
   len:    Integer;
 
 begin

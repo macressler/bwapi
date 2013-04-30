@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 
 #include <BWAPI.h>
 #include <BWAPI/Client.h>

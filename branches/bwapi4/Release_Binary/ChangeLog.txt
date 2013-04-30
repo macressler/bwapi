@@ -1,3 +1,96 @@
+============================================
+Changes from BWAPI 3.7.4 to BWAPI 4.0.0 Beta
+============================================
+General Changes:
+  * All BWAPI projects have been upgraded to use Microsoft Visual C++ 2010 Express.
+  * BWAPI now uses the available C++11 features, such as move semantics, std::function, lambdas, and nullptr.
+  * The location of BWAPI.dll has been moved to the bwapi-data folder.
+  * Several performance improvements have been made for BWAPI.
+  * The save_replay configuration option has been altered for more flexibility on date/time stamps.
+  * The documentation has been extensively reworked and is now included as offline HTML files. Not all documentation has been updated but will continue to be worked on.
+  * A proper installer is now distributed for BWAPI.
+
+Necessary Regressions:
+  * BWAPI no longer supports loading older revisions of itself.
+  * The holiday lights have been removed.
+  * BWTA is no longer compatible with BWAPI.
+
+AI/Tournament Module:
+  * Type data is no longer initialized by the module, and can now be retrieved properly at any time.
+  * The gameInit function is now exported to initialize the Broodwar pointer.
+  * The original newAIModule function now takes 0 arguments.
+  * Removed the Tournament enum restartGame.
+
+Sets and Vectors:
+  * Using a custom new class template known as a Vectorset, BWAPI and AI modules can perform significantly better (faster and less memory). This replaces the use of STL containers, but is used the same way (with Vectorset::iterator, stl algorithms, etc).
+  * It can be treated like a vector or a set, and the user has the option of treating it as a vector for some cases and a set for others.
+  * Additional convenience members have been added, such as .rand(), which returns the value of a random element of the set.
+
+Positions:
+  * Position, TilePosition?, and the new WalkPosition? now all share the same class template: Point. This maintains consistency between member functions to be used by any Position type, and provides conversions between each type, including custom ones.
+  * Positions now have several operators that make arithmetic easier. For example, Position(8,8)/2 will give Position(4,4) and Position(30,20) - Position(15,5) will give Position(15,15).
+  * There is also Position::set, derived from the Vectorset that will handle sets of Positions.
+  * The x and y members are now public, and the x() and y() member functions have been removed.
+  * Added the constants Positions::Origin, TilePositions?::Origin, etc. which represent (0,0).
+
+Interface:
+  * Each interface class will have its own derived set with several enhancements, and brings in some functionality similar to that of BWSAL. The new sets are as follows: Unitset, Playerset, Regionset, Bulletset, Forceset
+  * Interface overhead has been reduced by making some member functions with alternative parameters non-virtual. Keep in mind some function parameters have been re-arranged so that default parameters can be used.
+  * getClientInfo/setClientInfo are now available to all Interface classes, and also take an optional parameter that acts as a key.
+  * User-defined events have been added, and can be utilized through registerEvent.
+
+Types:
+  * Types have also received their own set, the Type::set (Example: UnitType::set).
+  * The behavior of type creation has been changed, and now all types with an id between 0 and Unknown will be considered valid, even if data for the type has not been defined in BWAPI. This drastically simplifies the type's constructors.
+  * Most type data is now made constant and no longer requires an initialization to be made. This gives users more flexibility for when they want to access type information.
+  * Added a Type::isValid function.
+  * All types' enumerations are now available (for switch case usage) and are accessed by Types::Enum (Example: UnitTypes::Enum::Terran_Marine).
+  * TechType::energyUsed has been renamed to energyCost.
+  * All types now overload std::ostream operator<< (including Color).
+  * UnitTypes::getUnit, Races::getRace, etc. have now been replaced with static Type::getType. (Example: Races::getRace doesn't exist, use Race::getType)
+  * Added UnitType::width, UnitType::height, and UnitType::isCritter.
+
+Game:
+  * Draw functions now take Position parameters as an alternative to individual x and y.
+  * The parameters for canBuildHere, canMake, canResearch, and canUpgrade have been rearranged.
+  * getUnits_ functions now return a Unitset copy instead of a reference, and also now takes a function predicate.
+  * Added getClosestUnit, getBestUnit, getClosestUnitInRectangle, vPrintf, vSendText, vSendTextEx, vDrawText, isGUIEnabled, getBuildLocation, getDamageFrom, and getDamageTo.
+  * Removed getScreenBuffer, setReplayVision(use setVision for replays too), changeRace, and startGame.
+  * Instead of using Game::printf, you may use BWAPI::Broodwar like you would std::cout, using operator <<.
+  * Using Special_Start_Location? in canBuildHere will ignore units that are occupying the space while still checking for resource distance.
+  * Some functions now take an Enum type instead of an int.
+
+Unit Filters:
+  * UnitFilter is a new powerful function composition object and function predicate for use with getUnits_ functions throughout the interface. It can generally be combined with any other functional object (including lambdas) using operators && and ||, as well as ! for the inverse. (Example: !(IsFlyer || IsLifted) )
+  * CompareFilter is a sister function composition object that compares the values returned from the call to the object, and can be combined using operators ==, <, <=, >, >=, and !=. (Example: GetType == UnitTypes::Terran_SCV && HP_Percent < 100)
+  * Filters can be found in the BWAPI::Filter namespace.
+
+Player:
+  * groundWeaponMaxRange and airWeaponMaxRange have been removed. Use weaponMaxRange instead.
+  * getTextColor now returns a char instead of an int so that it is printed correctly when used with ostream operator <<.
+  * Added damage(WeaponType)
+  * Unit count functions now take a default parameter of AllUnits.
+  * Rename groundWeaponDamageCooldown to weaponDamageCooldown.
+
+Unit:
+  * The parameters for build have been rearranged.
+  * getUnits_ functions now return a Unitset copy instead of a reference, and also now takes a function predicate.
+  * Added getClosestUnit, getUnitsInRadius, getSpaceRemaining, and isTargetable.
+  * Removed getUpgradeLevel.
+  * Several functions for testing command validity were added.
+  * Unit commands are now more strict.
+  * getResources now returns the last-known resource amount when the unit becomes inaccessible.
+
+Region:
+  * Added a getUnits function.
+  * Renamed isWalkable to isAccessible
+
+Bug Fixes:
+  * Fixed a bug where Unit::getRemainingBuildTime failed to work correctly for some units (such as siege tanks).
+  * Fixed a bug where Spider Mines were not correctly identified for Jim Raynor (Vulture).
+  * Fixed a bug where key enum values were incorrectly mapped for Game::getKeyState.
+  * Fixed a bug that allowed multiple instances of the BWAPI DLL to be injected into Broodwar, which could cause compatibility issues.
+
 =======================================
 Changes from BWAPI 3.7.3 to BWAPI 3.7.4
 =======================================

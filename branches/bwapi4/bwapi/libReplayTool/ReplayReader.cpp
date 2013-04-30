@@ -1,5 +1,5 @@
 #include "ReplayReader.h"
-#include <stdio.h>
+#include <cstdio>
 
 using namespace BWAPI;
 using namespace ReplayTool;

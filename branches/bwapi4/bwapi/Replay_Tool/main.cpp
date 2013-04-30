@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <stdio.h>
+#include <cstdio>
 #include <tchar.h>
 #include <BWAPI.h>
 #include "Replay.h"
