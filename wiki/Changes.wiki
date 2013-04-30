@@ -30,6 +30,7 @@
  * Positions now have several operators that make arithmetic easier. For example, Position(8,8)/2 will give Position(4,4) and Position(30,20) - Position(15,5) will give Position(15,15).
  * There is also Position::set, derived from the Vectorset that will handle sets of Positions.
  * The x and y members are now public, and the x() and y() member functions have been removed.
+ * Added the constants Positions::Origin, TilePositions::Origin, etc. which represent (0,0).
 
 === Interface ===
  * Each interface class will have its own derived set with several enhancements, and brings in some functionality similar to that of BWSAL. The new sets are as follows: Unitset, Playerset, Regionset, Bulletset, Forceset
