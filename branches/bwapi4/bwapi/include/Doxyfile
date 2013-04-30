@@ -52,7 +52,7 @@ PROJECT_LOGO           = C:/Projects/BWAPI/wiki/logo.png
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = C:/Projects/BWAPI/doxytest
+OUTPUT_DIRECTORY       = ../../Release_Binary/documentation
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -210,7 +210,6 @@ ALIASES                = "Dropships=@ref UnitTypes::Terran_Dropship \"Dropships\
                          "Refineries=@ref UnitTypes::Terran_Refinery \"Refineries\"" \
                          "Assimilators=@ref UnitTypes::Protoss_Assimilator \"Assimilators\"" \
                          "Extractors=@ref UnitTypes::Zerg_Extractor \"Extractors\"" \
-                         "Ex=@par Example:\n@snippet" \
                          "Interceptors=@ref UnitTypes::Protoss_Interceptor \"Interceptors\"" \
                          "Carriers=@ref UnitTypes::Protoss_Carrier \"Carriers\"" \
                          "Hatcheries=@ref UnitTypes::Zerg_Hatchery \"Hatcheries\"" \
@@ -263,7 +262,31 @@ ALIASES                = "Dropships=@ref UnitTypes::Terran_Dropship \"Dropships\
                          "UMS=@ref GameTypes::Use_Map_Settings \"Use Map Settings\"" \
                          "CTF=@ref GameTypes::Capture_The_Flag \"Capture The Flag\"" \
                          "Transport=Transport(@ref UnitTypes::Terran_Dropship \"Dropship\", @ref UnitTypes::Protoss_Shuttle \"Shuttle\", @ref UnitTypes::Zerg_Overlord \"Overlord\" )" \
-                         TODO=@todo
+                         TODO=@todo \
+                         "threadsafe=@note This function is considered thread-safe." \
+                         "Infested_Kerrigan=@ref UnitTypes::Hero_Infested_Kerrigan \"Infested Kerrigan\"" \
+                         "Psi_Storm=@ref TechTypes::Psionic_Storm \"Psionic Storm\"" \
+                         "Lurker=@ref UnitTypes::Zerg_Lurker \"Lurker\"" \
+                         "Drones=@ref UnitTypes::Zerg_Drone \"Drones\"" \
+                         "Lurker_Aspect=@ref TechTypes::Lurker_Aspect \"Lurker Aspect\"" \
+                         "Heal=@ref TechTypes::Healing \"Heal\"" \
+                         "Repair=@ref UnitCommandTypes::Repair \"Repair\"" \
+                         "implies=@note If this function returns a successful state, then the following function calls will also return a successful state:" \
+                         "Irradiate=@ref TechTypes::Irradiate \"Irradiate\"" \
+                         "Science_Vessel=@ref UnitTypes::Terran_Science_Vessel \"Science Vessel\"" \
+                         "Hallucination=@ref TechTypes::Hallucination \"Hallucination\"" \
+                         "Spider_Mine=@ref UnitTypes::Terran_Vulture_Spider_Mine \"Spider Mine\"" \
+                         "Optical_Flare=@ref TechTypes::Optical_Flare \"Optical Flare\"" \
+                         "SCV=@ref UnitTypes::Terran_SCV \"SCV\"" \
+                         "Mineral_Field=@ref UnitTypes::Resource_Mineral_Field \"Mineral Field\"" \
+                         "Flag=@ref UnitTypes::Powerup_Flag \"Flag\"" \
+                         "Pylon=@ref UnitTypes::Protoss_Pylon \"Pylon\"" \
+                         "Overlord=@ref UnitTypes::Zerg_Overlord \"Overlord\"" \
+                         "TvB=@ref GameTypes::Top_vs_Bottom \"Top vs Bottom\"" \
+                         "Ghost=@ref UnitTypes::Terran_Ghost \"Ghost\"" \
+                         "minerals=@ref UnitTypes::Resource_Mineral_Field \"Mineral Fields\"" \
+                         "geysers=@ref UnitTypes::Resource_Vespene_Geyser \"Vespene Geysers\"" \
+                         "critters=@ref UnitTypes::Critter_Bengalaas \"Critters\""
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only). 
 # A mapping has the form "name=value". For example adding 

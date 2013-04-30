@@ -88,7 +88,7 @@ namespace BWAPI
 
       /// Retrieves the number of frames needed to research the tech type.
       ///
-      /// @rerturns The time, in frames, it will take for the research to complete.
+      /// @returns The time, in frames, it will take for the research to complete.
       /// @see Unit::getRemainingResearchTime
       int researchTime() const;
 

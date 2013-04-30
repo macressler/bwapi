@@ -26,6 +26,7 @@ Source: "..\Release_Binary\ExampleAIModule\*"; DestDir: "{app}\ExampleAIModule\"
 Source: "..\Release_Binary\ExampleTournamentModule\*"; DestDir: "{app}\ExampleTournamentModule\"; Flags: ignoreversion createallsubdirs recursesubdirs; Components: Library\Examples
 Source: "..\Release_Binary\ExampleProjects.sln"; DestDir: "{app}"; Flags: ignoreversion; Components: Library\Examples
 Source: "..\Release_Binary\Starcraft\bwapi-data\data\bspatch.exe"; DestDir: "{code:BroodwarPath}\bwapi-data\data\"; Flags: ignoreversion; Components: Binaries\BWAPI; Check: GetBroodwarPath
+Source: "..\Release_Binary\documentation\*"; DestDir: "{app}\documentation\"; Flags: ignoreversion createallsubdirs recursesubdirs; Components: Library\Documentation
 
 [Setup]
 AppName=BWAPI
@@ -75,6 +76,7 @@ Name: "Binaries\vcredist"; Description: "Microsoft Visual C++ 2010 Redistributab
 Name: "Library"; Description: "Interface"; Types: custom full
 Name: "Library\Headers"; Description: "Library & Header Files"; Types: custom full
 Name: "Library\Examples"; Description: "Example Projects"; Types: custom full
+Name: "Library\Documentation"; Description: "Documentation"; Types: custom full
 Name: "Chaoslauncher"; Description: "Chaoslauncher (Plugin Loader) & Plugins"; Types: full custom
 Name: "MPQDraft"; Description: "MPQDraft (Mod Manager & Plugin Loader)"; Types: custom full
 

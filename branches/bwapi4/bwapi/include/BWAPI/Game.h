@@ -163,7 +163,7 @@ namespace BWAPI
     /// @retval nullptr if the given ID is invalid.
     virtual Region* getRegion(int regionID) const = 0;
 
-    /// Retrieves the @GameType of the current game.
+    /// Retrieves the GameType of the current game.
     ///
     /// @returns GameType indicating the rules of the match.
     /// @see GameType
@@ -463,7 +463,7 @@ namespace BWAPI
     ///
     /// @note This function only checks if the static terrain is walkable. Its current occupied
     /// state is excluded from this check. To see if the space is currently occupied or not, then
-    /// see ::getUnitsInRectangle .
+    /// see #getUnitsInRectangle .
     ///
     /// @param walkX
     ///   The x coordinate of the mini-tile, in mini-tile units (8 pixels).
@@ -673,7 +673,7 @@ namespace BWAPI
 
     /// Prints text to the screen as a notification. This function allows text formatting using
     /// Text::Enum members. The behaviour of this function is the same as printf, located in 
-    /// <cstdio>.
+    /// header cstdio.
     /// 
     /// @note That text printed through this function is not seen by other players or in replays.
     /// 
@@ -697,7 +697,7 @@ namespace BWAPI
     virtual void vPrintf(const char *format, va_list args) = 0;
     
     /// Sends a text message to all other players in the game. The behaviour of this function is
-    /// the same as printf, located in <cstdio>.
+    /// the same as printf, located in header cstdio.
     ///
     /// @note In a single player game this function can be used to execute cheat codes.
     ///
@@ -718,7 +718,7 @@ namespace BWAPI
     void vSendText(const char *format, va_list args);
 
     /// An extended version of Game::sendText which allows messages to be forwarded to allies.
-    /// The behaviour of this function is the same as printf, located in <cstdio>.
+    /// The behaviour of this function is the same as printf, located in header cstdio.
     ///
     /// @param toAllies
     ///   If this parameter is set to true, then the message is only sent to allied players,
@@ -729,7 +729,7 @@ namespace BWAPI
     /// @see sendText
     void sendTextEx(bool toAllies, const char *format, ...);
     
-    /// @copydoc sendText
+    /// @copydoc sendTextEx
     ///
     /// This function is intended to forward an already-existing argument list.
     ///
@@ -794,7 +794,7 @@ namespace BWAPI
     ///   - Slowest: 167ms/frame
     ///
     /// @note Specifying a value of 0 will not guarantee that logical frames are executed as fast
-    /// as possible. If that is the intention, use this in combination with ::setFrameSkip.
+    /// as possible. If that is the intention, use this in combination with #setFrameSkip.
     ///
     /// @bug Changing this value will cause the execution of @UMS scenario triggers to glitch.
     /// This will only happen in campaign maps and custom scenarios (non-melee).
@@ -839,7 +839,8 @@ namespace BWAPI
     /// @code
     ///   void ExampleAIModule::onStart()
     ///   {
-    ///     BWAPI::Broodwar->sendText("Hello, my name is %s.", BWAPI::Broodwar->self()->getName().c_str());
+    ///     if ( BWAPI::Broodwar->self() )
+    ///       BWAPI::Broodwar->sendText("Hello, my name is %s.", BWAPI::Broodwar->self()->getName().c_str());
     ///   }
     /// @endcode
     virtual Player* self() const = 0;
@@ -1123,6 +1124,7 @@ namespace BWAPI
     ///
     /// @returns Amount of time, in milliseconds, until a command is executed if it were sent in
     /// the current frame.
+    /// @see getRemainingLatencyFrames, getLatencyTime
     virtual int getRemainingLatencyTime() const = 0;
 
     /// Retrieves the current revision of BWAPI.
@@ -1364,13 +1366,16 @@ namespace BWAPI
     /// Returns the remaining countdown time. The countdown timer is used in @CTF and @UMS game
     /// types.
     ///
+    /// Example usage:
     /// @code
     ///   void ExampleAIModule::onStart()
     ///   {
-    ///     if ( Broodwar->getGameType() == GameTypes::Capture_The_Flag || Broodwar->getGameType() == GameTypes::Team_Capture_The_Flag )
+    ///     // Register a callback that only occurs once when the countdown timer reaches 0
+    ///     if ( BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Capture_The_Flag ||
+    ///           BWAPI::Broodwar->getGameType() == BWAPI::GameTypes::Team_Capture_The_Flag )
     ///     {
-    ///       Broodwar->registerEvent([](Game*){ Broodwar->sendText("Try to find my flag!"); },   // action
-    ///                               [](Game*){ return Broodwar->countdownTimer() == 0; },       // condition
+    ///       BWAPI::Broodwar->registerEvent([](BWAPI::Game*){ BWAPI::Broodwar->sendText("Try to find my flag!"); },   // action
+    ///                               [](BWAPI::Game*){ return BWAPI::Broodwar->countdownTimer() == 0; },       // condition
     ///                               1);                                                         // times to run (once)
     ///     }
     ///   }
