@@ -1,5 +1,5 @@
 #labels Featured
-== Changes in BWAPI 4.0.0 Beta (since r4342) ==
+== Changes from BWAPI 3.7.4 (r4160) to BWAPI 4.0.0 Beta (r4350) ==
  * All BWAPI projects have been upgraded to use Microsoft Visual C++ 2010 Express.
  * BWAPI now uses the available C++11 features, such as move semantics, std::function, lambdas, and nullptr.
  * The location of BWAPI.dll has been moved to the bwapi-data folder.
