@@ -8,7 +8,6 @@
  * Several performance improvements have been made for BWAPI.
  * The holiday lights have been removed.
  * The save_replay configuration option has been altered for more flexibility on date/time stamps.
- * Added the /fps command.
  * The documentation has been extensively reworked and is now included as offline HTML files. Not all documentation has been updated but will continue to be worked on.
  * A proper installer is now distributed for BWAPI.
  * BWTA is no longer compatible with BWAPI.
