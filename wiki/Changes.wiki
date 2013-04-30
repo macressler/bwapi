@@ -1,22 +1,23 @@
 #labels Featured
 == Changes in BWAPI 4.0.0 Beta (since r4342) ==
  * All BWAPI projects have been upgraded to use Microsoft Visual C++ 2010 Express.
- * BWAPI no longer supports loading older revisions if the revision of the AI module is diffrent.
- * BWAPI will be using some C++11 features, such as: r-value references, std::function, lambdas, nullptr, auto, and range-based for loops.
+ * BWAPI now uses the available C++11 features, such as move semantics, std::function, lambdas, and nullptr.
  * The location of BWAPI.dll has been moved to the bwapi-data folder.
- * The module now only allows one instance of itself to be injected into the Broodwar process.
  * Several performance improvements have been made for BWAPI.
- * The holiday lights have been removed.
  * The save_replay configuration option has been altered for more flexibility on date/time stamps.
  * The documentation has been extensively reworked and is now included as offline HTML files. Not all documentation has been updated but will continue to be worked on.
  * A proper installer is now distributed for BWAPI.
+
+== Necessary Regressions ==
+ * BWAPI no longer supports loading older revisions of itself.
+ * The holiday lights have been removed.
  * BWTA is no longer compatible with BWAPI.
 
 === AI/Tournament Module ===
  * Type data is no longer initialized by the module, and can now be retrieved properly at any time.
  * The gameInit function is now exported to initialize the Broodwar pointer.
  * The original newAIModule function now takes 0 arguments.
- * Removed the Tournament enums restartGame
+ * Removed the Tournament enum restartGame.
 
 === Sets and Vectors ===
  Using a custom new class template known as a Vectorset, BWAPI and AI modules can perform significantly better (faster and less memory). This replaces the use of STL containers, but is used the same way (with Vectorset::iterator, stl algorithms, etc).
@@ -87,8 +88,8 @@
 === Bug Fixes ===
  * Fixed a bug where Unit::getRemainingBuildTime failed to work correctly for some units (such as siege tanks).
  * Fixed a bug where Spider Mines were not correctly identified for Jim Raynor (Vulture).
- * Fixed a bug where key values were incorrectly mapped (getKeyState).
-
+ * Fixed a bug where key enum values were incorrectly mapped for Game::getKeyState.
+ * Fixed a bug that allowed multiple instances of the BWAPI DLL to be injected into Broodwar, which could cause compatibility issues.
 
 == Changes from BWAPI 3.7.3 (r4111) to BWAPI 3.7.4 (r4160) ==
 
