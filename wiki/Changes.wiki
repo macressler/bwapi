@@ -1,5 +1,5 @@
 #labels Featured
-== Changes in BWAPI4 (since r4342) ==
+== Changes in BWAPI 4.0.0 Beta (since r4342) ==
  * All BWAPI projects have been upgraded to use Microsoft Visual C++ 2010 Express.
  * BWAPI no longer supports loading older revisions if the revision of the AI module is diffrent.
  * BWAPI will be using some C++11 features, such as: r-value references, std::function, lambdas, nullptr, auto, and range-based for loops.
@@ -9,7 +9,7 @@
  * The holiday lights have been removed.
  * The save_replay configuration option has been altered for more flexibility on date/time stamps.
  * Added the /fps command.
- * The documentation has been extensively reworked and is now included as offline HTML files.
+ * The documentation has been extensively reworked and is now included as offline HTML files. Not all documentation has been updated but will continue to be worked on.
  * A proper installer is now distributed for BWAPI.
  * BWTA is no longer compatible with BWAPI.
 
