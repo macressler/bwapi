@@ -13,6 +13,10 @@ _Note: In most cases you do not need to be present at the tournament location, s
  === Info ===
     * *Official Website:* http://webdocs.cs.ualberta.ca/~cdavid/starcraftaicomp/
 
+ == _CIG 2013_ ==
+ === Info ===
+   * *Official Website:* http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2013
+
  == _SSCAI Tournament 2013_ ==
  === Info ===
    * *Official Website:* http://sscaitournament.com/
