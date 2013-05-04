@@ -9,6 +9,16 @@ _Note: In most cases you do not need to be present at the tournament location, s
 
 ----
 = In Progress =
+ == _AIIDE 2013_ ==
+ === Info ===
+    * *Official Website:* http://webdocs.cs.ualberta.ca/~cdavid/starcraftaicomp/
+
+ == _SSCAI Tournament 2013_ ==
+ === Info ===
+   * *Official Website:* http://sscaitournament.com/
+
+----
+= Finished =
 
  == _AIIDE 2012_ ==
  === Info ===
@@ -22,7 +32,7 @@ _Note: In most cases you do not need to be present at the tournament location, s
    * *Results:* October, 2012
 
  == _CIG 2012_ ==
-  * _*Details to be announced.*_
+  * *Official Website:* http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2012
 
  == _SSCAI Tournament 2012_ ==
  === Info ===
@@ -33,9 +43,6 @@ _Note: In most cases you do not need to be present at the tournament location, s
 
  === Dates ===
   * *Submission Deadline:* December, 2012
-
-----
-= Finished =
 
  == _BWAPI Winter Tournament 2012_ ==
  === Info ===
