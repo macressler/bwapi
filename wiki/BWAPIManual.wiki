@@ -2,6 +2,7 @@
 #sidebar TableOfContents
 
 = Contents =
+  * [Academics]
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
   * [Commands]
