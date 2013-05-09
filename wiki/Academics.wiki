@@ -3,13 +3,18 @@
 This page contains a list of works that BWAPI has been used for in academia.
 
 
-= Papers =
+= Papers/Dissertations =
+  * [http://users.soe.ucsc.edu/~%20bweber/pubs/weber_aiide11.pdf A Particle Model for State Estimation in Real-Time Strategy Games]
   * [http://bwmas.googlecode.com/hg-history/5967034349d2128c562f87e4f91bf537d5d1704c/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAAI_Format/AuthorKit/Aiide2010RoughDraft.pdf Agent-Oriented Programming Framework Design for Real-Time Strategy AI]
+  * [http://users.soe.ucsc.edu/~%20bweber/pubs/gda_aiide2010.pdf Applying Goal-Driven Autonomy to StarCraft]
   * [http://geneura.ugr.es/cig2012/papers/paper44.pdf Applying Reinforcement Learning to Small Scale Combat in the Real-Time Strategy Game StarCraft:Broodwar]
   * [http://users.soe.ucsc.edu/~bweber/pubs/weber-acs2011-final.pdf Building Human-Level AI for Real-Time Strategy Games]
+  * [http://users.soe.ucsc.edu/~%20bweber/pubs/weber_goalformulation.pdf Case-Based Goal Formulation]
   * [http://www.bth.se/fou/cuppsats.nsf/6753b78eb2944e0ac1256608004f0535/991f54e9394c4dbec125786300787c9b?OpenDocument Implementation of Asymmetric Potential Fields in Real Time Strategy Game]
-  * [http://urn.kb.se/resolve?urn=urn:nbn:no:ntnu:diva-18449 Opponent Modeling and Strategic Reasoning in the Real-time Strategy Game Starcraft]
+  * [http://users.soe.ucsc.edu/~%20bweber/pubs/bweber-dissertation-UC.pdf Integrating Learning in a Multi-Scale Agent]
   * [http://daim.idi.ntnu.no/masteroppgave?id=7312 Jantu: A Cognitive Agent Playing StarCraft: Brood War]
   * [http://urn.kb.se/resolve?urn=urn:nbn:no:ntnu:diva-18809 Micromanagement in StarCraft using Potential Fields tuned with a Multi- Objective Genetic Algorithm]
+  * [http://urn.kb.se/resolve?urn=urn:nbn:no:ntnu:diva-18449 Opponent Modeling and Strategic Reasoning in the Real-time Strategy Game Starcraft]
+  * [http://users.soe.ucsc.edu/~%20bweber/pubs/weber_cig2010.pdf Reactive Planning Idioms for Multi-Scale Game AI]
   * [http://users.soe.ucsc.edu/~bweber/pubs/iccbr-cg.pdf Using Automated Replay Annotation for Case-Based Planning in Games]
   
