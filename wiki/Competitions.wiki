@@ -17,6 +17,9 @@ _Note: In most cases you do not need to be present at the tournament location, s
   
 ----
 = Finished =
+ == 2013 ==
+  * [http://www.hackcraft.sk/article/default/zhodnotenie-starcraft-micro-ai-tournament-2013 Starcraft Micro AI Tournament] (February 15th - February 17th)
+
  == 2012 ==
   * [http://code.google.com/p/bwapi/wiki/BWAPICodeTournament BWAPI Winter Tournament 2012] (January 7th - January 8th)
   * [http://webdocs.cs.ualberta.ca/~cdavid/starcraftaicomp/media.shtml AIIDE 2012]
