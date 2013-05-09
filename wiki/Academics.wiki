@@ -1,6 +1,6 @@
 #summary Usage of BWAPI in academics.
 
-This page contains a list of works that BWAPI has been used for in academia.
+This page contains a list of works that BWAPI has been used for in academia. (Currently not categorized)
 
 
 = Papers/Dissertations/Reports/Projects/etc =
