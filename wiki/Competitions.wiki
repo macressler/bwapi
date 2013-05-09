@@ -10,7 +10,7 @@ _Note: In most cases you do not need to be present at the tournament location, s
 ----
 = In Progress =
  == 2013 ==
-  * [http://scmai.hackcraft.sk/?lang=en Starcraft AI Micro Tournament 2] (July 5th - July 7th)
+  * [http://scmai.hackcraft.sk/?lang=en Starcraft Micro AI Tournament 2] (July 5th - July 7th)
   * [http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2013 CIG 2013] (July 19th - August 13th)
   * [http://webdocs.cs.ualberta.ca/~cdavid/starcraftaicomp/index.shtml AIIDE 2013] (July)
   * [http://www.sscaitournament.com/ SSCAI Tournament 2013] (December)
@@ -18,7 +18,7 @@ _Note: In most cases you do not need to be present at the tournament location, s
 ----
 = Finished =
  == 2013 ==
-  * [http://www.hackcraft.sk/article/default/zhodnotenie-starcraft-micro-ai-tournament-2013 Starcraft Micro AI Tournament] (February 15th - February 17th)
+  * [http://www.hackcraft.sk/article/default/starcraft-micro-ai-tournament-2013-report Starcraft Micro AI Tournament] (February 15th - February 17th)
 
  == 2012 ==
   * [http://code.google.com/p/bwapi/wiki/BWAPICodeTournament BWAPI Winter Tournament 2012] (January 7th - January 8th)
