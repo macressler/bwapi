@@ -1,6 +1,6 @@
 #summary Usage of BWAPI in academics.
 
-This page contains a list of published papers that have used Starcraft: Broodwar and the BWAPI.
+This page contains a list of works that BWAPI has been used for in academia.
 
 
 = Papers =
