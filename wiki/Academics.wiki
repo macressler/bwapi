@@ -1,0 +1,11 @@
+#summary Usage of BWAPI in academics.
+
+This page contains a list of published papers that have used Starcraft: Broodwar and the BWAPI.
+
+<wiki:toc max_depth="2" />
+
+= Papers =
+  * [http://geneura.ugr.es/cig2012/papers/paper44.pdf Applying Reinforcement Learning to Small Scale Combat in the Real-Time Strategy Game StarCraft:Broodwar]
+  * [http://users.soe.ucsc.edu/~bweber/pubs/iccbr-cg.pdf Using Automated Replay Annotation for Case-Based Planning in Games]
+  * [http://daim.idi.ntnu.no/masteroppgave?id=7312 Jantu: A Cognitive Agent Playing StarCraft: Brood War]
+  
