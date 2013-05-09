@@ -21,6 +21,10 @@ _Note: In most cases you do not need to be present at the tournament location, s
  === Info ===
    * *Official Website:* http://sscaitournament.com/
 
+ == _Starcraft AI Micro Tournament 2_ ==
+ === Info ===
+   * *Official Website:* http://scmai.hackcraft.sk/?lang=en
+
 ----
 = Finished =
 
