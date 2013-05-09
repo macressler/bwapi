@@ -1,4 +1,5 @@
   * [BWAPIManual ↑ Top]
+  * [Academics]
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
   * [Commands]
