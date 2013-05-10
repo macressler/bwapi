@@ -4,13 +4,6 @@ This page covers methods of making the Starcraft application run faster. Note th
 
 <wiki:toc max_depth="1" />
 
-= Run Full Screen =
-  http://bwapi.googlecode.com/svn/wiki/speed_tut_00.gif
-
-Do not run in windowed mode.
-
-_Windowed mode uses software rendering which takes significantly more CPU usage than the fullscreen hardware rendering._
-
 = Disable Sound =
   http://bwapi.googlecode.com/svn/wiki/speed_tut_01.gif
 
