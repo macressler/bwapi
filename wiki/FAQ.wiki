@@ -47,5 +47,5 @@ This page contains answers to frequent questions.
 
 You can HealMove by using either of the following calls;
 <code>
-pUnit->[Unit#attack attack](position);
-pUnit->[Unit#useTech useTech]([TechTypes#Healing TechTypes::Healing], position);</code>
+pUnit->attack(position);
+pUnit->useTech(TechTypes::Healing, position);</code>
