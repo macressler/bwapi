@@ -205,7 +205,7 @@ HWND WINAPI _CreateWindowEx(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindow
 HANDLE WINAPI _FindFirstFile(LPCSTR lpFileName, LPWIN32_FIND_DATA lpFindFileData)
 {
   const char *pszFile = lpFileName;
-  if ( BWAPI::BroodwarImpl.autoMenuMapPath.size() > 0 && 
+  if ( !BWAPI::BroodwarImpl.autoMenuMapPath.empty() && 
        BWAPI::BroodwarImpl.autoMenuMode != ""         &&
        BWAPI::BroodwarImpl.autoMenuMode != "OFF"      &&
        BWAPI::BroodwarImpl.lastMapGen.size() > 0      &&

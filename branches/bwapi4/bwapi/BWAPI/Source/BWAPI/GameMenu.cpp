@@ -42,10 +42,12 @@ namespace BWAPI
       size_t tmp = cfgMap.find_last_of("\\/\n");
       if ( tmp != std::string::npos )
         this->autoMenuMapPath = cfgMap.substr(0, tmp);
+      this->autoMenuMapPath += "/";
       
       // Iterate files in directory
       WIN32_FIND_DATA finder = { 0 };
       HANDLE hFind = FindFirstFile(cfgMap.c_str(), &finder);
+      
       if ( hFind != INVALID_HANDLE_VALUE )
       {
         do
@@ -55,7 +57,9 @@ namespace BWAPI
             // Convert to string and add to autoMapPool if the type is valid
             std::string finderStr = std::string(finder.cFileName);
             if ( getFileType((this->autoMenuMapPath + finderStr).c_str()) )
+            {
               this->autoMapPool.push_back( finderStr );
+            }
           }
         } while ( FindNextFile(hFind, &finder) );
         FindClose(hFind);
@@ -77,9 +81,9 @@ namespace BWAPI
     autoMenuEnemyRace[0]  = LoadConfigString("auto_menu", "enemy_race", "RANDOM");
     for ( unsigned int i = 1; i < 8; ++i )
     {
-      char key[16];
-      sprintf(key, "enemy_race_%u", i);
-      autoMenuEnemyRace[i] = LoadConfigString("auto_menu", key, "DEFAULT");
+      std::stringstream sskey;
+      sskey << "enemy_race_" << i;
+      autoMenuEnemyRace[i] = LoadConfigString("auto_menu", sskey.str().c_str(), "DEFAULT");
       if ( autoMenuEnemyRace[i] == "DEFAULT" )
         autoMenuEnemyRace[i] = autoMenuEnemyRace[0];
     }
@@ -160,7 +164,7 @@ namespace BWAPI
 
 #ifdef _DEBUG
     // Wait for a debugger if autoMenuPause is enabled, and in DEBUG
-    BOOL (*_IsDebuggerPresent)();
+    decltype(&IsDebuggerPresent) _IsDebuggerPresent;
     (FARPROC&)_IsDebuggerPresent = HackUtil::GetImport("Kernel32", "IsDebuggerPresent");
 
     if ( autoMenuPause != "OFF" && _IsDebuggerPresent && !_IsDebuggerPresent() )
@@ -175,8 +179,8 @@ namespace BWAPI
 
     // Get some autoMenu properties
     bool isAutoSingle = autoMenuMode == "SINGLE_PLAYER";
-    bool isCreating   = autoMenuMapPath.length() > 0;
-    bool isJoining    = autoMenuGameName.length() > 0;
+    bool isCreating   = !autoMenuMapPath.empty();
+    bool isJoining    = !autoMenuGameName.empty();
 
     // Reset raceSel flag
     if ( menu != BW::GLUE_CHAT )
@@ -189,6 +193,9 @@ namespace BWAPI
     switch ( menu )
     {
     case BW::GLUE_MAIN_MENU:    // Main menu
+      if ( BW::FindDialogGlobal("TitleDlg") ) // skip if at title
+        break;
+
       // Choose single or multi
       this->pressKey(BW::FindDialogGlobal("MainMenu")->findIndex(isAutoSingle ? 3 : 4)->getHotkey() );
 

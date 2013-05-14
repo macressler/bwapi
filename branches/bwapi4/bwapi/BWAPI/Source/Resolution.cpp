@@ -57,8 +57,7 @@ void SetResolution(int width, int height)
 HMODULE ddLib;
 void DDrawDestroy()
 {
-  //SDrawManualInitialize(ghMainWnd);
-  SDrawManualInitialize();
+  SDrawManualInitialize(ghMainWnd);   // NOTE: Necessary so Storm knows the main window
   if ( *BW::BWDATA::PrimaryPalette )
     (*BW::BWDATA::PrimaryPalette)->Release();
   *BW::BWDATA::PrimaryPalette = NULL;
