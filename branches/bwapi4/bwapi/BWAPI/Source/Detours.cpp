@@ -323,12 +323,12 @@ int __stdcall _SStrCopy(char *dest, const char *source, int size)
     {
       if ( dest == BW::BWDATA::SaveGameFile )
       {
-        /* onSaveGame */
+        // onSaveGame
         BWAPI::BroodwarImpl.onSaveGame((char*)source);
       }
       else
       {
-        /* onSend Game */
+        // onSend Game
         BWAPI::BroodwarImpl.sentMessages.push_back(std::string(source));
         dest[0] = 0;
         return 0;
@@ -336,7 +336,7 @@ int __stdcall _SStrCopy(char *dest, const char *source, int size)
     }
     else if ( size == 120 && *BW::BWDATA::gwGameMode != 3 )
     {
-      /* onSend Lobby */
+      // onSend Lobby
     }
   }
   auto SStrCopyProc = _SStrCopyOld ? _SStrCopyOld : &SStrCopy;

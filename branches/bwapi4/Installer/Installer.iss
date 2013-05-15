@@ -31,8 +31,8 @@ Source: "..\Release_Binary\documentation\*"; DestDir: "{app}\documentation\"; Fl
 [Setup]
 AppName=BWAPI
 AppId={{5025BB16-9672-4C23-979D-2DC1B276CC5E}
-LicenseFile=C:\Projects\BWAPI\branches\bwapi4\Release_Binary\COPYING
-InfoBeforeFile=C:\Projects\BWAPI\branches\bwapi4\Release_Binary\ChangeLog.txt
+LicenseFile=..\Release_Binary\COPYING
+InfoBeforeFile=..\Release_Binary\ChangeLog.txt
 RestartIfNeededByRun=False
 AppPublisherURL=http://bwapi.googlecode.com
 AppSupportURL=http://bwapi.googlecode.com
