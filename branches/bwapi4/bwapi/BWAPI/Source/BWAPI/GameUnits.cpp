@@ -439,7 +439,7 @@ namespace BWAPI
 
     if (this->staticNeutralUnits.empty()) //if we haven't saved the set of static units, save them now
     {
-      foreach (UnitImpl* i, accessibleUnits)
+      foreach (UnitImpl* i, aliveUnits)
       {
         if (i->_getPlayer->isNeutral())
         {

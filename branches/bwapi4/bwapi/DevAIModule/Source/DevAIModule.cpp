@@ -2,9 +2,11 @@
 
 #include <BWAPI/Filters.h>
 #include <algorithm>
+#include <iostream>
 
 using namespace BWAPI;
 using namespace Filter;
+using namespace std;
 
 bool enabled;
 int mapH, mapW;
@@ -32,6 +34,15 @@ void DevAIModule::onStart()
 
   // set command optimization
   bw->setCommandOptimizationLevel(3);
+
+  Broodwar << "Minerals: " << Broodwar->getMinerals().size() << endl;
+  bw << "Static minerals: " << bw->getStaticMinerals().size() << endl;
+  Unitset mins = bw->getStaticMinerals();
+  for( auto it = mins.begin(); it != mins.end(); ++it )
+  {
+    Unit *u = *it;
+    bw->registerEvent([u](Game*){ bw->drawTextMap(u->getInitialPosition(), "%d", u->getResources()); });
+  }
 }
 
 void DevAIModule::onEnd(bool isWinner)
@@ -43,6 +54,9 @@ void DevAIModule::onFrame()
   if ( bw->isReplay() ) // ignore everything if in a replay
     return;
 
+  if ( bw->getFrameCount() < 3 )
+    Broodwar << Broodwar->getMinerals().size() << endl;
+
   // Log and display the best logical FPS seen in the game
   static int bestFPS = 0;
   bestFPS = std::max(bestFPS, Broodwar->getFPS());
@@ -52,15 +66,34 @@ void DevAIModule::onFrame()
   if ( Broodwar->getFrameCount() % Broodwar->getLatencyFrames() != 0 )
     return;
 
-  // Iterate our own units
-  Unitset myUnits = self->getUnits();
-  for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+  if ( BWAPI::Broodwar->self() )
   {
-    if ( u->getType().isWorker() && u->isIdle() )
-      u->gather( u->getClosestUnit( Filter::IsMineralField) );
-
+    BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+    for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
+    {
+      if ( u->getType().isRefinery() )
+      {
+        int nWorkersAssigned = u->getClientInfo<int>('work');
+        if ( nWorkersAssigned < 3 )
+        {
+          Unit *pClosestIdleWorker = u->getClosestUnit(BWAPI::Filter::IsWorker && BWAPI::Filter::IsIdle);
+          if ( pClosestIdleWorker )
+          {
+            // gather from the refinery (and check if it was successful)
+            if ( pClosestIdleWorker->gather(*u) )
+            {
+              // set a back reference for when the unit is killed or re-assigned (code not provided)
+              pClosestIdleWorker->setClientInfo(*u, 'ref');
+  
+              // Increment the number of workers assigned and associate it with the refinery
+              ++nWorkersAssigned;
+              u->setClientInfo(nWorkersAssigned, 'work');
+            }
+          }
+        }
+      }
+    } // for
   }
-
 }
 
 void DevAIModule::onSendText(std::string text)

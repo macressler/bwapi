@@ -203,10 +203,12 @@ namespace BWAPI
       return false;
     if (this->isVisible())
       return true;
+
     //if we get here, the unit exists but is not visible
     if ( BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation) )
       return true;
-    /* neutral units visible during AIModule::onStart */
+
+    // neutral units visible during AIModule::onStart
     if ( Broodwar->getFrameCount() == 0 )
       if (this->_getType.isNeutral() || (this->_getPlayer && this->_getPlayer->isNeutral()) )
         return true;
@@ -220,12 +222,13 @@ namespace BWAPI
       return true;
     if (BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation))
       return true;
-    /* neutral units visible during AIModule::onStart */
+
+    // neutral units visible during AIModule::onStart
     if (Broodwar->getFrameCount() == 0)
       if (this->_getType.isNeutral())
         return true;
-    return self->isDetected;
 
+    return self->isDetected;
   }
 
   //returns true if canAccess() is true and the unit is owned by self (or complete map info is turned on)
