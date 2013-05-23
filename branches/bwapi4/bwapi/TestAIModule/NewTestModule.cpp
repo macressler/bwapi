@@ -57,6 +57,12 @@ void NewTestModule::onStart()
   self = Broodwar->self();
 
   Assert.start();
+
+  // Issue 489
+  Broodwar->canBuildHere(TilePosition(Broodwar->mapWidth()-4,10), UnitTypes::Terran_Barracks) ? Assert.Pass() : Assert.Fail(__FILE__, __LINE__);
+  !Broodwar->canBuildHere(TilePosition(Broodwar->mapWidth()-3,10), UnitTypes::Terran_Barracks) ? Assert.Pass() : Assert.Fail(__FILE__, __LINE__);
+  Broodwar->canBuildHere(TilePosition(Broodwar->mapWidth()-4,Broodwar->mapHeight()-5), UnitTypes::Terran_Barracks) ? Assert.Pass() : Assert.Fail(__FILE__, __LINE__);
+  !Broodwar->canBuildHere(TilePosition(Broodwar->mapWidth()-3,Broodwar->mapHeight()-5), UnitTypes::Terran_Barracks) ? Assert.Pass() : Assert.Fail(__FILE__, __LINE__);
 }
 void NewTestModule::onEnd(bool isWinner)
 {

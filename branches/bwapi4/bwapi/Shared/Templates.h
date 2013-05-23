@@ -138,15 +138,13 @@ namespace BWAPI
     static inline bool canBuildHere(const Unit* builder, TilePosition position, UnitType type, bool checkExplored)
     {
       Broodwar->setLastError(Errors::Unbuildable_Location);
-      int width  = type.tileWidth();
-      int height = type.tileHeight();
 
       // lt = left top, rb = right bottom
       TilePosition lt = position;
-      TilePosition rb = position + TilePosition(width, height);
+      TilePosition rb = position + type.tileSize();
 
       // Map limit check
-      if ( !lt.isValid() || !rb.isValid() )
+      if ( !lt.isValid() || !(Position(rb) - Position(1,1)).isValid() )
         return false;
 
       //if the unit is a refinery, we just need to check the set of geysers to see if the position
@@ -187,7 +185,7 @@ namespace BWAPI
       {
         if ( !builder->getType().isBuilding() )
         {
-          if ( !builder->hasPath( Position(lt + TilePosition(width/2, height/2)) ) )
+          if ( !builder->hasPath( Position(lt) + Position(type.tileSize())/2 ) )
             return false;
         }
         else
@@ -200,8 +198,8 @@ namespace BWAPI
       // Ground unit dimension check
       if ( type != UnitTypes::Special_Start_Location )
       {
-        Position targPos = lt + Position(TilePosition(width,height))/2;
-        Unitset unitsInRect( Broodwar->getUnitsInRectangle((Position)lt, (Position)rb, !IsFlyer    &&
+        Position targPos = lt + Position( type.tileSize() )/2;
+        Unitset unitsInRect( Broodwar->getUnitsInRectangle(Position(lt), Position(rb), !IsFlyer    &&
                                                                                         !IsLoaded   &&
                                                                                         [&builder, &type](Unit *u){ return u != builder || type == UnitTypes::Zerg_Nydus_Canal;} &&
                                                                                         GetLeft   <= targPos.x + type.dimensionRight()  &&
@@ -281,7 +279,7 @@ namespace BWAPI
         TilePosition rbBuilder = TilePosition(lt.x, lt.y + 2);
 
         // Map limit check
-        if ( !ltBuilder.isValid() || !rbBuilder.isValid() )
+        if ( !ltBuilder.isValid() || !(Position(rbBuilder) - Position(1,1)).isValid() )
           return false;
 
         // Tile buildability check and creep check
@@ -302,7 +300,7 @@ namespace BWAPI
 
         // Ground unit dimension check
         Position targPosBuilder = ltBuilder + Position(TilePosition(4, 3))/2;
-        Unitset unitsInRectBuilder( Broodwar->getUnitsInRectangle((Position)ltBuilder, (Position)rbBuilder, !IsFlyer    &&
+        Unitset unitsInRectBuilder( Broodwar->getUnitsInRectangle(Position(ltBuilder), Position(rbBuilder), !IsFlyer    &&
                                                                                                             !IsLoaded   &&
                                                                                                             [&builder](Unit *u){ return u != builder;} &&
                                                                                                             GetLeft   <= targPosBuilder.x + typeBuilder.dimensionRight()  &&

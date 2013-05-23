@@ -41,7 +41,7 @@ void AssertTracker::updateDisplay() const
   int x = id * 100;
   int y = 2;
   Broodwar->drawTextScreen(x+2, y, "%c%s\n Succeeded: %u\n Failed: %u", Text::White, name.c_str(), passCount, failCount);
-  y += 24;
+  y += 32;
   for ( auto it = recent.cbegin(); it != recent.cend(); ++it )
   {
     Broodwar->drawTextScreen(x+6, y, "%c%s", Text::Green, it->c_str());
