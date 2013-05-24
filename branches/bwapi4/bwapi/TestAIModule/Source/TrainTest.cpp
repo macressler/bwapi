@@ -20,7 +20,7 @@ void TrainTest::start()
 
   int producerCount = Broodwar->self()->completedUnitCount(producerType);
   BWAssertF(producerCount>=1,{fail=true;return;});
-  for each(Unit* u in Broodwar->self()->getUnits())
+  for each(Unit u in Broodwar->self()->getUnits())
   {
     if (u->getType()==producerType)
     {

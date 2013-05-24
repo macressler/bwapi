@@ -69,12 +69,12 @@ void UnitWrap::EmulateOrder()
   }
 }
 
-BWAPI::Unit *UnitWrap::FindNewAttackTarget() const
+BWAPI::Unit UnitWrap::FindNewAttackTarget() const
 {
   UnitType t = pUnit->getType();
   
-  Unit *pTarg = pUnit->getClosestUnit( IsEnemy && 
-                                      [this](Unit *u){ return pUnit->isInWeaponRange(u);} &&
+  Unit pTarg = pUnit->getClosestUnit( IsEnemy && 
+                                      [this](Unit u){ return pUnit->isInWeaponRange(u);} &&
                                       IsVisible &&
                                       !IsInvincible,  std::max(t.seekRange(),t.sightRange())*32 );
   // Should be greatly expanded, but for now something simple

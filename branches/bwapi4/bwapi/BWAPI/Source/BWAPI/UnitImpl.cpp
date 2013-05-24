@@ -87,7 +87,7 @@ namespace BWAPI
          getType().producesLarva() && command.getUnitType().whatBuilds().first == UnitTypes::Zerg_Larva )
     {
       Unitset larvae( this->getLarva() );
-      foreach (Unit* larva, larvae)
+      foreach (Unit larva, larvae)
       {
         if ( !larva->isConstructing() && larva->isCompleted() && larva->canCommand() )
         {

@@ -92,7 +92,7 @@ void GameImpl::update()
   _observers.clear();
   if ( BWAPIPlayer )
   {
-    foreach(Player* p, players)
+    foreach(Player p, players)
     {
       if ( p->leftGame() || p->isDefeated() || p == BWAPIPlayer )
         continue;
@@ -109,7 +109,7 @@ void GameImpl::update()
     bool prevLeftGame = this->players[i]->leftGame();
     this->players[i]->updateData();
     if (!prevLeftGame && this->players[i]->leftGame())
-      events.push_back(Event::PlayerLeft((Player*)this->players[i]));
+      events.push_back(Event::PlayerLeft((Player)this->players[i]));
   }
   //update properties of Unit and Bullet objects
   this->updateUnits();
@@ -465,7 +465,7 @@ void GameImpl::updateCommandOptimizer()
 
       Position pos  = Positions::None;
       int       e   = 0;
-      Unit      *t  = nullptr;
+      Unit t  = nullptr;
       UnitType  ut;
       bool      o   = false;
 
@@ -543,7 +543,7 @@ void GameImpl::updateCommandOptimizer()
             QueueGameCommand(&sel, sel.size);
 
             // Workaround for doing certain actions
-            Unit *unit = (i == UnitCommandTypes::Load         || 
+            Unit unit = (i == UnitCommandTypes::Load         || 
                           i == UnitCommandTypes::Attack_Unit  ||
                           i == UnitCommandTypes::Train        ||
                           i == UnitCommandTypes::Unload_All   ||
@@ -566,7 +566,7 @@ void GameImpl::updateCommandOptimizer()
           QueueGameCommand(&sel, sel.size);
 
           // Workaround for doing certain actions
-          Unit *unit = (i == UnitCommandTypes::Load         || 
+          Unit unit = (i == UnitCommandTypes::Load         || 
                         i == UnitCommandTypes::Attack_Unit  ||
                         i == UnitCommandTypes::Train        ||
                         i == UnitCommandTypes::Unload_All   ||
@@ -698,7 +698,7 @@ void GameImpl::initializeAIModule()
 
     if ( !hAIModule )
     {
-      //if hAIModule is a NULL pointer, there there was a problem when trying to load the AI Module
+      //if hAIModule is nullptr, there there was a problem when trying to load the AI Module
       this->client = new AIModule();
 
       // enable flags to allow interaction

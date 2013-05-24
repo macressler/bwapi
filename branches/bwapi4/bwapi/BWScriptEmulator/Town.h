@@ -22,7 +22,7 @@ public:
 
   static std::vector<Town*> allTowns;
 
-  void AddUnit(BWAPI::Unit *pUnit);
+  void AddUnit(BWAPI::Unit pUnit);
 
 private:
   BWAPI::Unitset townWorkers;
@@ -35,7 +35,7 @@ private:
 
   BWAPI::Position location;
 
-  BWAPI::Unit *pTownCenter;
+  BWAPI::Unit pTownCenter;
   BWAPI::Unitset resources;
   BWAPI::Unitset gasGeysers;
 

@@ -153,7 +153,7 @@ void ExampleAIModule::onFrame()
           lastChecked = Broodwar->getFrameCount();
 
           // Retrieve a unit that is capable of constructing the supply needed
-          Unit *supplyBuilder = u->getClosestUnit(  GetType == supplyProviderType.whatBuilds().first &&
+          Unit supplyBuilder = u->getClosestUnit(  GetType == supplyProviderType.whatBuilds().first &&
                                                     (IsIdle || IsGatheringMinerals) &&
                                                     IsOwned);
           // If a unit was found
@@ -204,13 +204,13 @@ void ExampleAIModule::onSendText(std::string text)
 
 }
 
-void ExampleAIModule::onReceiveText(BWAPI::Player* player, std::string text)
+void ExampleAIModule::onReceiveText(BWAPI::Player player, std::string text)
 {
   // Parse the received text
   Broodwar << player->getName() << " said \"" << text << "\"" << std::endl;
 }
 
-void ExampleAIModule::onPlayerLeft(BWAPI::Player* player)
+void ExampleAIModule::onPlayerLeft(BWAPI::Player player)
 {
   // Interact verbally with the other players in the game by
   // announcing that the other player has left.
@@ -235,23 +235,23 @@ void ExampleAIModule::onNukeDetect(BWAPI::Position target)
   // You can also retrieve all the nuclear missile targets using Broodwar->getNukeDots()!
 }
 
-void ExampleAIModule::onUnitDiscover(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitDiscover(BWAPI::Unit unit)
 {
 }
 
-void ExampleAIModule::onUnitEvade(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitEvade(BWAPI::Unit unit)
 {
 }
 
-void ExampleAIModule::onUnitShow(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitShow(BWAPI::Unit unit)
 {
 }
 
-void ExampleAIModule::onUnitHide(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitHide(BWAPI::Unit unit)
 {
 }
 
-void ExampleAIModule::onUnitCreate(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitCreate(BWAPI::Unit unit)
 {
   if ( Broodwar->isReplay() )
   {
@@ -266,11 +266,11 @@ void ExampleAIModule::onUnitCreate(BWAPI::Unit* unit)
   }
 }
 
-void ExampleAIModule::onUnitDestroy(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitDestroy(BWAPI::Unit unit)
 {
 }
 
-void ExampleAIModule::onUnitMorph(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitMorph(BWAPI::Unit unit)
 {
   if ( Broodwar->isReplay() )
   {
@@ -285,7 +285,7 @@ void ExampleAIModule::onUnitMorph(BWAPI::Unit* unit)
   }
 }
 
-void ExampleAIModule::onUnitRenegade(BWAPI::Unit* unit)
+void ExampleAIModule::onUnitRenegade(BWAPI::Unit unit)
 {
 }
 
@@ -294,6 +294,6 @@ void ExampleAIModule::onSaveGame(std::string gameName)
   Broodwar << "The game was saved to \"" << gameName << "\"" << std::endl;
 }
 
-void ExampleAIModule::onUnitComplete(BWAPI::Unit *unit)
+void ExampleAIModule::onUnitComplete(BWAPI::Unit unit)
 {
 }

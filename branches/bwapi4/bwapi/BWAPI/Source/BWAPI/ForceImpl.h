@@ -6,9 +6,10 @@
 namespace BWAPI
 {
   // Forwards
-  class Player;
+  class PlayerInterface;
+  typedef PlayerInterface *Player;
 
-  class ForceImpl : public Force
+  class ForceImpl : public ForceInterface
   {
     public:
       ForceImpl(std::string name);

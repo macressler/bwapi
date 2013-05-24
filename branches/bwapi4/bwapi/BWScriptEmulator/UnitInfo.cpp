@@ -3,19 +3,19 @@
 
 UnitWrap::UnitWrap() : pUnit(nullptr)
 {}
-UnitWrap::UnitWrap(BWAPI::Unit *unit) : pUnit(unit)
+UnitWrap::UnitWrap(BWAPI::Unit unit) : pUnit(unit)
 {}
 
-UnitWrap &UnitWrap::operator =(BWAPI::Unit *unit)
+UnitWrap &UnitWrap::operator =(BWAPI::Unit unit)
 {
   this->pUnit = unit;
   return *this;
 }
-BWAPI::Unit *UnitWrap::operator->() const
+BWAPI::Unit UnitWrap::operator->() const
 {
   return this->pUnit;
 }
-UnitWrap::operator BWAPI::Unit*() const
+UnitWrap::operator BWAPI::Unit () const
 {
   return this->pUnit;
 }
@@ -29,7 +29,7 @@ bool UnitWrap::CanUseTech(TechType tech) const
 {
   return pUnit->getPlayer()->hasResearched(TechTypes::Lockdown) && pUnit->getEnergy() >= tech.energyCost();
 }
-bool UnitWrap::UseTech(BWAPI::TechType tech, Unit *pTarget, int targBit)
+bool UnitWrap::UseTech(BWAPI::TechType tech, Unit pTarget, int targBit)
 {
   if ( !pTarget )
     return false;
@@ -51,7 +51,7 @@ bool UnitWrap::UseTech(BWAPI::TechType tech, Unit *pTarget, int targBit)
 }
 bool UnitWrap::UseTechOnClosest(BWAPI::TechType tech, int range, const BWAPI::UnitFilter &pred, int targBit)
 {
-  Unit *pTarget = pUnit->getClosestUnit(pred, range);
+  Unit pTarget = pUnit->getClosestUnit(pred, range);
   return UseTech(tech, pTarget, targBit);
 }
 
@@ -76,9 +76,9 @@ Orders::Enum::Enum UnitWrap::GetQueuedOrder() const
   return pUnit->getClientInfo<Orders::Enum::Enum>(UnitInfo::QueuedOrder);
 }
 
-Unit *UnitWrap::GetAttackTarget() const
+Unit UnitWrap::GetAttackTarget() const
 { 
-  return pUnit->getClientInfo<Unit*>(UnitInfo::AttackTarget); 
+  return pUnit->getClientInfo<Unit >(UnitInfo::AttackTarget); 
 }
 
 ControlTypes::Enum UnitWrap::GetControlType() const
@@ -133,7 +133,7 @@ void UnitWrap::SetVirtualUnitOrder(Orders::Enum::Enum order, BWAPI::Position pos
   pUnit->setClientInfo(pos.y, UnitInfo::OrderTarget_Y);
 }
 
-void UnitWrap::SetAttackTarget(BWAPI::Unit *pTarget)
+void UnitWrap::SetAttackTarget(BWAPI::Unit pTarget)
 { 
   pUnit->setClientInfo(pTarget, UnitInfo::AttackTarget); 
 }

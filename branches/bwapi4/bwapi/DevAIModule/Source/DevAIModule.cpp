@@ -13,7 +13,7 @@ int mapH, mapW;
 
 DWORD dwCount = 0;
 
-Player *self;
+Player self;
 
 ////////////////////////////////
 void DevAIModule::onStart()
@@ -40,7 +40,7 @@ void DevAIModule::onStart()
   Unitset mins = bw->getStaticMinerals();
   for( auto it = mins.begin(); it != mins.end(); ++it )
   {
-    Unit *u = *it;
+    Unit u = *it;
     bw->registerEvent([u](Game*){ bw->drawTextMap(u->getInitialPosition(), "%d", u->getResources()); });
   }
 }
@@ -76,7 +76,7 @@ void DevAIModule::onFrame()
         int nWorkersAssigned = u->getClientInfo<int>('work');
         if ( nWorkersAssigned < 3 )
         {
-          Unit *pClosestIdleWorker = u->getClosestUnit(BWAPI::Filter::IsWorker && BWAPI::Filter::IsIdle);
+          Unit pClosestIdleWorker = u->getClosestUnit(BWAPI::Filter::IsWorker && BWAPI::Filter::IsIdle);
           if ( pClosestIdleWorker )
           {
             // gather from the refinery (and check if it was successful)
@@ -110,11 +110,11 @@ void DevAIModule::onSendText(std::string text)
   }
 }
 
-void DevAIModule::onReceiveText(BWAPI::Player* player, std::string text)
+void DevAIModule::onReceiveText(BWAPI::Player player, std::string text)
 {
 }
 
-void DevAIModule::onPlayerLeft(BWAPI::Player* player)
+void DevAIModule::onPlayerLeft(BWAPI::Player player)
 {
 }
 
@@ -122,39 +122,39 @@ void DevAIModule::onNukeDetect(BWAPI::Position target)
 {
 }
 
-void DevAIModule::onUnitDiscover(BWAPI::Unit* unit)
+void DevAIModule::onUnitDiscover(BWAPI::Unit unit)
 {
 }
 
-void DevAIModule::onUnitEvade(BWAPI::Unit* unit)
+void DevAIModule::onUnitEvade(BWAPI::Unit unit)
 {
 }
 
-void DevAIModule::onUnitShow(BWAPI::Unit* unit)
+void DevAIModule::onUnitShow(BWAPI::Unit unit)
 {
 }
 
-void DevAIModule::onUnitHide(BWAPI::Unit* unit)
+void DevAIModule::onUnitHide(BWAPI::Unit unit)
 {
 }
 
-void newOnUnitComplete(BWAPI::Unit *unit);
+void newOnUnitComplete(BWAPI::Unit unit);
 
-void DevAIModule::onUnitCreate(BWAPI::Unit* unit)
+void DevAIModule::onUnitCreate(BWAPI::Unit unit)
 {
   //unit->registerEvent(newOnUnitComplete, IsCompleted, 1);
   //Broodwar << __FUNCTION__ " -- " << unit->getPlayer()->getName() << ": " << unit->getType() << std::endl;
 }
 
-void DevAIModule::onUnitDestroy(BWAPI::Unit* unit)
+void DevAIModule::onUnitDestroy(BWAPI::Unit unit)
 {
 }
 
-void DevAIModule::onUnitMorph(BWAPI::Unit* unit)
+void DevAIModule::onUnitMorph(BWAPI::Unit unit)
 {
 }
 
-void DevAIModule::onUnitRenegade(BWAPI::Unit* unit)
+void DevAIModule::onUnitRenegade(BWAPI::Unit unit)
 {
 }
 
@@ -162,12 +162,12 @@ void DevAIModule::onSaveGame(std::string gameName)
 {
 }
 
-void DevAIModule::onUnitComplete(BWAPI::Unit *unit)
+void DevAIModule::onUnitComplete(BWAPI::Unit unit)
 {
   //Broodwar << __FUNCTION__ << " -- " << unit->getType() << std::endl;
 }
 
-void newOnUnitComplete(BWAPI::Unit *unit)
+void newOnUnitComplete(BWAPI::Unit unit)
 {
   //Broodwar << __FUNCTION__ " -- " << unit->getType() << std::endl;
 }

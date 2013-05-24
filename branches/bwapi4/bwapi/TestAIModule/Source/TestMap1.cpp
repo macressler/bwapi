@@ -69,12 +69,12 @@ void TestMap1::onStart()
   findAndRemove(players,Broodwar->self());
   findAndRemove(players,Broodwar->enemy());
   BWAssert(players.size()==1);
-  Player* neutral = *players.begin();
+  Player neutral = *players.begin();
   BWAssert(neutral->isNeutral()==true);
 
   BWAssert(Broodwar->self()->getUnits().size()==24);
   Unitset units = Broodwar->self()->getUnits();
-  for each(Unit* unit in units)
+  for each(Unit unit in units)
   {
     BWAssert(unit->exists()==true);
     BWAssert(unit->isAccelerating()==false);
@@ -281,7 +281,7 @@ void TestMap1::onFrame()
     BWAssert(Broodwar->self()->gas()==10000);
     BWAssert(Broodwar->self()->gatheredMinerals()==50);
     BWAssert(Broodwar->self()->gatheredGas()==0);
-    for each(Unit* u in Broodwar->self()->getUnits())
+    for each(Unit u in Broodwar->self()->getUnits())
     {
       if (u->getType().isFlyingBuilding())
       {
@@ -291,7 +291,7 @@ void TestMap1::onFrame()
   }
   else if (frame==200)
   {
-    for each(Unit* u in Broodwar->self()->getUnits())
+    for each(Unit u in Broodwar->self()->getUnits())
     {
       if (u->getType()==UnitTypes::Terran_Command_Center ||
           u->getType()==UnitTypes::Terran_Barracks ||
@@ -311,7 +311,7 @@ void TestMap1::onFrame()
   }
   else if (frame==300)
   {
-    for each(Unit* u in Broodwar->self()->getUnits())
+    for each(Unit u in Broodwar->self()->getUnits())
     {
       BWAssert(u->isLifted()==false);
       BWAssert(u->isTraining()==false);
@@ -327,7 +327,7 @@ void TestMap1::onFrame()
   }
   else if (frame==320)
   {
-    for each(Unit* u in Broodwar->self()->getUnits())
+    for each(Unit u in Broodwar->self()->getUnits())
     {
       BWAssert(u->isLifted()==false);
       if (u->getType()==UnitTypes::Terran_Command_Center ||
@@ -349,7 +349,7 @@ void TestMap1::onFrame()
   }
   else if (frame==400)
   {
-    for each(Unit* u in Broodwar->self()->getUnits())
+    for each(Unit u in Broodwar->self()->getUnits())
     {
       BWAssert(u->isTraining()==false);
       BWAssert(u->isIdle()==true);
@@ -371,28 +371,28 @@ void TestMap1::onFrame()
 void TestMap1::onSendText(std::string text)
 {
 }
-void TestMap1::onPlayerLeft(BWAPI::Player* player)
+void TestMap1::onPlayerLeft(BWAPI::Player player)
 {
 }
 void TestMap1::onNukeDetect(BWAPI::Position target)
 {
 }
-void TestMap1::onUnitCreate(BWAPI::Unit* unit)
+void TestMap1::onUnitCreate(BWAPI::Unit unit)
 {
 }
-void TestMap1::onUnitDestroy(BWAPI::Unit* unit)
+void TestMap1::onUnitDestroy(BWAPI::Unit unit)
 {
 }
-void TestMap1::onUnitMorph(BWAPI::Unit* unit)
+void TestMap1::onUnitMorph(BWAPI::Unit unit)
 {
 }
-void TestMap1::onUnitShow(BWAPI::Unit* unit)
+void TestMap1::onUnitShow(BWAPI::Unit unit)
 {
 }
-void TestMap1::onUnitHide(BWAPI::Unit* unit)
+void TestMap1::onUnitHide(BWAPI::Unit unit)
 {
 }
-void TestMap1::onUnitRenegade(BWAPI::Unit* unit)
+void TestMap1::onUnitRenegade(BWAPI::Unit unit)
 {
 }
 void TestMap1::onSaveGame(std::string gameName)

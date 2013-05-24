@@ -58,11 +58,11 @@ class UnitWrap
 {
 public:
   UnitWrap();
-  UnitWrap(BWAPI::Unit *unit);
+  UnitWrap(BWAPI::Unit unit);
 
-  UnitWrap &operator =(BWAPI::Unit *unit);
-  BWAPI::Unit *operator->() const;
-  operator BWAPI::Unit*() const;
+  UnitWrap &operator =(BWAPI::Unit unit);
+  BWAPI::Unit operator->() const;
+  operator BWAPI::Unit () const;
 
   // GetInfo
   int GetOrderTimer() const;
@@ -70,7 +70,7 @@ public:
   Orders::Enum::Enum GetUnitOrder() const;
   BWAPI::Position GetOrderTargetPosition() const;
   Orders::Enum::Enum GetQueuedOrder() const;
-  Unit *GetAttackTarget() const;
+  Unit GetAttackTarget() const;
   ControlTypes::Enum GetControlType() const;
   CaptainTypes::Enum GetCaptainType() const;
   BWAPI::Position GetGuardReturnPosition() const;
@@ -82,7 +82,7 @@ public:
   void SetOrderTimer(int time);
   void SetVirtualUnitOrder(BWAPI::Orders::Enum::Enum order, BWAPI::Position position = BWAPI::Positions::Origin);
   void SetQueuedOrder(BWAPI::Orders::Enum::Enum order);
-  void SetAttackTarget(BWAPI::Unit *pTarget);
+  void SetAttackTarget(BWAPI::Unit pTarget);
   void SetControlType(int type);
   void SetCaptainType(int type);
   void SetGuardReturnPosition(BWAPI::Position pos);
@@ -92,12 +92,12 @@ public:
   // Procedures
   void UpdateOrderTimers();
   void EmulateOrder();
-  BWAPI::Unit *FindNewAttackTarget() const;
+  BWAPI::Unit FindNewAttackTarget() const;
   bool IsMilitaryCaptain() const;
   bool HasNoCaptain() const;
   void AssignComputerIdleOrder();
   bool CanUseTech(TechType tech) const;
-  bool UseTech(BWAPI::TechType tech, Unit *pTarget, int targBit = 1);
+  bool UseTech(BWAPI::TechType tech, Unit pTarget, int targBit = 1);
   bool UseTechOnClosest(BWAPI::TechType tech, int range, const BWAPI::UnitFilter &pred, int targBit = 1);
 
   // AI Control
@@ -128,5 +128,5 @@ public:
   void RunComputerReturn();
 
 private:
-  BWAPI::Unit *pUnit;
+  BWAPI::Unit pUnit;
 };

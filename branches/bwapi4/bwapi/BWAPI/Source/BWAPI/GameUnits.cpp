@@ -33,7 +33,7 @@ namespace BWAPI
 
     UnitType _getType = BWAPI::UnitType(u->unitType);
 
-    // Replica of official Unit::IsDead function
+    // Replica of official UnitInterface::IsDead function
     if ( !u->sprite || (u->orderID == Orders::Die && u->orderState == 1) )
     {
       //Broodwar->printf("%s has met a true death", _getType.getName().c_str());
@@ -266,11 +266,11 @@ namespace BWAPI
       if ( orderTargetUnit && orderTargetUnit->exists() && i->getOrder() == Orders::ConstructingBuilding )
       {
         UnitImpl* j             = orderTargetUnit;
-        i->self->buildUnit      = server.getUnitID((Unit*)j);
+        i->self->buildUnit      = server.getUnitID((Unit )j);
         i->self->isConstructing = true;
         i->self->isIdle         = false;
         i->self->buildType      = j->self->type;
-        j->self->buildUnit      = server.getUnitID((Unit*)i);
+        j->self->buildUnit      = server.getUnitID((Unit )i);
         j->self->isConstructing = true;
         j->self->isIdle         = false;
         j->self->buildType      = j->self->type;
@@ -278,7 +278,7 @@ namespace BWAPI
       else if ( i->getAddon() && !i->getAddon()->isCompleted() )
       {
         UnitImpl* j             = static_cast<UnitImpl*>(i->getAddon());
-        i->self->buildUnit      = server.getUnitID((Unit*)j);
+        i->self->buildUnit      = server.getUnitID((Unit )j);
         i->self->isConstructing = true;
         i->self->isIdle         = false;
         i->self->buildType      = j->self->type;

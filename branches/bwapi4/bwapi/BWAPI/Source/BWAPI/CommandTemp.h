@@ -18,7 +18,7 @@ namespace BWAPI
   protected:
     virtual ~CommandTemp() {};
   private :
-    int getUnitID(Unit* unit);
+    int getUnitID(Unit unit);
     UnitCommand command;
     int savedExtra;
     int savedExtra2;
@@ -32,7 +32,7 @@ namespace BWAPI
     player      = nullptr;
   }
   template <class UnitImpl, class PlayerImpl>
-  int CommandTemp<UnitImpl, PlayerImpl>::getUnitID(Unit* unit)
+  int CommandTemp<UnitImpl, PlayerImpl>::getUnitID(Unit unit)
   {
     if ( !unit )
       return -1;

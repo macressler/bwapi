@@ -6,7 +6,7 @@ bool UnitWrap::TaskBunkerDefender() // @TODO
   return false;
 }
 
-auto TargetWorthHitting = [](Unit *pTarg)->bool
+auto TargetWorthHitting = [](Unit pTarg)->bool
 {
   UnitType t = pTarg->getType();
   Order o = pTarg->getOrder();
@@ -22,7 +22,7 @@ auto TargetWorthHitting = [](Unit *pTarg)->bool
 
 BWAPI::UnitFilter WeaponCanHit(WeaponType wpn)
 {
-  return [wpn](Unit *u)->bool
+  return [wpn](Unit u)->bool
   {
     UnitType ut = u->getType();
     return !(( wpn.targetsOwn()         && u->getPlayer() != Broodwar->self() ) ||
@@ -36,7 +36,7 @@ BWAPI::UnitFilter WeaponCanHit(WeaponType wpn)
   };
 };
 
-auto LockdownReqs = [](Unit *pTarg)->bool
+auto LockdownReqs = [](Unit pTarg)->bool
 {
   if ( pTarg->isLockedDown() || pTarg->isStasised() || pTarg->isMaelstrommed() || 
       !TargetWorthHitting(pTarg) || !WeaponCanHit(WeaponTypes::Lockdown)(pTarg) )
@@ -46,17 +46,17 @@ auto LockdownReqs = [](Unit *pTarg)->bool
     return true;
   if ( t == UnitTypes::Protoss_Carrier || t == UnitTypes::Protoss_Reaver )
     return true;
-  Unit *pEnemyOfMyEnemey = pTarg->getOrderTarget();
+  Unit pEnemyOfMyEnemey = pTarg->getOrderTarget();
   return pEnemyOfMyEnemey && IsAlly(pEnemyOfMyEnemey);
 };
 
-auto DMatrixReqs = [](Unit *pTarg)->bool
+auto DMatrixReqs = [](Unit pTarg)->bool
 {
   return !( pTarg->isDefenseMatrixed() || !IsAlly(pTarg) || !pTarg->getOrderTarget() || pTarg->isCloaked() ||
             MaxHP(pTarg) < 100 || pTarg->getHitPoints() > 75 || pTarg->isInvincible() || IsBuilding(pTarg) );
 };
 
-auto EMPShieldReqs = [](Unit *pTarg)->bool
+auto EMPShieldReqs = [](Unit pTarg)->bool
 {
   if ( !TargetWorthHitting(pTarg) || !MaxShields(pTarg) || !WeaponCanHit(WeaponTypes::EMP_Shockwave)(pTarg) )
     return false;
@@ -64,13 +64,13 @@ auto EMPShieldReqs = [](Unit *pTarg)->bool
   int totalShields = 0;
   auto p = pTarg->getPosition();
   Broodwar->getUnitsInRectangle(p.x-160, p.y-160, p.x+160, p.y+160,
-                                [&totalShields](Unit *u)->bool{ if ( !u->isInvincible() && IsEnemy(u) && MaxShields(u) > 0 )
+                                [&totalShields](Unit u)->bool{ if ( !u->isInvincible() && IsEnemy(u) && MaxShields(u) > 0 )
                                                                   totalShields += u->getShields();
                                                                 return false;} );
   return totalShields >= 200;
 };
 
-auto EMPEnergyReqs = [](Unit *pTarg)->bool
+auto EMPEnergyReqs = [](Unit pTarg)->bool
 {
   if ( !TargetWorthHitting(pTarg) || !IsSpellcaster(pTarg) || pTarg->isHallucination() || !WeaponCanHit(WeaponTypes::EMP_Shockwave)(pTarg) )
     return false;
@@ -78,26 +78,26 @@ auto EMPEnergyReqs = [](Unit *pTarg)->bool
   int totalEnergy = 0;
   auto p = pTarg->getPosition();
   Broodwar->getUnitsInRectangle(p.x-160, p.y-160, p.x+160, p.y+160,
-                                [&totalEnergy](Unit *u)->bool{ if ( !u->isInvincible() && IsEnemy(u) && IsSpellcaster(u) && !u->isHallucination() )
+                                [&totalEnergy](Unit u)->bool{ if ( !u->isInvincible() && IsEnemy(u) && IsSpellcaster(u) && !u->isHallucination() )
                                                                   totalEnergy += u->getEnergy();
                                                                 return false;} );
   return totalEnergy >= 200;
 };
 
-auto IrradiateReqs = [](Unit *pTarg)->bool
+auto IrradiateReqs = [](Unit pTarg)->bool
 {
   UnitType t = pTarg->getType();
   return TargetWorthHitting(pTarg) && !pTarg->isIrradiated() && WeaponCanHit(WeaponTypes::Irradiate)(pTarg) &&
           t.isOrganic() && !t.isBuilding() && t != UnitTypes::Zerg_Larva && t != UnitTypes::Zerg_Egg && t != UnitTypes::Zerg_Lurker_Egg;
 };
 
-auto RestrictedIrradiateReqs = [](Unit *pTarg)->bool
+auto RestrictedIrradiateReqs = [](Unit pTarg)->bool
 {
   UnitType t = pTarg->getType();
   return IrradiateReqs(pTarg) && (!MainController.IsCampaign() || t.isWorker() || t == UnitTypes::Zerg_Overlord || t == UnitTypes::Terran_Medic);
 };
 
-auto YamatoReqs = [](Unit *pTarg)->bool
+auto YamatoReqs = [](Unit pTarg)->bool
 {
   if ( !TargetWorthHitting(pTarg) )
     return false;
@@ -116,7 +116,7 @@ auto YamatoReqs = [](Unit *pTarg)->bool
   return false;
 };
 
-auto HallucinationReqs = [](Unit *pTarg)->bool
+auto HallucinationReqs = [](Unit pTarg)->bool
 {
   UnitType t = pTarg->getType();
   return pTarg->getPlayer() == Broodwar->self() && !pTarg->isInvincible() && !t.isBuilding() && t != UnitTypes::Protoss_Interceptor &&
@@ -151,7 +151,7 @@ bool UnitWrap::TaskSpellcaster(bool isAggressive) // @TODO
     if ( CanUseTech(TechTypes::EMP_Shockwave) )
     {
       // Get best target unit
-      Unit *pTarget = pUnit->getClosestUnit(EMPShieldReqs, range);
+      Unit pTarget = pUnit->getClosestUnit(EMPShieldReqs, range);
       if ( !pTarget && !isAggressive )
         pTarget = pUnit->getClosestUnit(EMPEnergyReqs, range);
 
@@ -276,7 +276,7 @@ void UnitWrap::RunMilitaryController()
     return;
 
   // @TODO
-  Region *targetRgn = nullptr;
+  Region targetRgn = nullptr;
   // Get targetRgn from captain destination or slowest unit in group
   
   if ( pUnit->getRegion() == targetRgn )

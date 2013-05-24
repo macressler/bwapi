@@ -7,7 +7,7 @@
 
 namespace BWAPI
 {
-  class RegionImpl : public Region
+  class RegionImpl : public RegionInterface
   {
   public:
     virtual int getID() const override;
@@ -24,8 +24,8 @@ namespace BWAPI
     virtual int getBoundsRight() const override;
     virtual int getBoundsBottom() const override;
 
-    virtual BWAPI::Region *getClosestAccessibleRegion() const override;
-    virtual BWAPI::Region *getClosestInaccessibleRegion() const override;
+    virtual BWAPI::Region getClosestAccessibleRegion() const override;
+    virtual BWAPI::Region getClosestInaccessibleRegion() const override;
 
     RegionImpl(int id);
     ~RegionImpl();
@@ -36,8 +36,8 @@ namespace BWAPI
     RegionData *self;
     
     Regionset neighbors;
-    BWAPI::Region *closestAccessibleRgn;
-    BWAPI::Region *closestInaccessibleRgn;
+    BWAPI::Region closestAccessibleRgn;
+    BWAPI::Region closestInaccessibleRgn;
   };
 
 };

@@ -45,9 +45,9 @@ namespace BWAPI
 
     // Store some commonly accessed variables
     UnitCommandType uct = command.getType();
-    Unit      *utarg   = command.getTarget();
+    Unit utarg   = command.getTarget();
     UnitType  targType = utarg ? utarg->getType() : UnitTypes::None;
-    Unit      *uthis   = command.getUnit();
+    Unit uthis   = command.getUnit();
     UnitType  thisType = uthis ? uthis->getType() : UnitTypes::None;
 
     //  Exclude commands that cannot be optimized.

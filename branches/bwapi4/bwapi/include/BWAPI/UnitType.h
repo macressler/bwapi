@@ -264,7 +264,7 @@ namespace BWAPI
   /// The UnitType is used to get information about a particular type of unit, such as its cost,
   /// build time, weapon, hit points, abilities, etc.
   ///
-  /// @see Unit::getType
+  /// @see UnitInterface::getType
   class UnitType : public Type<UnitType, UnitTypes::Enum::Unknown>
   {
   public:
@@ -372,7 +372,7 @@ namespace BWAPI
     /// @note This value may not necessarily match the value seen in the @UMS game type.
     ///
     /// @returns Number of frames needed in order to build the unit.
-    /// @see Unit::getRemainingBuildTime
+    /// @see UnitInterface::getRemainingBuildTime
     int buildTime() const;
 
     /// Retrieves the amount of supply that this unit type will use when created. It will use the
@@ -382,7 +382,7 @@ namespace BWAPI
     /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
     ///
     /// @returns Integer containing the supply required to build this unit.
-    /// @see supplyProvided, Player::supplyTotal, Player::supplyUsed
+    /// @see supplyProvided, PlayerInterface::supplyTotal, PlayerInterface::supplyUsed
     int supplyRequired() const;
 
     /// Retrieves the amount of supply that this unit type produces for its appropriate Race's
@@ -391,7 +391,7 @@ namespace BWAPI
     /// @note In Starcraft programming, the managed supply values are double than what they appear
     /// in the game. The reason for this is because @Zerglings use 0.5 visible supply.
     ///
-    /// @see supplyRequired, Player::supplyTotal, Player::supplyUsed
+    /// @see supplyRequired, PlayerInterface::supplyTotal, PlayerInterface::supplyUsed
     int supplyProvided() const;
 
     /// Retrieves the amount of space required by this unit type to fit inside a @Bunker or
@@ -646,7 +646,7 @@ namespace BWAPI
     ///         int nWorkersAssigned = u->getClientInfo<int>('work');
     ///         if ( nWorkersAssigned < 3 )
     ///         {
-    ///           Unit *pClosestIdleWorker = u->getClosestUnit(BWAPI::Filter::IsWorker && BWAPI::Filter::IsIdle);
+    ///           Unit pClosestIdleWorker = u->getClosestUnit(BWAPI::Filter::IsWorker && BWAPI::Filter::IsIdle);
     ///           if ( pClosestIdleWorker )
     ///           {
     ///             // gather from the refinery (and check if successful)
@@ -738,7 +738,7 @@ namespace BWAPI
     ///   {
     ///     if ( u->getType().isCritter() && !u->isInvincible() )
     ///     {
-    ///       BWAPI::Unit *myQueen = u->getClosestUnit(BWAPI::Filter::GetType == BWAPI::UnitTypes::Zerg_Queen && BWAPI::Filter::IsOwned);
+    ///       BWAPI::Unit myQueen = u->getClosestUnit(BWAPI::Filter::GetType == BWAPI::UnitTypes::Zerg_Queen && BWAPI::Filter::IsOwned);
     ///       if ( myQueen )
     ///         myQueen->useTech(BWAPI::TechTypes::Parasite, *u);
     ///     }

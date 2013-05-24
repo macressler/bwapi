@@ -112,7 +112,7 @@ namespace BWAPI
       e.text = new std::string(text);
     return e;
   }
-  Event Event::ReceiveText(Player* player, const char* text)
+  Event Event::ReceiveText(Player player, const char* text)
   {
     Event e;
     e.type   = EventType::ReceiveText;
@@ -121,7 +121,7 @@ namespace BWAPI
       e.text   = new std::string(text);
     return e;
   }
-  Event Event::PlayerLeft(Player* player)
+  Event Event::PlayerLeft(Player player)
   {
     Event e;
     e.type   = EventType::PlayerLeft;
@@ -135,56 +135,56 @@ namespace BWAPI
     e.position = target;
     return e;
   }
-  Event Event::UnitDiscover(Unit* unit)
+  Event Event::UnitDiscover(Unit unit)
   {
     Event e;
     e.type = EventType::UnitDiscover;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitEvade(Unit* unit)
+  Event Event::UnitEvade(Unit unit)
   {
     Event e;
     e.type = EventType::UnitEvade;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitShow(Unit* unit)
+  Event Event::UnitShow(Unit unit)
   {
     Event e;
     e.type = EventType::UnitShow;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitHide(Unit* unit)
+  Event Event::UnitHide(Unit unit)
   {
     Event e;
     e.type = EventType::UnitHide;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitCreate(Unit* unit)
+  Event Event::UnitCreate(Unit unit)
   {
     Event e;
     e.type = EventType::UnitCreate;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitDestroy(Unit* unit)
+  Event Event::UnitDestroy(Unit unit)
   {
     Event e;
     e.type = EventType::UnitDestroy;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitMorph(Unit* unit)
+  Event Event::UnitMorph(Unit unit)
   {
     Event e;
     e.type = EventType::UnitMorph;
     e.unit = unit;
     return e;
   }
-  Event Event::UnitRenegade(Unit* unit)
+  Event Event::UnitRenegade(Unit unit)
   {
     Event e;
     e.type = EventType::UnitRenegade;
@@ -199,7 +199,7 @@ namespace BWAPI
       e.text = new std::string(gameName);
     return e;
   }
-  Event Event::UnitComplete(Unit *unit)
+  Event Event::UnitComplete(Unit unit)
   {
     Event e;
     e.type = EventType::UnitComplete;
@@ -220,11 +220,11 @@ namespace BWAPI
       return emptyString;
     return *text;
   }
-  Unit* Event::getUnit() const
+  Unit Event::getUnit() const
   {
     return unit;
   }
-  Player* Event::getPlayer() const
+  Player Event::getPlayer() const
   {
     return player;
   }
@@ -265,12 +265,12 @@ namespace BWAPI
     }
     return *this;
   }
-  Event& Event::setUnit(Unit* unit)
+  Event& Event::setUnit(Unit unit)
   {
     this->unit = unit;
     return *this;
   }
-  Event& Event::setPlayer(Player* player)
+  Event& Event::setPlayer(Player player)
   {
     this->player = player;
     return *this;

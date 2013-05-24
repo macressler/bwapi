@@ -51,7 +51,7 @@ namespace BWAPI
     for ( int n = 0; n < r->neighborCount; ++n )
     {
       BW::region *neighbor = r->getNeighbor((unsigned char)n);
-      BWAPI::Region *bwapiNeighbor = (BWAPI::Region*)neighbor->unk_28;
+      BWAPI::Region bwapiNeighbor = (BWAPI::Region)neighbor->unk_28;
 
       // continue if this is null (but it shouldn't be)
       if ( !bwapiNeighbor )

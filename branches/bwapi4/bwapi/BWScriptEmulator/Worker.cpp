@@ -39,8 +39,8 @@ void UnitWrap::RunWorkerController()
 
 
   /* switch for something (task value?)
-    Unit *gas = nullptr;
-    Unit *mineral = nullptr;
+    Unit gas = nullptr;
+    Unit mineral = nullptr;
     switch ( blah )
     {
     case 1:

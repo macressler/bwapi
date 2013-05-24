@@ -6,9 +6,9 @@ using namespace BWAPI;
 using namespace Filter;
 using namespace std;
 
-Player *self;
+Player self;
 
-void DebugUnit(Unit *pUnit, const char * const fxn)
+void DebugUnit(Unit pUnit, const char * const fxn)
 {
   Broodwar << fxn << ": " << pUnit->getType() << " owned by " << (pUnit->getPlayer() ? pUnit->getPlayer()->getName() : "unknown") << endl;
 }
@@ -17,7 +17,7 @@ struct BuildAction
 {
   UnitType type;
   BuildAction(UnitType t) : type(t) {}
-  void operator()(Unit *u)
+  void operator()(Unit u)
   {
     TilePosition targPos = Broodwar->getBuildLocation(type, TilePosition(u->getPosition()) );
     if ( Broodwar->getLastError() != Errors::None )
@@ -36,13 +36,13 @@ struct CompleteAction
 {
   UnitFilter completionCmp;
   CompleteAction(const UnitFilter &c) : completionCmp(c) {}
-  void operator()(Unit *u)
+  void operator()(Unit u)
   {
     Broodwar << ((!completionCmp.isValid() || completionCmp(u)) ? "PASS" : "FAIL") << endl;
   }
 };
 
-void addTestCase(Unit *pUnit, const std::function<void(Unit*)> &action, const UnitFilter &completion, int timeout)
+void addTestCase(Unit pUnit, const std::function<void(Unit )> &action, const UnitFilter &completion, int timeout)
 {
   if ( !pUnit )
     return;
@@ -73,32 +73,32 @@ void NewTestModule::onFrame()
 void NewTestModule::onSendText(std::string text)
 {
 }
-void NewTestModule::onReceiveText(BWAPI::Player* player, std::string text)
+void NewTestModule::onReceiveText(BWAPI::Player player, std::string text)
 {
 }
-void NewTestModule::onPlayerLeft(BWAPI::Player* player)
+void NewTestModule::onPlayerLeft(BWAPI::Player player)
 {
 }
 void NewTestModule::onNukeDetect(BWAPI::Position target)
 {
 }
-void NewTestModule::onUnitDiscover(BWAPI::Unit* unit)
+void NewTestModule::onUnitDiscover(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitEvade(BWAPI::Unit* unit)
+void NewTestModule::onUnitEvade(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitShow(BWAPI::Unit* unit)
+void NewTestModule::onUnitShow(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitHide(BWAPI::Unit* unit)
+void NewTestModule::onUnitHide(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitCreate(BWAPI::Unit* unit)
+void NewTestModule::onUnitCreate(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
   if ( unit->getPlayer() == self )
@@ -115,22 +115,22 @@ void NewTestModule::onUnitCreate(BWAPI::Unit* unit)
     }
   }
 }
-void NewTestModule::onUnitDestroy(BWAPI::Unit* unit)
+void NewTestModule::onUnitDestroy(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitMorph(BWAPI::Unit* unit)
+void NewTestModule::onUnitMorph(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
-void NewTestModule::onUnitRenegade(BWAPI::Unit* unit)
+void NewTestModule::onUnitRenegade(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }
 void NewTestModule::onSaveGame(std::string gameName)
 {
 }
-void NewTestModule::onUnitComplete(BWAPI::Unit *unit)
+void NewTestModule::onUnitComplete(BWAPI::Unit unit)
 {
   //DebugUnit(unit, __FUNCTION__);
 }

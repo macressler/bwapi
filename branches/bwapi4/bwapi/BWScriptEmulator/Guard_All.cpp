@@ -7,7 +7,7 @@ IMPLEMENT(Guard_All);
 
 bool Guard_All::execute(aithread &thread) const
 {
-  //for each ( Unit *u in self->getUnits() ) {}
+  //for each ( Unit u in self->getUnits() ) {}
     // MakeGuard(u);
 
   // Save debug info and return

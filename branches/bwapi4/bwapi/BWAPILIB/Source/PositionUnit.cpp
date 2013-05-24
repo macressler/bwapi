@@ -11,14 +11,14 @@ namespace BWAPI
     this->position.x = pos.x;
     this->position.y = pos.y;
   }
-  PositionOrUnit::PositionOrUnit(Unit *pUnit)
+  PositionOrUnit::PositionOrUnit(Unit pUnit)
   {
     this->unit.pUnit = pUnit;
     this->unit.y = ISUNIT;
   }
 
   // operators
-  PositionOrUnit &PositionOrUnit::operator =(Unit *pUnit)
+  PositionOrUnit &PositionOrUnit::operator =(Unit pUnit)
   {
     this->unit.pUnit = pUnit;
     this->unit.y = ISUNIT;
@@ -36,7 +36,7 @@ namespace BWAPI
   {
     return this->unit.y == ISUNIT;
   }
-  Unit *PositionOrUnit::getUnit() const
+  Unit PositionOrUnit::getUnit() const
   {
     if ( this->isPosition() )
       return nullptr;

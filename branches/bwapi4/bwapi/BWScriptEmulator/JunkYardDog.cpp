@@ -30,7 +30,7 @@ void UnitWrap::RunJunkYardDog()
   }
   else
   {
-    BWAPI::Unit *pAutoTarget = GetAttackTarget();
+    BWAPI::Unit pAutoTarget = GetAttackTarget();
     if ( pAutoTarget == nullptr ||
       !Broodwar->self()->isEnemy(pAutoTarget->getPlayer())  ||
       !pAutoTarget->isVisible() ||

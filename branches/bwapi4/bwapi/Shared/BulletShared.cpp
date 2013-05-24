@@ -9,7 +9,7 @@ namespace BWAPI
     return self->id;
   }
   //------------------------------------------------ GET PLAYER ----------------------------------------------
-  Player* BulletImpl::getPlayer() const
+  Player BulletImpl::getPlayer() const
   {
     return Broodwar->getPlayer(self->player);
   }
@@ -19,7 +19,7 @@ namespace BWAPI
     return BulletType(self->type);
   }
   //------------------------------------------------ GET SOURCE ----------------------------------------------
-  Unit* BulletImpl::getSource() const
+  Unit BulletImpl::getSource() const
   {
     return Broodwar->getUnit(self->source);
   }
@@ -44,7 +44,7 @@ namespace BWAPI
     return self->velocityY;
   }
   //------------------------------------------------ GET TARGET ----------------------------------------------
-  Unit* BulletImpl::getTarget() const
+  Unit BulletImpl::getTarget() const
   {
     return Broodwar->getUnit(self->target);
   }
@@ -64,7 +64,7 @@ namespace BWAPI
     return self->exists;
   }
   //----------------------------------------------- IS VISIBLE -----------------------------------------------
-  bool BulletImpl::isVisible(BWAPI::Player* player) const
+  bool BulletImpl::isVisible(BWAPI::Player player) const
   {
     if ( player == nullptr )  // Default to self
       player = Broodwar->self();

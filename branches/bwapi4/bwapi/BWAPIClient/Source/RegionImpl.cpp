@@ -14,7 +14,7 @@ namespace BWAPI
     int inaccessibleBestDist  = 99999;
     for ( int i = 0; i < self->neighborCount; ++i )
     {
-      BWAPI::Region *neighbor = Broodwar->getRegion(self->neighbors[i]);
+      BWAPI::Region neighbor = Broodwar->getRegion(self->neighbors[i]);
       this->neighbors.insert(neighbor);
 
       // Obtain the closest accessible and inaccessible Regions from their Region center

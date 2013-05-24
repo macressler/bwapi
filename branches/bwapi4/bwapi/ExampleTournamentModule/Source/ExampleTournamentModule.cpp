@@ -40,11 +40,11 @@ void ExampleTournamentAI::onSendText(std::string text)
 {
 }
 
-void ExampleTournamentAI::onReceiveText(BWAPI::Player* player, std::string text)
+void ExampleTournamentAI::onReceiveText(BWAPI::Player player, std::string text)
 {
 }
 
-void ExampleTournamentAI::onPlayerLeft(BWAPI::Player* player)
+void ExampleTournamentAI::onPlayerLeft(BWAPI::Player player)
 {
 }
 
@@ -52,35 +52,35 @@ void ExampleTournamentAI::onNukeDetect(BWAPI::Position target)
 {
 }
 
-void ExampleTournamentAI::onUnitDiscover(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitDiscover(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitEvade(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitEvade(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitShow(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitShow(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitHide(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitHide(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitCreate(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitCreate(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitDestroy(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitDestroy(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitMorph(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitMorph(BWAPI::Unit unit)
 {
 }
 
-void ExampleTournamentAI::onUnitRenegade(BWAPI::Unit* unit)
+void ExampleTournamentAI::onUnitRenegade(BWAPI::Unit unit)
 {
 }
 

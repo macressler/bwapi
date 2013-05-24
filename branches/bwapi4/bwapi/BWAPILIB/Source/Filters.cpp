@@ -9,9 +9,9 @@
 #include <BWAPI/UpgradeType.h>
 #include <BWAPI/WeaponType.h>
 
-#define U_UFILTER(n,x) bool n ## Impl(Unit *u){ return(x); } const PtrUnitFilter n( &n ## Impl )
-#define U_CFILTER(n,x) int n ## Impl(Unit *u){ return (x); } const PtrIntCompareUnitFilter n( &n ## Impl )
-#define U_CFILTERX(n,x,r) r n ## Impl(Unit *u){ return (x); } const CompareFilter<Unit*,r,r (*)(Unit*)> n( &n ## Impl )
+#define U_UFILTER(n,x) bool n ## Impl(Unit u){ return(x); } const PtrUnitFilter n( &n ## Impl )
+#define U_CFILTER(n,x) int n ## Impl(Unit u){ return (x); } const PtrIntCompareUnitFilter n( &n ## Impl )
+#define U_CFILTERX(n,x,r) r n ## Impl(Unit u){ return (x); } const CompareFilter<Unit ,r,r (*)(Unit )> n( &n ## Impl )
 
 namespace BWAPI
 {
@@ -94,7 +94,7 @@ namespace BWAPI
 
     U_CFILTERX(GetType, u->getType(), UnitType );
     U_CFILTERX(GetRace, u->getType().getRace(), Race );
-    U_CFILTERX(GetPlayer, u->getPlayer(), Player* );
+    U_CFILTERX(GetPlayer, u->getPlayer(), Player );
   
     U_CFILTER(Resources, u->getResources() );
     U_CFILTER(ResourceGroup, u->getResourceGroup() );
@@ -119,10 +119,10 @@ namespace BWAPI
     U_CFILTERX(BuildType, u->getBuildType(), UnitType );
     U_CFILTER(RemainingBuildTime, u->getRemainingBuildTime() );
     U_CFILTER(RemainingTrainTime, u->getRemainingTrainTime() );
-    U_CFILTERX(Target, u->getTarget(), Unit* );
+    U_CFILTERX(Target, u->getTarget(), Unit );
     U_CFILTERX(CurrentOrder, u->getOrder(), Order );
     U_CFILTERX(SecondaryOrder, u->getSecondaryOrder(), Order );
-    U_CFILTERX(OrderTarget, u->getOrderTarget(), Unit* );
+    U_CFILTERX(OrderTarget, u->getOrderTarget(), Unit );
     U_CFILTER(GetLeft, u->getLeft() );
     U_CFILTER(GetTop, u->getTop() );
     U_CFILTER(GetRight, u->getRight() );
@@ -178,20 +178,20 @@ namespace BWAPI
     U_UFILTER(IsUnpowered, u->isUnpowered() );
     U_UFILTER(IsVisible, u->isVisible() );
 
-    bool IsEnemyImpl(Unit *u)
+    bool IsEnemyImpl(Unit u)
     {
       if ( BWAPI::BroodwarPtr == nullptr )
         return false;
-      BWAPI::Player *self = BWAPI::Broodwar->self();
+      BWAPI::Player self = BWAPI::Broodwar->self();
       return self == nullptr ? false : self->isEnemy( u->getPlayer() );
     }
     const PtrUnitFilter IsEnemy( &IsEnemyImpl );
 
-    bool IsAllyImpl(Unit *u)
+    bool IsAllyImpl(Unit u)
     {
       if ( BWAPI::BroodwarPtr == nullptr )
         return false;
-      BWAPI::Player *self = BWAPI::Broodwar->self();
+      BWAPI::Player self = BWAPI::Broodwar->self();
       return self == nullptr ? false : self->isAlly( u->getPlayer() );
     }
     const PtrUnitFilter IsAlly( &IsAllyImpl );

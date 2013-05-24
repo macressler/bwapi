@@ -4,9 +4,6 @@
 #pragma pack(1)
 namespace BW
 {
-  // Forwards
-  class Unit;
-
   // Must be on a 4-byte alignment
   class COrder
   {

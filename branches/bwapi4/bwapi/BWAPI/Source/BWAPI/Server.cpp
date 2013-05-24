@@ -311,7 +311,7 @@ namespace BWAPI
         data->mapSplitTilesMiniTileMask[i] = (*BW::BWDATA::SAIPathing)->splitTiles[i].minitileMask;
         data->mapSplitTilesRegion1[i]      = (*BW::BWDATA::SAIPathing)->splitTiles[i].rgn1;
         data->mapSplitTilesRegion2[i]      = (*BW::BWDATA::SAIPathing)->splitTiles[i].rgn2;
-        // Region hack using a possibly unused variable
+        // Region hack using a possibly unused variable (feeling risky, babe :) )
         if ( (*BW::BWDATA::SAIPathing)->regions[i].unk_28 )
           data->regions[i] = *((RegionImpl*)(*BW::BWDATA::SAIPathing)->regions[i].unk_28)->getData();
         else
@@ -340,7 +340,7 @@ namespace BWAPI
 
     //static force data
     data->forces[0].name[0] = '\0';
-    foreach(Force *i, Broodwar->getForces())
+    foreach(Force i, Broodwar->getForces())
     {
       int id = getForceID(i);
       StrCopy(data->forces[id].name, i->getName());
@@ -364,7 +364,7 @@ namespace BWAPI
         p->isAlly[j]  = false;
         p->isEnemy[j] = false;
       }
-      foreach(Player *j, Broodwar->getPlayers())
+      foreach(Player j, Broodwar->getPlayers())
       {
         p->isAlly[getPlayerID(j)]  = i->isAlly(j);
         p->isEnemy[getPlayerID(j)]  = i->isEnemy(j);
@@ -519,7 +519,7 @@ namespace BWAPI
       data->isPaused          = Broodwar->isPaused();
       data->selectedUnitCount = Broodwar->getSelectedUnits().size();
       int i = 0;
-      foreach(Unit *t, Broodwar->getSelectedUnits())
+      foreach(Unit t, Broodwar->getSelectedUnits())
         data->selectedUnits[i++] = getUnitID(t);
 
       //dynamic map data
@@ -587,7 +587,7 @@ namespace BWAPI
 
       for(int i = 0; i < UNIT_ARRAY_MAX_LENGTH; ++i)
       {
-        Unit* u = Broodwar->indexToUnit(i);
+        Unit u = Broodwar->indexToUnit(i);
         int id = -1;
         if ( u )
           id = u->getID();
@@ -649,7 +649,7 @@ namespace BWAPI
       Server::onMatchStart();
   }
 
-  int Server::getForceID(Force* force)
+  int Server::getForceID(Force force)
   {
     if ( !force )
       return -1;
@@ -660,13 +660,13 @@ namespace BWAPI
     }
     return forceLookup[force];
   }
-  Force* Server::getForce(int id) const
+  Force Server::getForce(int id) const
   {
     if ((int)forceVector.size() <= id || id < 0)
       return nullptr;
     return forceVector[id];
   }
-  int Server::getPlayerID(Player* player)
+  int Server::getPlayerID(Player player)
   {
     if ( !player )
       return -1;
@@ -677,14 +677,14 @@ namespace BWAPI
     }
     return playerLookup[player];
   }
-  Player* Server::getPlayer(int id) const
+  Player Server::getPlayer(int id) const
   {
     if ((int)playerVector.size() <= id || id < 0)
       return nullptr;
     return playerVector[id];
   }
 
-  int Server::getUnitID(Unit* unit)
+  int Server::getUnitID(Unit unit)
   {
     if ( !unit )
       return -1;
@@ -695,7 +695,7 @@ namespace BWAPI
     }
     return unitLookup[unit];
   }
-  Unit* Server::getUnit(int id) const
+  Unit Server::getUnit(int id) const
   {
     if ((int)unitVector.size() <= id || id < 0)
       return nullptr;
@@ -808,8 +808,8 @@ namespace BWAPI
       {
         if (data->unitCommands[i].unitIndex < 0 || data->unitCommands[i].unitIndex >= (int)unitVector.size())
           continue;
-        Unit* unit   = unitVector[data->unitCommands[i].unitIndex];
-        Unit* target = nullptr;
+        Unit unit   = unitVector[data->unitCommands[i].unitIndex];
+        Unit target = nullptr;
         if (data->unitCommands[i].targetIndex >= 0 && data->unitCommands[i].targetIndex < (int)unitVector.size())
           target = unitVector[data->unitCommands[i].targetIndex];
 

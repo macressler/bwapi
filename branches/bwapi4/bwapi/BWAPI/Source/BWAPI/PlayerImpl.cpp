@@ -72,19 +72,19 @@ namespace BWAPI
     return BWAPI::PlayerType((int)(BW::BWDATA::Players[index].nType));
   }
   //--------------------------------------------- GET FORCE --------------------------------------------------
-  Force* PlayerImpl::getForce() const
+  Force PlayerImpl::getForce() const
   {
-    return (Force*)force;
+    return (Force)force;
   }
   //--------------------------------------------- IS ALLIES WITH ---------------------------------------------
-  bool PlayerImpl::isAlly(Player* player) const
+  bool PlayerImpl::isAlly(Player player) const
   {
     if ( !player || this->isNeutral() || player->isNeutral() || this->isObserver() || player->isObserver() )
       return false;
     return BW::BWDATA::Alliance[index].player[ static_cast<PlayerImpl*>(player)->getIndex() ] != 0;
   }
   //--------------------------------------------- IS ALLIES WITH ---------------------------------------------
-  bool PlayerImpl::isEnemy(Player* player) const
+  bool PlayerImpl::isEnemy(Player player) const
   {
     if ( !player || this->isNeutral() || player->isNeutral() || this->isObserver() || player->isObserver() )
       return false;
@@ -108,7 +108,7 @@ namespace BWAPI
     // Return unknown and set Access_Denied if the start location
     // should not be made available.
     if ( !BroodwarImpl.isReplay() &&
-       BroodwarImpl.self()->isEnemy((Player*)this) &&
+       BroodwarImpl.self()->isEnemy((Player)this) &&
        !BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation) )
     {
       BroodwarImpl.setLastError(Errors::Access_Denied);
@@ -239,7 +239,7 @@ namespace BWAPI
 
     // Get Scores, supply
     if ( (!BroodwarImpl.isReplay() && 
-          BroodwarImpl.self()->isEnemy((Player*)this) && 
+          BroodwarImpl.self()->isEnemy((Player)this) && 
           !BroodwarImpl.isFlagEnabled(Flag::CompleteMapInformation)) ||
           index >= 12 )
     {

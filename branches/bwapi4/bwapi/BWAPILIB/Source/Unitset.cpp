@@ -88,7 +88,7 @@ namespace BWAPI
 
     return Broodwar->getUnitsInRadius(this->getPosition(), radius, pred);
   }
-  Unit *Unitset::getClosestUnit(const UnitFilter &pred, int radius) const
+  Unit Unitset::getClosestUnit(const UnitFilter &pred, int radius) const
   {
     // Return if this unit does not exist
     if ( this->empty() )
@@ -154,12 +154,12 @@ namespace BWAPI
     return this->issueCommand(UnitCommand::stop(nullptr, shiftQueueCommand));
   }
   //--------------------------------------------- FOLLOW -----------------------------------------------------
-  bool Unitset::follow(Unit* target, bool shiftQueueCommand) const
+  bool Unitset::follow(Unit target, bool shiftQueueCommand) const
   {
     return this->issueCommand(UnitCommand::follow(nullptr,target, shiftQueueCommand));
   }
   //--------------------------------------------- GATHER -----------------------------------------------------
-  bool Unitset::gather(Unit* target, bool shiftQueueCommand) const
+  bool Unitset::gather(Unit target, bool shiftQueueCommand) const
   {
     return this->issueCommand(UnitCommand::gather(nullptr,target, shiftQueueCommand));
   }
@@ -169,7 +169,7 @@ namespace BWAPI
     return this->issueCommand(UnitCommand::returnCargo(nullptr, shiftQueueCommand));
   }
   //--------------------------------------------- REPAIR -----------------------------------------------------
-  bool Unitset::repair(Unit* target, bool shiftQueueCommand) const
+  bool Unitset::repair(Unit target, bool shiftQueueCommand) const
   {
     return this->issueCommand(UnitCommand::repair(nullptr,target, shiftQueueCommand));
   }
@@ -209,7 +209,7 @@ namespace BWAPI
     return this->issueCommand(UnitCommand::lift(nullptr));
   }
   //--------------------------------------------- LOAD -------------------------------------------------------
-  bool Unitset::load(Unit* target, bool shiftQueueCommand) const
+  bool Unitset::load(Unit target, bool shiftQueueCommand) const
   {
     return this->issueCommand(UnitCommand::load(nullptr,target, shiftQueueCommand));
   }

@@ -52,29 +52,29 @@
 namespace BWAPI
 {
   //----------------------------------------------------------------------------------------------------------
-  Force* GameImpl::getForce(int forceID) const
+  Force GameImpl::getForce(int forceID) const
   {
     return server.getForce(forceID);
   }
   //----------------------------------------------------------------------------------------------------------
-  Region *GameImpl::getRegion(int regionID) const
+  Region GameImpl::getRegion(int regionID) const
   {
     if ( !(*BW::BWDATA::SAIPathing) || regionID < 0 || regionID >= (int)(*BW::BWDATA::SAIPathing)->regionCount )
       return nullptr;
-    return (Region*)(*BW::BWDATA::SAIPathing)->regions[regionID].unk_28;
+    return (Region)(*BW::BWDATA::SAIPathing)->regions[regionID].unk_28;
   }
   //----------------------------------------------------------------------------------------------------------
-  Player* GameImpl::getPlayer(int playerID) const
+  Player GameImpl::getPlayer(int playerID) const
   {
     return server.getPlayer(playerID);
   }
   //----------------------------------------------------------------------------------------------------------
-  Unit* GameImpl::getUnit(int unitID) const
+  Unit GameImpl::getUnit(int unitID) const
   {
     return server.getUnit(unitID);
   }
   //----------------------------------------------------------------------------------------------------------
-  Unit* GameImpl::indexToUnit(int unitIndex) const
+  Unit GameImpl::indexToUnit(int unitIndex) const
   {
     if ( !this->isFlagEnabled(Flag::CompleteMapInformation) )
       return nullptr;
@@ -274,7 +274,7 @@ namespace BWAPI
     }
   }
   //--------------------------------------------- GET UNITS IN RECTANGLE -------------------------------------
-  Unit *GameImpl::_unitFromIndex(int index)
+  Unit GameImpl::_unitFromIndex(int index)
   {
     return this->unitArray[index-1];
   }
@@ -290,15 +290,15 @@ namespace BWAPI
                                                  top,
                                                  right,
                                                  bottom,
-                                                 [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                                 [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                                  unitFinderResults.push_back(u); });
     // Return results
     return unitFinderResults;
   }
-  Unit *GameImpl::getClosestUnitInRectangle(Position center, const UnitFilter &pred, int left, int top, int right, int bottom) const
+  Unit GameImpl::getClosestUnitInRectangle(Position center, const UnitFilter &pred, int left, int top, int right, int bottom) const
   {
     int bestDistance = 99999999;
-    Unit *pBestUnit = nullptr;
+    Unit pBestUnit = nullptr;
 
     Templates::iterateUnitFinder<BW::unitFinder>( BW::BWDATA::UnitOrderingX,
                                                   BW::BWDATA::UnitOrderingY,
@@ -307,7 +307,7 @@ namespace BWAPI
                                                   top,
                                                   right,
                                                   bottom,
-                                                  [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                                  [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                                 {
                                                                   int newDistance = u->getDistance(center);
                                                                   if ( newDistance < bestDistance )
@@ -318,9 +318,9 @@ namespace BWAPI
                                                                 } } );
     return pBestUnit;
   }
-  Unit *GameImpl::getBestUnit(const BestUnitFilter &best, const UnitFilter &pred, Position center, int radius) const
+  Unit GameImpl::getBestUnit(const BestUnitFilter &best, const UnitFilter &pred, Position center, int radius) const
   {
-    Unit *pBestUnit = nullptr;
+    Unit pBestUnit = nullptr;
     Position rad(radius,radius);
     
     Position topLeft(center - rad);
@@ -336,7 +336,7 @@ namespace BWAPI
                                                   topLeft.y,
                                                   botRight.x,
                                                   botRight.y,
-                                                  [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                                  [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                                 {
                                                                   if ( pBestUnit == nullptr )
                                                                     pBestUnit = u;
@@ -417,7 +417,7 @@ namespace BWAPI
   //--------------------------------------------- HAS POWER --------------------------------------------------
   bool GameImpl::hasPowerPrecise(int x, int y, UnitType unitType) const
   {
-    return Templates::hasPower<UnitImpl>(x, y, unitType, pylons);
+    return Templates::hasPower(x, y, unitType, pylons);
   }
   //------------------------------------------------- PRINTF -------------------------------------------------
   void GameImpl::vPrintf(const char *format, va_list arg)
@@ -585,7 +585,7 @@ namespace BWAPI
     QUEUE_COMMAND(BW::Orders::RestartGame);
   }
   //--------------------------------------------- SET ALLIANCE -----------------------------------------------
-  bool GameImpl::setAlliance(BWAPI::Player *player, bool allied, bool alliedVictory)
+  bool GameImpl::setAlliance(BWAPI::Player player, bool allied, bool alliedVictory)
   {
     // Set the current player's alliance status 
     if ( !BWAPIPlayer || isReplay() || !player || player == BWAPIPlayer )
@@ -604,7 +604,7 @@ namespace BWAPI
     return this->setLastError();
   }
   //----------------------------------------------- SET VISION -----------------------------------------------
-  bool GameImpl::setVision(BWAPI::Player *player, bool enabled)
+  bool GameImpl::setVision(BWAPI::Player player, bool enabled)
   {
     if ( !player )  // Parameter check
       return this->setLastError(Errors::Invalid_Parameter);
@@ -746,19 +746,19 @@ namespace BWAPI
     return selectedUnitSet;
   }
   //----------------------------------------------------- SELF -----------------------------------------------
-  Player *GameImpl::self() const
+  Player GameImpl::self() const
   {
-    return (Player*)this->BWAPIPlayer;
+    return (Player)this->BWAPIPlayer;
   }
   //----------------------------------------------------- ENEMY ----------------------------------------------
-  Player *GameImpl::enemy() const
+  Player GameImpl::enemy() const
   {
-    return (Player*)this->enemyPlayer;
+    return (Player)this->enemyPlayer;
   }
   //----------------------------------------------------- NEUTRAL --------------------------------------------
-  Player *GameImpl::neutral() const
+  Player GameImpl::neutral() const
   {
-    return (Player*)players[11];
+    return (Player)players[11];
   }
   //----------------------------------------------------- ALLIES ---------------------------------------------
   Playerset& GameImpl::allies()
@@ -886,7 +886,7 @@ namespace BWAPI
     return (int)*BW::BWDATA::CountdownTimer;
   }
   //------------------------------------------------- GET REGION AT ------------------------------------------
-  BWAPI::Region *GameImpl::getRegionAt(int x, int y) const
+  BWAPI::Region GameImpl::getRegionAt(int x, int y) const
   {
     this->setLastError();
     if ( !Position(x, y) )
@@ -900,7 +900,7 @@ namespace BWAPI
       this->setLastError(BWAPI::Errors::Invalid_Parameter);
       return nullptr;
     }
-    return (Region*)rgn->unk_28;
+    return (Region)rgn->unk_28;
   }
   int GameImpl::getLastEventTime() const
   {

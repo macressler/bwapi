@@ -14,19 +14,20 @@ namespace BW
 namespace BWAPI
 {
   // Forwards
-  class Player;
+  class PlayerInterface;
+  typedef PlayerInterface *Player;
 
   /**
    * Interface for broodwar unit, can be used to obtain any information and
    * issue commands.
    */
-  class UnitImpl : public Unit
+  class UnitImpl : public UnitInterface
   {
     public:
       virtual int           getID() const override;
       virtual bool          exists() const override;
       virtual int           getReplayID() const override;
-      virtual Player*       getPlayer() const override;
+      virtual Player        getPlayer() const override;
       virtual UnitType      getType() const override;
       virtual Position      getPosition() const override;
       virtual double        getAngle() const override;
@@ -40,7 +41,7 @@ namespace BWAPI
 
       virtual int           getLastCommandFrame() const override;
       virtual UnitCommand   getLastCommand() const override;
-      virtual BWAPI::Player *getLastAttackingPlayer() const override;
+      virtual BWAPI::Player getLastAttackingPlayer() const override;
 
       virtual UnitType      getInitialType() const override;
       virtual Position      getInitialPosition() const override;
@@ -77,25 +78,25 @@ namespace BWAPI
       virtual int           getRemainingTrainTime() const override;
       virtual int           getRemainingResearchTime() const override;
       virtual int           getRemainingUpgradeTime() const override;
-      virtual Unit*         getBuildUnit() const override;
+      virtual Unit         getBuildUnit() const override;
 
-      virtual Unit*    getTarget() const override;
+      virtual Unit     getTarget() const override;
       virtual Position getTargetPosition() const override;
       virtual Order    getOrder() const override;
-      virtual Unit*    getOrderTarget() const override;
+      virtual Unit     getOrderTarget() const override;
       virtual Position getOrderTargetPosition() const override;
       virtual Order    getSecondaryOrder() const override;
       virtual Position getRallyPosition() const override;
-      virtual Unit*    getRallyUnit() const override;
-      virtual Unit*    getAddon() const override;
-      virtual Unit*    getNydusExit() const override;
-      virtual Unit*    getPowerUp() const override;
+      virtual Unit     getRallyUnit() const override;
+      virtual Unit     getAddon() const override;
+      virtual Unit     getNydusExit() const override;
+      virtual Unit     getPowerUp() const override;
 
-      virtual Unit*    getTransport() const override;
+      virtual Unit     getTransport() const override;
       virtual Unitset  getLoadedUnits() const override;
-      virtual Unit*    getCarrier() const override;
+      virtual Unit     getCarrier() const override;
       virtual Unitset  getInterceptors() const override;
-      virtual Unit*    getHatchery() const override;
+      virtual Unit     getHatchery() const override;
       virtual Unitset  getLarva() const override;
 
       virtual bool hasNuke() const override;
@@ -132,19 +133,19 @@ namespace BWAPI
       virtual bool isUnderDisruptionWeb() const override;
       virtual bool isUnderStorm() const override;
       virtual bool isUnpowered() const override;
-      virtual bool isVisible(Player* player = nullptr) const override;
+      virtual bool isVisible(Player player = nullptr) const override;
       virtual bool isTargetable() const override;
 
       virtual bool canCommand() const override;
       virtual bool canCommandGrouped(bool checkCommandibility = true) const override;
-      virtual bool canTargetUnit(const Unit* targetUnit, bool checkCommandibility = true) const override;
+      virtual bool canTargetUnit(Unit targetUnit, bool checkCommandibility = true) const override;
 
       virtual bool canAttackMove(bool checkCommandibility = true) const override;
       virtual bool canAttackMoveGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canAttackUnit(bool checkCommandibility = true) const override;
-      virtual bool canAttackUnit(Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canAttackUnit(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canAttackUnitGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
-      virtual bool canAttackUnitGrouped(Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
+      virtual bool canAttackUnitGrouped(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canBuild(bool checkCommandibility = true) const override;
       virtual bool canBuild(UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canBuild(UnitType uType, BWAPI::TilePosition tilePos, bool checkTargetUnitType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
@@ -160,20 +161,20 @@ namespace BWAPI
       virtual bool canUpgrade(UpgradeType type, bool checkCanIssueCommandType = true) const override;
       virtual bool canSetRallyPosition(bool checkCommandibility = true) const override;
       virtual bool canSetRallyUnit(bool checkCommandibility = true) const override;
-      virtual bool canSetRallyUnit(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canSetRallyUnit(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canMove(bool checkCommandibility = true) const override;
       virtual bool canMoveGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canPatrol(bool checkCommandibility = true) const override;
       virtual bool canPatrolGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canFollow(bool checkCommandibility = true) const override;
-      virtual bool canFollow(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canFollow(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canGather(bool checkCommandibility = true) const override;
-      virtual bool canGather(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canGather(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canReturnCargo(bool checkCommandibility = true) const override;
       virtual bool canHoldPosition(bool checkCommandibility = true) const override;
       virtual bool canStop(bool checkCommandibility = true) const override;
       virtual bool canRepair(bool checkCommandibility = true) const override;
-      virtual bool canRepair(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canRepair(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canBurrow(bool checkCommandibility = true) const override;
       virtual bool canUnburrow(bool checkCommandibility = true) const override;
       virtual bool canCloak(bool checkCommandibility = true) const override;
@@ -184,20 +185,20 @@ namespace BWAPI
       virtual bool canLand(bool checkCommandibility = true) const override;
       virtual bool canLand(TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canLoad(bool checkCommandibility = true) const override;
-      virtual bool canLoad(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canLoad(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUnloadWithOrWithoutTarget(bool checkCommandibility = true) const override;
       virtual bool canUnloadAtPosition(Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUnload(bool checkCommandibility = true) const override;
-      virtual bool canUnload(const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkPosition = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canUnload(Unit targetUnit, bool checkCanTargetUnit = true, bool checkPosition = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUnloadAll(bool checkCommandibility = true) const override;
       virtual bool canUnloadAllPosition(bool checkCommandibility = true) const override;
       virtual bool canUnloadAllPosition(Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canRightClickPosition(bool checkCommandibility = true) const override;
       virtual bool canRightClickPositionGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canRightClickUnit(bool checkCommandibility = true) const override;
-      virtual bool canRightClickUnit(Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canRightClickUnit(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canRightClickUnitGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
-      virtual bool canRightClickUnitGrouped(Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
+      virtual bool canRightClickUnitGrouped(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canHaltConstruction(bool checkCommandibility = true) const override;
       virtual bool canCancelConstruction(bool checkCommandibility = true) const override;
       virtual bool canCancelAddon(bool checkCommandibility = true) const override;
@@ -211,7 +212,7 @@ namespace BWAPI
       virtual bool canUseTechWithOrWithoutTarget(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechWithoutTarget(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechUnit(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
-      virtual bool canUseTechUnit(BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canUseTechUnit(BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechPosition(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechPosition(Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canPlaceCOP(bool checkCommandibility = true) const override;
@@ -250,12 +251,12 @@ namespace BWAPI
       void updateData();
       
     // data members
-      Player* _getPlayer;
+      Player _getPlayer;
       UnitType _getType;
       Position _getPosition;
       int _getResources;
       int _getHitPoints;
-      Unit* _getTransport;
+      Unit _getTransport;
       
       /** Gets #bwOriginalUnit */
       BW::CUnit* getOriginalRawData;
@@ -276,7 +277,7 @@ namespace BWAPI
       int lastAirWeaponCooldown;
       int lastFrameSet;
       UnitType lastType;
-      Player* lastPlayer;
+      Player lastPlayer;
       int id;
       bool isAlive;
       bool wasAlive;

@@ -60,7 +60,7 @@ namespace BWAPI
     {  0,   0,   0,   0,   0,   0 }, // None
     {  0,   0,   0,   0,   0,   0 }  // Unknown
   };
-  int getDamageFromImpl(UnitType fromType, UnitType toType, Player *fromPlayer, Player *toPlayer)
+  int getDamageFromImpl(UnitType fromType, UnitType toType, Player fromPlayer, Player toPlayer)
   {
     // Retrieve appropriate weapon
     WeaponType wpn = toType.isFlyer() ? fromType.airWeapon() : fromType.groundWeapon();
@@ -76,7 +76,7 @@ namespace BWAPI
     
     return dmg * damageRatio[wpn.damageType()][toType.size()] / 256;
   }
-  int Game::getDamageFrom(UnitType fromType, UnitType toType, Player *fromPlayer, Player *toPlayer) const
+  int Game::getDamageFrom(UnitType fromType, UnitType toType, Player fromPlayer, Player toPlayer) const
   {
     // Get self if toPlayer not provided
     if ( toPlayer == nullptr )
@@ -84,7 +84,7 @@ namespace BWAPI
 
     return getDamageFromImpl(fromType, toType, fromPlayer, toPlayer);
   }
-  int Game::getDamageTo(UnitType toType, UnitType fromType, Player *toPlayer, Player *fromPlayer) const
+  int Game::getDamageTo(UnitType toType, UnitType fromType, Player toPlayer, Player fromPlayer) const
   {
     // Get self if fromPlayer not provided
     if ( fromPlayer == nullptr )
@@ -300,7 +300,7 @@ namespace BWAPI
     reserve.restoreIfInvalid(__FUNCTION__);
   }
 
-  void ReserveStructure(PlacementReserve &reserve, Unit *pUnit, int padding, UnitType type, TilePosition desiredPosition)
+  void ReserveStructure(PlacementReserve &reserve, Unit pUnit, int padding, UnitType type, TilePosition desiredPosition)
   {
     ReserveStructureWithPadding(reserve, TilePosition(pUnit->getPosition()), pUnit->getType().tileSize(), padding, type, desiredPosition);
   }
@@ -509,8 +509,8 @@ namespace BWAPI
 
     // Do type-specific checks
     bool trimPlacement = true;
-    Region *pTargRegion = nullptr;
-    Unit *pSpecialUnitTarget = nullptr;
+    Region pTargRegion = nullptr;
+    Unit pSpecialUnitTarget = nullptr;
     switch ( type )
     {
     case UnitTypes::Enum::Protoss_Pylon:
@@ -697,7 +697,7 @@ namespace BWAPI
                                      y - radius,
                                      x + radius,
                                      y + radius,
-                                     [&x,&y,&radius,&pred](Unit *u){ return u->getDistance(Position(x,y)) <= radius && (!pred.isValid() || pred(u)); });
+                                     [&x,&y,&radius,&pred](Unit u){ return u->getDistance(Position(x,y)) <= radius && (!pred.isValid() || pred(u)); });
   }
   Unitset Game::getUnitsInRadius(Position center, int radius, const UnitFilter &pred) const
   {
@@ -707,17 +707,17 @@ namespace BWAPI
   {
     return this->getUnitsInRectangle(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y, pred);
   }
-  Unit *Game::getClosestUnit(Position center, const UnitFilter &pred, int radius) const
+  Unit Game::getClosestUnit(Position center, const UnitFilter &pred, int radius) const
   {
     return this->getClosestUnitInRectangle(center,
-                                            [&](Unit *u){ return u->getDistance(center) <= radius && (!pred.isValid() || pred(u));},
+                                            [&](Unit u){ return u->getDistance(center) <= radius && (!pred.isValid() || pred(u));},
                                             center.x - radius,
                                             center.y - radius,
                                             center.x + radius,
                                             center.y + radius);
   }
   //------------------------------------------ REGIONS -----------------------------------------------
-  BWAPI::Region *Game::getRegionAt(BWAPI::Position position) const
+  BWAPI::Region Game::getRegionAt(BWAPI::Position position) const
   {
     return this->getRegionAt(position.x, position.y);
   }

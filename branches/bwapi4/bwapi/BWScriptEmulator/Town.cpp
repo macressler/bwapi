@@ -17,7 +17,7 @@ Town::Town( BWAPI::Position townLocation )
   , pTownCenter(nullptr)
 {}
 
-void Town::AddUnit(BWAPI::Unit *pUnit)
+void Town::AddUnit(BWAPI::Unit pUnit)
 {
   if ( !pUnit )
     return;

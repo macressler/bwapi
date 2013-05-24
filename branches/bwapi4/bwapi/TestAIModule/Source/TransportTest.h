@@ -17,8 +17,8 @@ class TransportTest : public TestCase
     int startFrame;
     int nextFrame;
     BWAPI::UnitType transportType;
-    BWAPI::Unit* transport;
-    BWAPI::Unit* currentUnit;
+    BWAPI::Unit transport;
+    BWAPI::Unit currentUnit;
     BWAPI::Unitset unloadedUnits;
     BWAPI::Unitset loadedUnits;
     int waitFrameStart;

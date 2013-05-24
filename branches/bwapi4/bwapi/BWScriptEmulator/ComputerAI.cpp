@@ -82,7 +82,7 @@ bool UnitWrap::DoUnitBehaviour()
   case UnitTypes::Enum::Terran_Dropship:
     if ( pUnit->getHitPoints() < t.maxHitPoints() ) //&& AssignRepairSCV(pUnit) )
     {
-      Unit *pSCV = nullptr;//AssignRepairSCV(pUnit);
+      Unit pSCV = nullptr;//AssignRepairSCV(pUnit);
       if ( pSCV )   // do unload, then follow SCV
       {
         if ( pUnit->getLoadedUnits().empty() )
@@ -123,7 +123,7 @@ bool UnitWrap::DoUnitBehaviour()
     return false;
   case UnitTypes::Enum::Protoss_Arbiter:
     // Should be "AIOrderTargetUnit" or autotarget
-    Unit *pBest = pUnit->getClosestUnit(GetPlayer == Broodwar->self() && !IsBuilding && OrderTarget != nullptr, 640);
+    Unit pBest = pUnit->getClosestUnit(GetPlayer == Broodwar->self() && !IsBuilding && OrderTarget != nullptr, 640);
     if ( pBest != nullptr )
       return pUnit->attack(pBest->getPosition());
     return false;

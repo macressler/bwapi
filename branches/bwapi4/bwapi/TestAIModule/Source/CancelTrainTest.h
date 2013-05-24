@@ -15,7 +15,7 @@ class CancelTrainTest : public TestCase
     BWAPI::UnitType unitType2;
     BWAPI::UnitType unitType3;
     BWAPI::UnitType producerType;
-    BWAPI::Unit* producer;
+    BWAPI::Unit producer;
     int startFrame;
     int nextFrame;
     int correctMineralCount;

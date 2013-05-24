@@ -54,11 +54,11 @@ namespace BWAPI
   {
     return this->neighbors;
   }
-  BWAPI::Region *RegionImpl::getClosestAccessibleRegion() const
+  BWAPI::Region RegionImpl::getClosestAccessibleRegion() const
   {
     return this->closestAccessibleRgn;
   }
-  BWAPI::Region *RegionImpl::getClosestInaccessibleRegion() const
+  BWAPI::Region RegionImpl::getClosestInaccessibleRegion() const
   {
     return this->closestInaccessibleRgn;
   }

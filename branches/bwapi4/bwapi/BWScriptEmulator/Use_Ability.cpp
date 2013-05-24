@@ -7,7 +7,7 @@ Use_Ability nuke_location_impl(AISCRIPT::Enum::NUKE_LOCATION);
 Use_Ability disruption_web_impl(AISCRIPT::Enum::DISRUPTION_WEB);
 Use_Ability recall_location_impl(AISCRIPT::Enum::RECALL_LOCATION);
 
-Unit *GetSuitableCaster(int minEnergy, UnitType type)
+Unit GetSuitableCaster(int minEnergy, UnitType type)
 {
   Unitset myUnits( Broodwar->self()->getUnits() );
   for ( auto u = myUnits.begin(); u != myUnits.end(); ++u )
@@ -40,7 +40,7 @@ bool Use_Ability::execute(aithread &thread) const
   }
 
   // Execute the ability after obtaining a unit
-  Unit *pCaster = GetSuitableCaster(tech.energyCost(), unit);
+  Unit pCaster = GetSuitableCaster(tech.energyCost(), unit);
   if ( pCaster )
     pCaster->useTech(tech, thread.getLocation().center());
 

@@ -39,7 +39,7 @@ bool UnitWrap::HasNoCaptain() const
 bool UnitWrap::HasEnemyTarget()
 {
   // Get the target
-  BWAPI::Unit *pTarg = pUnit->getOrderTarget();
+  BWAPI::Unit pTarg = pUnit->getOrderTarget();
   if ( !pTarg )
     return false;
 

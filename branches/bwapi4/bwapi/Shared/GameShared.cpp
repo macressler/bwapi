@@ -78,22 +78,22 @@ namespace BWAPI
     return e == Errors::None;
   }
   //--------------------------------------------- CAN BUILD HERE ---------------------------------------------
-  bool GameImpl::canBuildHere(TilePosition position, UnitType type, const Unit* builder, bool checkExplored)
+  bool GameImpl::canBuildHere(TilePosition position, UnitType type, Unit builder, bool checkExplored)
   {
     return Templates::canBuildHere(builder,position,type,checkExplored);
   }
   //--------------------------------------------- CAN MAKE ---------------------------------------------------
-  bool GameImpl::canMake(UnitType type, const Unit* builder) const
+  bool GameImpl::canMake(UnitType type, Unit builder) const
   {
     return Templates::canMake(builder,type);
   }
   //--------------------------------------------- CAN RESEARCH -----------------------------------------------
-  bool GameImpl::canResearch(TechType type, const Unit* unit, bool checkCanIssueCommandType)
+  bool GameImpl::canResearch(TechType type, Unit unit, bool checkCanIssueCommandType)
   {
     return Templates::canResearch(unit,type,checkCanIssueCommandType);
   }
   //--------------------------------------------- CAN UPGRADE ------------------------------------------------
-  bool GameImpl::canUpgrade(UpgradeType type, const Unit* unit, bool checkCanIssueCommandType)
+  bool GameImpl::canUpgrade(UpgradeType type, Unit unit, bool checkCanIssueCommandType)
   {
     return Templates::canUpgrade(unit,type,checkCanIssueCommandType);
   }

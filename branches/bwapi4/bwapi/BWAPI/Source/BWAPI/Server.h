@@ -10,9 +10,12 @@ namespace BWAPI
   struct GameData;
   struct GameTable;
   class Event;
-  class Force;
-  class Player;
-  class Unit;
+  class ForceInterface;
+  typedef ForceInterface *Force;
+  class PlayerInterface;
+  typedef PlayerInterface *Player;
+  class UnitInterface;
+  typedef UnitInterface *Unit;
 
   class Server
   {
@@ -26,14 +29,14 @@ namespace BWAPI
     int       addString(const char* text);
     void      clearAll();
 
-    int       getForceID(Force* force);
-    Force     *getForce(int id) const;
+    int       getForceID(Force force);
+    Force     getForce(int id) const;
     
-    int       getPlayerID(Player* player);
-    Player    *getPlayer(int id) const;
+    int       getPlayerID(Player player);
+    Player    getPlayer(int id) const;
     
-    int       getUnitID(Unit* unit);
-    Unit      *getUnit(int id) const;
+    int       getUnitID(Unit unit);
+    Unit      getUnit(int id) const;
 
     GameData  *data;
   private:
@@ -51,13 +54,13 @@ namespace BWAPI
     int gameTableIndex;
     bool connected;
     bool localOnly;
-    std::vector<Force*> forceVector;
-    std::map<Force*, int> forceLookup;
+    std::vector<Force> forceVector;
+    std::map<Force, int> forceLookup;
 
-    std::vector<Player*> playerVector;
-    std::map<Player*, int> playerLookup;
+    std::vector<Player> playerVector;
+    std::map<Player, int> playerLookup;
 
-    std::vector<Unit*> unitVector;
-    std::map<Unit*, int> unitLookup;
+    std::vector<Unit> unitVector;
+    std::map<Unit, int> unitLookup;
   };
 }

@@ -10,13 +10,11 @@
 #include "UnitImpl.h"
 #include "ForceImpl.h"
 
-namespace BW { class Unit; };
-
 namespace BWAPI
 {
   // Forwards
-  class Unit;
-  class Force;
+  class ForceInterface;
+  typedef ForceInterface *Force;
   class UnitType;
   class UpgradeType;
   class TechType;
@@ -24,17 +22,17 @@ namespace BWAPI
   class Race;
 
   /** Represents one player in game. Note that there is always player 12 who owns resources. */
-  class PlayerImpl : public Player
+  class PlayerImpl : public PlayerInterface
   {
     public:
       virtual int         getID() const override;
       virtual std::string getName() const override;
       virtual Race        getRace() const override;
       virtual PlayerType  getType() const override;
-      virtual Force*      getForce() const override;
+      virtual Force       getForce() const override;
 
-      virtual bool isAlly(Player* player) const override;
-      virtual bool isEnemy(Player* player) const override;
+      virtual bool isAlly(Player player) const override;
+      virtual bool isEnemy(Player player) const override;
       virtual bool isNeutral() const override;
 
       virtual bool isVictorious() const override;

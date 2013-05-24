@@ -7,12 +7,12 @@
 using namespace BWAPI;
 
 //--------------------------------------------- INCOMPLETE UNIT COUNT --------------------------------------
-int Player::incompleteUnitCount(UnitType unit) const
+int PlayerInterface::incompleteUnitCount(UnitType unit) const
 {
   return this->completedUnitCount(unit) - this->allUnitCount(unit);
 }
 //--------------------------------------------- MAX ENERGY -------------------------------------------------
-int Player::maxEnergy(UnitType unit) const
+int PlayerInterface::maxEnergy(UnitType unit) const
 {
   int energy = unit.maxEnergy();
   if ((unit == UnitTypes::Protoss_Arbiter       && getUpgradeLevel(UpgradeTypes::Khaydarin_Core)    > 0) ||
@@ -30,7 +30,7 @@ int Player::maxEnergy(UnitType unit) const
   return energy;
 }
 //--------------------------------------------- TOP SPEED --------------------------------------------------
-double Player::topSpeed(UnitType unit) const
+double PlayerInterface::topSpeed(UnitType unit) const
 {
   double speed = unit.topSpeed();
   if ((unit == UnitTypes::Terran_Vulture   && getUpgradeLevel(UpgradeTypes::Ion_Thrusters)        > 0) ||
@@ -55,7 +55,7 @@ double Player::topSpeed(UnitType unit) const
   return speed;
 }
 //----------------------------------------------- WEAPON MAX RANGE -----------------------------------------
-int Player::weaponMaxRange(WeaponType weapon) const
+int PlayerInterface::weaponMaxRange(WeaponType weapon) const
 {
   int range = weapon.maxRange();
   if ( (weapon == WeaponTypes::Gauss_Rifle   && getUpgradeLevel(UpgradeTypes::U_238_Shells)   > 0) ||
@@ -68,7 +68,7 @@ int Player::weaponMaxRange(WeaponType weapon) const
   return range;
 }
 //--------------------------------------------- SIGHT RANGE ------------------------------------------------
-int Player::sightRange(UnitType unit) const
+int PlayerInterface::sightRange(UnitType unit) const
 {
   int range = unit.sightRange();
   if ((unit == UnitTypes::Terran_Ghost     && getUpgradeLevel(UpgradeTypes::Ocular_Implants) > 0) ||
@@ -79,7 +79,7 @@ int Player::sightRange(UnitType unit) const
   return range;
 }
 //--------------------------------------------- GROUND WEAPON DAMAGE COOLDOWN ------------------------------
-int Player::weaponDamageCooldown(UnitType unit) const
+int PlayerInterface::weaponDamageCooldown(UnitType unit) const
 {
   int cooldown = unit.groundWeapon().damageCooldown();
   if (unit == UnitTypes::Zerg_Zergling && getUpgradeLevel(UpgradeTypes::Adrenal_Glands) > 0)
@@ -92,7 +92,7 @@ int Player::weaponDamageCooldown(UnitType unit) const
   return cooldown;
 }
 //--------------------------------------------- ARMOR ------------------------------------------------------
-int Player::armor(UnitType unit) const
+int PlayerInterface::armor(UnitType unit) const
 {
   int armor = unit.armor();
   armor += getUpgradeLevel(unit.armorUpgrade());
@@ -103,7 +103,7 @@ int Player::armor(UnitType unit) const
   return armor;
 }
 //-------------------------------------------- DAMAGE ------------------------------------------------------
-int Player::damage(WeaponType wpn) const
+int PlayerInterface::damage(WeaponType wpn) const
 {
   int dmg = wpn.damageAmount();
   dmg += getUpgradeLevel(wpn.upgradeType()) * wpn.damageBonus();
@@ -111,7 +111,7 @@ int Player::damage(WeaponType wpn) const
   return dmg;
 }
 //-------------------------------------------- TEXT COLOR --------------------------------------------------
-char Player::getTextColor() const
+char PlayerInterface::getTextColor() const
 {
   switch ( this->getColor() )
   {

@@ -7,12 +7,12 @@ Enter_Transport enter_bunker_impl(AISCRIPT::Enum::ENTER_BUNKER);
 Enter_Transport enter_transport_impl(AISCRIPT::Enum::ENTER_TRANSPORT);
 Enter_Transport exit_transport_impl(AISCRIPT::Enum::EXIT_TRANSPORT);
 
-auto baseProc   = [](Unit *u)->bool{ return u->getPlayer() == Broodwar->self() && u->isCompleted(); };
-bool bunkerProc(Unit *u)
+auto baseProc   = [](Unit u)->bool{ return u->getPlayer() == Broodwar->self() && u->isCompleted(); };
+bool bunkerProc(Unit u)
 {
   return (GetRace == Races::Terran && IsOrganic && baseProc)(u);
 }
-bool transProc(Unit *u)
+bool transProc(Unit u)
 {
   return (SpaceRequired < 8 && baseProc)(u);
 }
@@ -28,7 +28,7 @@ bool Enter_Transport::execute(aithread &thread) const
     for ( auto u = unitsForTrans.begin(); u != unitsForTrans.end(); ++u )
     {
       // Find a bunker closest to the current unit that has space available
-      Unit *pClosest = u->getClosestUnit( (this->getOpcode() == AISCRIPT::Enum::ENTER_BUNKER ? GetType == UnitTypes::Terran_Bunker : GetType != UnitTypes::Terran_Bunker) &&
+      Unit pClosest = u->getClosestUnit( (this->getOpcode() == AISCRIPT::Enum::ENTER_BUNKER ? GetType == UnitTypes::Terran_Bunker : GetType != UnitTypes::Terran_Bunker) &&
                                             IsTransport &&
                                             GetPlayer == Broodwar->self() && 
                                             SpaceRemaining >= u->getType().spaceRequired() );

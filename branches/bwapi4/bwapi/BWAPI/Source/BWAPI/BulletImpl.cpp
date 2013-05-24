@@ -83,7 +83,7 @@ namespace BWAPI
     {
       UnitImpl *_getSource = UnitImpl::BWUnitToBWAPIUnit(bwOriginalBullet->sourceUnit);
       UnitImpl *_getTarget = UnitImpl::BWUnitToBWAPIUnit(bwOriginalBullet->attackTarget.pUnit);
-      Player   *_getPlayer = _getSource ? _getSource->_getPlayer : nullptr;
+      Player   _getPlayer = _getSource ? _getSource->_getPlayer : nullptr;
 
       // id, player, type, source
       self->id      = id;

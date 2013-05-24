@@ -13,7 +13,7 @@ using namespace Filter;
 
 void UpdateScripts();
 bool LoadAIBinary(const char *pszFileName);
-int GetStandardUnitCount(BWAPI::UnitType type, bool bCompleted = true, Player *player = NULL);
+int GetStandardUnitCount(BWAPI::UnitType type, bool bCompleted = true, Player player = NULL);
 
 #define AI_THREAD_BROODWAR        0x01
 #define AI_THREAD_KILLABLE        0x02

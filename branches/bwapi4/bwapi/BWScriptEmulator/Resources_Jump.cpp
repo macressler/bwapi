@@ -13,7 +13,7 @@ bool Resources_Jump::execute(aithread &thread) const
   thread.readTuple( std::tie(wOre, wGas, wJump) );
 
   // Get Player
-  Player *player = this->getOpcode() == Enum::RESOURCES_JUMP ? Broodwar->self() : Broodwar->enemy();
+  Player player = this->getOpcode() == Enum::RESOURCES_JUMP ? Broodwar->self() : Broodwar->enemy();
 
   // Check if player has the given amount of resources
   if ( player && player->minerals() >= wOre && player->gas() >= wGas )

@@ -9,9 +9,9 @@ namespace BWAPI
   namespace Templates
   {
     //--------------------------------------------- FORWARD DECLARATIONS -------------------------------------
-    static inline bool canUseTechWithoutTarget(const Unit* thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
-    static inline bool canAttackUnit(const Unit* thisUnit, bool checkCommandibility = true);
-    static inline bool canMove(const Unit* thisUnit, bool checkCommandibility = true);
+    static inline bool canUseTechWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canAttackUnit(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canMove(Unit thisUnit, bool checkCommandibility = true);
     //--------------------------------------------- HAS POWER ------------------------------------------------
     const bool bPsiFieldMask[10][16] = {
       { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
@@ -25,14 +25,13 @@ namespace BWAPI
       { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
       { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 }
     };
-    template < class UnitImpl >
-    bool hasPower(int x, int y, UnitType unitType, const Unitset &pylons)
+    static inline bool hasPower(int x, int y, UnitType unitType, const Unitset &pylons)
     {
       if ( unitType >= 0 && unitType < UnitTypes::None && (!unitType.requiresPsi() || !unitType.isBuilding()) )
         return true;
 
       // Loop through all pylons for the current player
-      foreach (UnitImpl* i, pylons)
+      foreach (Unit i, pylons)
       {
         if ( !i->exists() || !i->isCompleted() )
           continue;
@@ -96,7 +95,7 @@ namespace BWAPI
         {
           if ( isWidthExtended )  // If width is small, check unit bounds
           {
-            Unit *u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
+            Unit u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
             if ( u && u->getLeft() <= right )
               dwFinderFlags[iUnitIndex] = 1;
           }
@@ -112,7 +111,7 @@ namespace BWAPI
         {
           if ( isHeightExtended ) // If height is small, check unit bounds
           {
-            Unit *u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
+            Unit u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
             if ( u && u->getTop() <= bottom )
               dwFinderFlags[iUnitIndex] = 2;
           }
@@ -126,7 +125,7 @@ namespace BWAPI
         int iUnitIndex = px->unitIndex;
         if ( dwFinderFlags[iUnitIndex] == 2 )
         {
-          Unit *u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
+          Unit u = static_cast<GameImpl*>(BroodwarPtr)->_unitFromIndex(iUnitIndex);
           if ( u && u->exists() )
             callback(u);
         }
@@ -135,7 +134,7 @@ namespace BWAPI
       }
     }
     //------------------------------------------- CAN BUILD HERE ---------------------------------------------
-    static inline bool canBuildHere(const Unit* builder, TilePosition position, UnitType type, bool checkExplored)
+    static inline bool canBuildHere(Unit builder, TilePosition position, UnitType type, bool checkExplored)
     {
       Broodwar->setLastError(Errors::Unbuildable_Location);
 
@@ -151,7 +150,7 @@ namespace BWAPI
       //matches one of them (and the type is still vespene geyser)
       if ( type.isRefinery() )
       {
-        foreach (Unit* g, Broodwar->getGeysers())
+        foreach (Unit g, Broodwar->getGeysers())
         {
           if (g->getTilePosition() == position)
           {
@@ -201,12 +200,12 @@ namespace BWAPI
         Position targPos = lt + Position( type.tileSize() )/2;
         Unitset unitsInRect( Broodwar->getUnitsInRectangle(Position(lt), Position(rb), !IsFlyer    &&
                                                                                         !IsLoaded   &&
-                                                                                        [&builder, &type](Unit *u){ return u != builder || type == UnitTypes::Zerg_Nydus_Canal;} &&
+                                                                                        [&builder, &type](Unit u){ return u != builder || type == UnitTypes::Zerg_Nydus_Canal;} &&
                                                                                         GetLeft   <= targPos.x + type.dimensionRight()  &&
                                                                                         GetTop    <= targPos.y + type.dimensionDown()   &&
                                                                                         GetRight  >= targPos.x - type.dimensionLeft()   &&
                                                                                         GetBottom >= targPos.y - type.dimensionUp() )    );
-        foreach(Unit *u, unitsInRect)
+        foreach(Unit u, unitsInRect)
         {
           BWAPI::UnitType iterType = u->getType();
           if ( !type.isAddon() )
@@ -247,7 +246,7 @@ namespace BWAPI
       // Resource Check (CC, Nex, Hatch)
       if ( type.isResourceDepot() )
       {
-        foreach (BWAPI::Unit* m, Broodwar->getStaticMinerals())
+        foreach (BWAPI::Unit m, Broodwar->getStaticMinerals())
         {
           TilePosition tp = m->getInitialTilePosition();
           if ( (Broodwar->isVisible(tp) || Broodwar->isVisible(tp.x + 1, tp.y)) && !m->isVisible() )
@@ -258,7 +257,7 @@ namespace BWAPI
               tp.y < lt.y + 6)
             return false;
         }
-        foreach (BWAPI::Unit* g, Broodwar->getStaticGeysers())
+        foreach (BWAPI::Unit g, Broodwar->getStaticGeysers())
         {
           TilePosition tp = g->getInitialTilePosition();
           if (tp.x > lt.x - 7 &&
@@ -302,7 +301,7 @@ namespace BWAPI
         Position targPosBuilder = ltBuilder + Position(TilePosition(4, 3))/2;
         Unitset unitsInRectBuilder( Broodwar->getUnitsInRectangle(Position(ltBuilder), Position(rbBuilder), !IsFlyer    &&
                                                                                                             !IsLoaded   &&
-                                                                                                            [&builder](Unit *u){ return u != builder;} &&
+                                                                                                            [&builder](Unit u){ return u != builder;} &&
                                                                                                             GetLeft   <= targPosBuilder.x + typeBuilder.dimensionRight()  &&
                                                                                                             GetTop    <= targPosBuilder.y + typeBuilder.dimensionDown()   &&
                                                                                                             GetRight  >= targPosBuilder.x - typeBuilder.dimensionLeft()   &&
@@ -315,7 +314,7 @@ namespace BWAPI
       return Broodwar->setLastError();
     }
     //------------------------------------------- CAN MAKE ---------------------------------------------------
-    static inline bool canMake(const Unit* builder, UnitType type)
+    static inline bool canMake(Unit builder, UnitType type)
     {
       // Error checking
       Broodwar->setLastError();
@@ -329,7 +328,7 @@ namespace BWAPI
       // Get the required UnitType
       BWAPI::UnitType requiredType = type.whatBuilds().first;
 
-      Player *pSelf = Broodwar->self();
+      Player pSelf = Broodwar->self();
       if ( builder != nullptr ) // do checks if a builder is provided
       {
         // Check if the owner of the unit is you
@@ -441,7 +440,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN COMMAND ------------------------------------------------
-    static inline bool canCommand(const Unit* thisUnit)
+    static inline bool canCommand(Unit thisUnit)
     {
       // Basic header
       Broodwar->setLastError();
@@ -466,7 +465,7 @@ namespace BWAPI
         else
         {
           Unitset larvae( thisUnit->getLarva() );
-          foreach (Unit* larva, larvae)
+          foreach (Unit larva, larvae)
           {
             if ( canCommand(larva) )
               return Broodwar->setLastError();
@@ -497,7 +496,7 @@ namespace BWAPI
 
       return Broodwar->setLastError();
     }
-    static inline bool canCommandGrouped(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCommandGrouped(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -510,7 +509,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN TARGET -------------------------------------------------
-    static inline bool canTargetUnit(const Unit* targetUnit)
+    static inline bool canTargetUnit(Unit targetUnit)
     {
       if ( !targetUnit || !targetUnit->exists() )
         return Broodwar->setLastError(Errors::Unit_Does_Not_Exist);
@@ -528,7 +527,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canTargetUnit(const Unit* thisUnit, const Unit* targetUnit, bool checkCommandibility = true)
+    static inline bool canTargetUnit(Unit thisUnit, Unit targetUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -541,7 +540,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN ATTACK MOVE --------------------------------------------
-    static inline bool canAttackMove(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canAttackMove(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -553,7 +552,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackMoveGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttackMoveGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -572,7 +571,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN ATTACK UNIT --------------------------------------------
-    static inline bool canAttackUnit(const Unit* thisUnit, bool checkCommandibility)
+    static inline bool canAttackUnit(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -610,7 +609,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnit(const Unit* thisUnit, Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canAttackUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -650,7 +649,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnitGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttackUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -683,7 +682,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnitGrouped(const Unit* thisUnit, Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttackUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -716,7 +715,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN BUILD --------------------------------------------------
-    static inline bool canBuild(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canBuild(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -734,7 +733,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canBuild(const Unit* thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canBuild(Unit thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -754,7 +753,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canBuild(const Unit* thisUnit, UnitType uType, BWAPI::TilePosition tilePos, bool checkTargetUnitType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canBuild(Unit thisUnit, UnitType uType, BWAPI::TilePosition tilePos, bool checkTargetUnitType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -776,7 +775,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN BUILD ADDON --------------------------------------------
-    static inline bool canBuildAddon(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canBuildAddon(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -795,7 +794,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canBuildAddon(const Unit* thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canBuildAddon(Unit thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -817,7 +816,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN TRAIN --------------------------------------------------
-    static inline bool canTrain(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canTrain(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -829,7 +828,7 @@ namespace BWAPI
         if ( !thisUnit->isConstructing() && thisUnit->isCompleted() )
           return Broodwar->setLastError();
         Unitset larvae( thisUnit->getLarva() );
-        foreach (Unit* larva, larvae)
+        foreach (Unit larva, larvae)
         {
           if ( !larva->isConstructing() && larva->isCompleted() && canCommand(larva) )
             return Broodwar->setLastError();
@@ -854,7 +853,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canTrain(const Unit* thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canTrain(Unit thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -870,7 +869,7 @@ namespace BWAPI
         {
           bool foundCommandableLarva = false;
           Unitset larvae( thisUnit->getLarva() );
-          foreach (Unit* larva, larvae)
+          foreach (Unit larva, larvae)
           {
             if ( canTrain(larva, true) )
             {
@@ -898,7 +897,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN MORPH --------------------------------------------------
-    static inline bool canMorph(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canMorph(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -910,7 +909,7 @@ namespace BWAPI
         if ( !thisUnit->isConstructing() && thisUnit->isCompleted() && ( !thisUnit->getType().isBuilding() || thisUnit->isIdle() ) )
           return Broodwar->setLastError();
         Unitset larvae( thisUnit->getLarva() );
-        foreach (Unit* larva, larvae)
+        foreach (Unit larva, larvae)
         {
           if ( !larva->isConstructing() && larva->isCompleted() && canCommand(larva) )
             return Broodwar->setLastError();
@@ -936,7 +935,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canMorph(const Unit* thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canMorph(Unit thisUnit, UnitType uType, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -952,7 +951,7 @@ namespace BWAPI
         {
           bool foundCommandableLarva = false;
           Unitset larvae( thisUnit->getLarva() );
-          foreach (Unit* larva, larvae)
+          foreach (Unit larva, larvae)
           {
             if ( canMorph(larva, true) )
             {
@@ -978,7 +977,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN RESEARCH -----------------------------------------------
-    static inline bool canResearch(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canResearch(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -990,7 +989,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canResearch(const Unit* thisUnit, TechType type, bool checkCanIssueCommandType = true)
+    static inline bool canResearch(Unit thisUnit, TechType type, bool checkCanIssueCommandType = true)
     {
       // Error checking
       if ( !Broodwar->self() )
@@ -1028,7 +1027,7 @@ namespace BWAPI
       return Broodwar->setLastError();
     }
     //------------------------------------------- CAN UPGRADE ------------------------------------------------
-    static inline bool canUpgrade(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUpgrade(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1040,9 +1039,9 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUpgrade(const Unit* thisUnit, UpgradeType type, bool checkCanIssueCommandType = true)
+    static inline bool canUpgrade(Unit thisUnit, UpgradeType type, bool checkCanIssueCommandType = true)
     {
-      Player *self = Broodwar->self();
+      Player self = Broodwar->self();
       if ( !self )
         return Broodwar->setLastError(Errors::Unit_Not_Owned);
 
@@ -1117,7 +1116,7 @@ namespace BWAPI
       return Broodwar->setLastError();
     }
     //------------------------------------------- CAN SET RALLY POSITION -------------------------------------
-    static inline bool canSetRallyPosition(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canSetRallyPosition(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1132,7 +1131,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN SET RALLY UNIT -----------------------------------------
-    static inline bool canSetRallyUnit(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canSetRallyUnit(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1146,7 +1145,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canSetRallyUnit(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canSetRallyUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1162,7 +1161,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN MOVE ---------------------------------------------------
-    static inline bool canMove(const Unit* thisUnit, bool checkCommandibility)
+    static inline bool canMove(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1186,7 +1185,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canMoveGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canMoveGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1204,7 +1203,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN PATROL -------------------------------------------------
-    static inline bool canPatrol(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canPatrol(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1216,7 +1215,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canPatrolGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canPatrolGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1232,7 +1231,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN FOLLOW -------------------------------------------------
-    static inline bool canFollow(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canFollow(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1244,7 +1243,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canFollow(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canFollow(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1263,7 +1262,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN GATHER -------------------------------------------------
-    static inline bool canGather(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canGather(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1287,7 +1286,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canGather(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canGather(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1316,7 +1315,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN RETURN CARGO -------------------------------------------
-    static inline bool canReturnCargo(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canReturnCargo(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1337,7 +1336,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN HOLD POSITION ------------------------------------------
-    static inline bool canHoldPosition(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canHoldPosition(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1360,7 +1359,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN STOP ---------------------------------------------------
-    static inline bool canStop(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canStop(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1381,7 +1380,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN REPAIR -------------------------------------------------
-    static inline bool canRepair(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canRepair(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1401,7 +1400,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRepair(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canRepair(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1427,7 +1426,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN BURROW -------------------------------------------------
-    static inline bool canBurrow(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canBurrow(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1440,7 +1439,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN UNBURROW -----------------------------------------------
-    static inline bool canUnburrow(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnburrow(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1455,7 +1454,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CLOAK --------------------------------------------------
-    static inline bool canCloak(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCloak(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1468,7 +1467,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN DECLOAK ------------------------------------------------
-    static inline bool canDecloak(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canDecloak(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1483,7 +1482,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN SIEGE --------------------------------------------------
-    static inline bool canSiege(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canSiege(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1496,7 +1495,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN UNSIEGE ------------------------------------------------
-    static inline bool canUnsiege(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnsiege(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1513,7 +1512,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN LIFT ---------------------------------------------------
-    static inline bool canLift(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canLift(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1532,7 +1531,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN LAND ---------------------------------------------------
-    static inline bool canLand(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canLand(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1546,7 +1545,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canLand(const Unit* thisUnit, TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canLand(Unit thisUnit, TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1562,7 +1561,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN LOAD ---------------------------------------------------
-    static inline bool canLoad(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canLoad(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1584,7 +1583,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canLoad(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canLoad(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1613,7 +1612,7 @@ namespace BWAPI
       if ( thisUnitSpaceProvided <= 0 && targetSpaceProvided <= 0 )
         return Broodwar->setLastError(Errors::Incompatible_UnitType);
 
-      const BWAPI::Unit* unitToBeLoaded = ( thisUnitSpaceProvided > 0 ? targetUnit : thisUnit );
+      const BWAPI::Unit unitToBeLoaded = ( thisUnitSpaceProvided > 0 ? targetUnit : thisUnit );
       if ( unitToBeLoaded->getType().canMove() == false || unitToBeLoaded->getType().isFlyer() || unitToBeLoaded->getType().spaceRequired() > 8 )
         return Broodwar->setLastError(Errors::Incompatible_UnitType);
       if ( !unitToBeLoaded->isCompleted() )
@@ -1621,7 +1620,7 @@ namespace BWAPI
       if ( unitToBeLoaded->isBurrowed() )
         return Broodwar->setLastError(Errors::Incompatible_State);
 
-      const BWAPI::Unit* unitThatLoads = ( thisUnitSpaceProvided > 0 ? thisUnit : targetUnit );
+      const BWAPI::Unit unitThatLoads = ( thisUnitSpaceProvided > 0 ? thisUnit : targetUnit );
       if ( unitThatLoads->isHallucination() )
         return Broodwar->setLastError(Errors::Incompatible_UnitType);
 
@@ -1636,7 +1635,7 @@ namespace BWAPI
       int freeSpace = ( thisUnitSpaceProvided > 0 ? thisUnitSpaceProvided : targetSpaceProvided );
       int requiredSpace;
       Unitset loadedUnits = unitThatLoads->getLoadedUnits();
-      foreach(Unit* u, loadedUnits)
+      foreach(Unit u, loadedUnits)
       {
         requiredSpace = u->getType().spaceRequired();
         if ( requiredSpace > 0 && requiredSpace < 8 )
@@ -1648,7 +1647,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN UNLOAD -------------------------------------------------
-    static inline bool canUnloadWithOrWithoutTarget(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnloadWithOrWithoutTarget(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1670,7 +1669,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUnloadAtPosition(const Unit* thisUnit, Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUnloadAtPosition(Unit thisUnit, Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1690,11 +1689,11 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUnload(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnload(Unit thisUnit, bool checkCommandibility = true)
     {
       return canUnloadAtPosition(thisUnit, thisUnit->getPosition(), true, checkCommandibility);
     }
-    static inline bool canUnload(const Unit* thisUnit, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkPosition = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUnload(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkPosition = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1719,12 +1718,12 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN UNLOAD ALL ---------------------------------------------
-    static inline bool canUnloadAll(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnloadAll(Unit thisUnit, bool checkCommandibility = true)
     {
       return canUnloadAtPosition(thisUnit, thisUnit->getPosition(), true, checkCommandibility);
     }
     //------------------------------------------- CAN UNLOAD ALL POSITION ------------------------------------
-    static inline bool canUnloadAllPosition(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUnloadAllPosition(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1739,7 +1738,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUnloadAllPosition(const Unit* thisUnit, Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUnloadAllPosition(Unit thisUnit, Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1755,7 +1754,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN RIGHT CLICK POSITION -----------------------------------
-    static inline bool canRightClickPosition(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canRightClickPosition(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1769,7 +1768,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickPositionGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickPositionGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1787,7 +1786,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN RIGHT CLICK UNIT ---------------------------------------
-    static inline bool canRightClickUnit(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canRightClickUnit(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1804,7 +1803,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnit(const Unit* thisUnit, Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1828,7 +1827,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnitGrouped(const Unit* thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1847,7 +1846,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnitGrouped(const Unit* thisUnit, Unit* targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1874,7 +1873,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN HALT CONSTRUCTION --------------------------------------
-    static inline bool canHaltConstruction(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canHaltConstruction(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1887,7 +1886,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL CONSTRUCTION ------------------------------------
-    static inline bool canCancelConstruction(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelConstruction(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1903,7 +1902,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL ADDON -------------------------------------------
-    static inline bool canCancelAddon(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelAddon(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1916,7 +1915,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL TRAIN -------------------------------------------
-    static inline bool canCancelTrain(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelTrain(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1929,11 +1928,11 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL TRAIN SLOT --------------------------------------
-    static inline bool canCancelTrainSlot(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelTrainSlot(Unit thisUnit, bool checkCommandibility = true)
     {
       return canCancelTrain(thisUnit, checkCommandibility);
     }
-    static inline bool canCancelTrainSlot(const Unit* thisUnit, int slot, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canCancelTrainSlot(Unit thisUnit, int slot, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1949,7 +1948,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL MORPH -------------------------------------------
-    static inline bool canCancelMorph(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelMorph(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1964,7 +1963,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL RESEARCH ----------------------------------------
-    static inline bool canCancelResearch(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelResearch(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1977,7 +1976,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN CANCEL UPGRADE -----------------------------------------
-    static inline bool canCancelUpgrade(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canCancelUpgrade(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1990,7 +1989,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN USE TECH -----------------------------------------------
-    static inline bool canUseTechWithOrWithoutTarget(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canUseTechWithOrWithoutTarget(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2006,7 +2005,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechWithOrWithoutTarget(const Unit* thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechWithOrWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2069,7 +2068,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechWithoutTarget(const Unit* thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType, bool checkCommandibility)
+    static inline bool canUseTechWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2087,7 +2086,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN USE TECH UNIT ------------------------------------------
-    static inline bool canUseTechUnit(const Unit* thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechUnit(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2104,7 +2103,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechUnit(const Unit* thisUnit, BWAPI::TechType tech, const Unit* targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechUnit(Unit thisUnit, BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2253,7 +2252,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN USE TECH POSITION --------------------------------------
-    static inline bool canUseTechPosition(const Unit* thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechPosition(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2270,7 +2269,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechPosition(const Unit* thisUnit, Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechPosition(Unit thisUnit, Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2289,7 +2288,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN PLACE COP ----------------------------------------------
-    static inline bool canPlaceCOP(const Unit* thisUnit, bool checkCommandibility = true)
+    static inline bool canPlaceCOP(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2304,7 +2303,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canPlaceCOP(const Unit* thisUnit, TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canPlaceCOP(Unit thisUnit, TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2320,7 +2319,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN ISSUE COMMAND TYPE -------------------------------------
-    static inline bool canIssueCommandType(const Unit* thisUnit, BWAPI::UnitCommandType ct, bool checkCommandibility = true)
+    static inline bool canIssueCommandType(Unit thisUnit, BWAPI::UnitCommandType ct, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2460,7 +2459,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canIssueCommandTypeGrouped(const Unit* thisUnit, BWAPI::UnitCommandType ct, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canIssueCommandTypeGrouped(Unit thisUnit, BWAPI::UnitCommandType ct, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2604,7 +2603,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN ISSUE COMMAND ------------------------------------------
-    static inline bool canIssueCommand(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canIssueCommand(Unit thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanBuildUnitType = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2752,7 +2751,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canIssueCommandGrouped(const Unit *thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canIssueCommandGrouped(Unit thisUnit, UnitCommand c, bool checkCanUseTechPositionOnPositions = true, bool checkCanUseTechUnitOnUnits = true, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();

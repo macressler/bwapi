@@ -149,10 +149,10 @@ aithread::~aithread()
   this->debugQueue.clear();
 }
 
-int GetStandardUnitCount(UnitType type, bool bCompleted, Player *player)
+int GetStandardUnitCount(UnitType type, bool bCompleted, Player player)
 {
   int count = 0;
-  Player *pl = (player ? player : self);
+  Player pl = (player ? player : self);
   if ( !pl )
     return 0;
   if ( bCompleted )

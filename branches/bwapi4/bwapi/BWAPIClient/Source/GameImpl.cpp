@@ -62,7 +62,7 @@ namespace BWAPI
     data->unitCommands[data->unitCommandCount] = c;
     return data->unitCommandCount++;
   }
-  Unit *GameImpl::_unitFromIndex(int index)
+  Unit GameImpl::_unitFromIndex(int index)
   {
     return this->getUnit(index);
   }
@@ -205,7 +205,7 @@ namespace BWAPI
     if ( thePlayer )
     {
       // iterate each player
-      foreach(Player* p, playerSet)
+      foreach(Player p, playerSet)
       {
         // check if the player should not be updated
         if ( p->leftGame() || p->isDefeated() || p == thePlayer )
@@ -252,7 +252,7 @@ namespace BWAPI
       int id = data->events[e].v1;
       if (data->events[e].type == EventType::UnitDiscover)
       {
-        Unit* u = &unitVector[id];
+        Unit u = &unitVector[id];
         accessibleUnits.insert(u);
         static_cast<PlayerImpl*>(u->getPlayer())->units.insert(u);
         if (u->getPlayer()->isNeutral())
@@ -271,7 +271,7 @@ namespace BWAPI
       }
       else if (data->events[e].type == EventType::UnitEvade)
       {
-        Unit* u = &unitVector[id];
+        Unit u = &unitVector[id];
         accessibleUnits.erase(u);
         static_cast<PlayerImpl*>(u->getPlayer())->units.erase(u);
         if (u->getPlayer()->isNeutral())
@@ -290,14 +290,14 @@ namespace BWAPI
       }
       else if (data->events[e].type==EventType::UnitRenegade)
       {
-        Unit* u = &unitVector[id];
+        Unit u = &unitVector[id];
         for (auto p = playerSet.begin(); p != playerSet.end(); ++p )
           static_cast<PlayerImpl*>(*p)->units.erase(u);
         static_cast<PlayerImpl*>(u->getPlayer())->units.insert(u);
       }
       else if (data->events[e].type == EventType::UnitMorph)
       {
-        Unit* u = &unitVector[id];
+        Unit u = &unitVector[id];
         if (u->getType() == UnitTypes::Resource_Vespene_Geyser)
         {
           geysers.insert(u);
@@ -315,7 +315,7 @@ namespace BWAPI
       u->connectedUnits.clear();
       u->loadedUnits.clear();
     }
-    foreach(Unit* u, accessibleUnits)
+    foreach(Unit u, accessibleUnits)
     {
       if ( u->getType() == UnitTypes::Zerg_Larva && u->getHatchery() )
         static_cast<UnitImpl*>(u->getHatchery())->connectedUnits.insert(u);
@@ -327,7 +327,7 @@ namespace BWAPI
     selectedUnits.clear();
     for ( int i = 0; i < data->selectedUnitCount; ++i )
     {
-      Unit* u = getUnit(data->selectedUnits[i]);
+      Unit u = getUnit(data->selectedUnits[i]);
       if ( u )
         selectedUnits.insert(u);
     }
@@ -338,7 +338,7 @@ namespace BWAPI
     if ( thePlayer )
     {
       // iterate each player
-      foreach(Player* p, playerSet)
+      foreach(Player p, playerSet)
       {
         // check if player should be skipped
         if ( p->leftGame() || p->isDefeated() || p == thePlayer )
@@ -357,37 +357,37 @@ namespace BWAPI
     this->processInterfaceEvents(); // Note sure if this should go here?
   }
   //----------------------------------------------- GET FORCE ------------------------------------------------
-  Force* GameImpl::getForce(int forceId) const
+  Force GameImpl::getForce(int forceId) const
   {
     if (forceId < 0 || forceId >= (int)forceVector.size())
-      return NULL;
-    return (Force*)(&forceVector[forceId]);
+      return nullptr;
+    return (Force)(&forceVector[forceId]);
   }
-  Region *GameImpl::getRegion(int regionID) const
+  Region GameImpl::getRegion(int regionID) const
   {
     if ( regionID < 0 || regionID >= data->regionCount )
-      return NULL;
+      return nullptr;
     return regionArray[regionID];
   }
   //----------------------------------------------- GET PLAYER -----------------------------------------------
-  Player* GameImpl::getPlayer(int playerId) const
+  Player GameImpl::getPlayer(int playerId) const
   {
     if (playerId < 0 || playerId >= (int)playerVector.size())
-      return NULL;
-    return (Player*)(&playerVector[playerId]);
+      return nullptr;
+    return (Player)(&playerVector[playerId]);
   }
   //----------------------------------------------- GET UNIT -------------------------------------------------
-  Unit* GameImpl::getUnit(int unitId) const
+  Unit GameImpl::getUnit(int unitId) const
   {
     if (unitId < 0 || unitId >= (int)unitVector.size())
-      return NULL;
-    return (Unit*)(&unitVector[unitId]);
+      return nullptr;
+    return (Unit )(&unitVector[unitId]);
   }
   //----------------------------------------------- INDEX TO UNIT --------------------------------------------
-  Unit* GameImpl::indexToUnit(int unitIndex) const
+  Unit GameImpl::indexToUnit(int unitIndex) const
   {
     if ( unitIndex < 0 || unitIndex >= 1700 )
-      return NULL;
+      return nullptr;
     return getUnit(data->unitArray[unitIndex]);
   }
   //--------------------------------------------- GET GAME TYPE ----------------------------------------------
@@ -482,15 +482,15 @@ namespace BWAPI
                                              top,
                                              right,
                                              bottom,
-                                             [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                             [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                              unitFinderResults.push_back(u); });
     // Return results
     return unitFinderResults;
   }
-  Unit *GameImpl::getClosestUnitInRectangle(Position center, const UnitFilter &pred, int left, int top, int right, int bottom) const
+  Unit GameImpl::getClosestUnitInRectangle(Position center, const UnitFilter &pred, int left, int top, int right, int bottom) const
   {
     int bestDistance = 99999999;
-    Unit *pBestUnit = nullptr;
+    Unit pBestUnit = nullptr;
 
     Templates::iterateUnitFinder<unitFinder>(data->xUnitSearch,
                                              data->yUnitSearch,
@@ -499,7 +499,7 @@ namespace BWAPI
                                              top,
                                              right,
                                              bottom,
-                                             [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                             [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                            {
                                                               int newDistance = u->getDistance(center);
                                                               if ( newDistance < bestDistance )
@@ -510,9 +510,9 @@ namespace BWAPI
                                                            } } );
     return pBestUnit;
   }
-  Unit *GameImpl::getBestUnit(const BestUnitFilter &best, const UnitFilter &pred, Position center, int radius) const
+  Unit GameImpl::getBestUnit(const BestUnitFilter &best, const UnitFilter &pred, Position center, int radius) const
   {
-    Unit *pBestUnit = nullptr;
+    Unit pBestUnit = nullptr;
     Position rad(radius,radius);
     
     Position topLeft(center - rad);
@@ -528,7 +528,7 @@ namespace BWAPI
                                              topLeft.y,
                                              botRight.x,
                                              botRight.y,
-                                             [&](Unit *u){ if ( !pred.isValid() || pred(u) )
+                                             [&](Unit u){ if ( !pred.isValid() || pred(u) )
                                                            {
                                                              if ( pBestUnit == nullptr )
                                                                pBestUnit = u;
@@ -613,7 +613,7 @@ namespace BWAPI
   //--------------------------------------------- HAS POWER --------------------------------------------------
   bool GameImpl::hasPowerPrecise(int x, int y, UnitType unitType) const
   {
-    return Templates::hasPower<Unit>(x, y, unitType, pylons);
+    return Templates::hasPower(x, y, unitType, pylons);
   }
   //------------------------------------------------ PRINTF --------------------------------------------------
   void GameImpl::vPrintf(const char *format, va_list arg)
@@ -674,7 +674,7 @@ namespace BWAPI
     addCommand(BWAPIC::Command(BWAPIC::CommandType::RestartGame));
   }
   //--------------------------------------------- SET ALLIANCE -----------------------------------------------
-  bool GameImpl::setAlliance(BWAPI::Player *player, bool allied, bool alliedVictory)
+  bool GameImpl::setAlliance(BWAPI::Player player, bool allied, bool alliedVictory)
   {
     /* Set the current player's alliance status */
     if ( !self() || isReplay() || !player || player == self() )
@@ -688,7 +688,7 @@ namespace BWAPI
     return true;
   }
   //----------------------------------------------- SET VISION -----------------------------------------------
-  bool GameImpl::setVision(BWAPI::Player *player, bool enabled)
+  bool GameImpl::setVision(BWAPI::Player player, bool enabled)
   {
     // Param check
     if ( !player )
@@ -720,7 +720,7 @@ namespace BWAPI
   {
     bool success = false;
     //FIX FIX FIX naive implementation
-    foreach(Unit* u, units)
+    foreach(Unit u, units)
     {
       success |= u->issueCommand(command);
     }
@@ -733,17 +733,17 @@ namespace BWAPI
     return selectedUnits;
   }
   //--------------------------------------------- SELF -------------------------------------------------------
-  Player* GameImpl::self() const
+  Player GameImpl::self() const
   {
     return thePlayer;
   }
   //--------------------------------------------- ENEMY ------------------------------------------------------
-  Player* GameImpl::enemy() const
+  Player GameImpl::enemy() const
   {
     return theEnemy;
   }
   //--------------------------------------------- ENEMY ------------------------------------------------------
-  Player* GameImpl::neutral() const
+  Player GameImpl::neutral() const
   {
     return theNeutral;
   }
@@ -957,7 +957,7 @@ namespace BWAPI
     return data->countdownTimer;
   }
   //------------------------------------------------- GET REGION AT ------------------------------------------
-  BWAPI::Region *GameImpl::getRegionAt(int x, int y) const
+  BWAPI::Region GameImpl::getRegionAt(int x, int y) const
   {
     if ( !Position(x,y) )
     {

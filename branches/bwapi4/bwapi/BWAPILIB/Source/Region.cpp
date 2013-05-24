@@ -6,17 +6,17 @@
 
 namespace BWAPI
 {
-  int Region::getDistance(BWAPI::Region *other) const
+  int RegionInterface::getDistance(BWAPI::Region other) const
   {
     return this->getCenter().getApproxDistance(other->getCenter());
   }
 
-  Unitset Region::getUnits(const UnitFilter &pred) const
+  Unitset RegionInterface::getUnits(const UnitFilter &pred) const
   {
     return Broodwar->getUnitsInRectangle(this->getBoundsLeft(),
                                          this->getBoundsTop(),
                                          this->getBoundsRight(),
                                          this->getBoundsBottom(),
-                                         [&](Unit *u){ return u->getRegion() == this && (!pred.isValid() || pred(u)); });
+                                         [&](Unit u){ return u->getRegion() == this && (!pred.isValid() || pred(u)); });
   }
 }

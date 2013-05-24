@@ -73,7 +73,7 @@ int main(int argc, const char* argv[])
       {
         if ( i->getType().isWorker() )
         {
-          Unit* closestMineral = NULL;
+          Unit closestMineral = NULL;
 
           for( Unitset::iterator m = minerals.begin(); m != minerals.end(); ++m )
           {

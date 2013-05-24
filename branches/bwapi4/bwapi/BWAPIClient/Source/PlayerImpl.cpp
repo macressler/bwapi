@@ -28,17 +28,17 @@ namespace BWAPI
   {
     return PlayerType(self->type);
   }
-  Force* PlayerImpl::getForce() const
+  Force PlayerImpl::getForce() const
   {
     return Broodwar->getForce(self->force);
   }
-  bool PlayerImpl::isAlly(Player* player) const
+  bool PlayerImpl::isAlly(Player player) const
   {
     if ( !player )
       return false;
     return self->isAlly[player->getID()];
   }
-  bool PlayerImpl::isEnemy(Player* player) const
+  bool PlayerImpl::isEnemy(Player player) const
   {
     if ( !player )
       return false;

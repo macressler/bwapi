@@ -20,7 +20,7 @@ bool Order_Region::execute(aithread &thread) const
   }
   else if ( this->getOpcode() == Enum::JUNKYARD_DOG )
   {
-    for each ( Unit *u in rgnUnits )
+    for each ( Unit u in rgnUnits )
       UnitWrap(u).SetVirtualUnitOrder(Orders::Enum::JunkYardDog);
   }
 

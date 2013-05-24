@@ -194,7 +194,7 @@ namespace BWAPI
 
     if ( this->BWAPIPlayer )
     {
-      foreach(Player* p, players)
+      foreach(Player p, players)
       {
         if ( p->leftGame() || p->isDefeated() || p == BWAPIPlayer )
           continue;
@@ -251,7 +251,7 @@ namespace BWAPI
       rn_AlliesRaces.clear();
       rn_EnemiesNames.clear();
       rn_EnemiesRaces.clear();
-      foreach ( Player *p, this->_allies )
+      foreach ( Player p, this->_allies )
       {
         if ( p )
         {
@@ -259,7 +259,7 @@ namespace BWAPI
           rn_AlliesRaces += p->getRace().getName().substr(0, 1);
         }
       }
-      foreach ( Player *p, this->_enemies )
+      foreach ( Player p, this->_enemies )
       {
         if ( p )
         {

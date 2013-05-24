@@ -6,7 +6,7 @@ using namespace AISCRIPT;
 IMPLEMENT(Rush);
 
 
-int GetTerranRushScore(Player *player)
+int GetTerranRushScore(Player player)
 {
   int bunkerScore = 4 * player->completedUnitCount(UnitTypes::Terran_Bunker);
   int marineScore = player->completedUnitCount(UnitTypes::Terran_Marine);
@@ -16,20 +16,20 @@ int GetTerranRushScore(Player *player)
     return 2 * marineScore;
 }
 
-int GetZergGroundRushScore(Player *player)
+int GetZergGroundRushScore(Player player)
 {
   return player->completedUnitCount(UnitTypes::Zerg_Hydralisk) + 
      2 * player->completedUnitCount(UnitTypes::Zerg_Sunken_Colony);
 }
 
-int GetZergAirRushScore(Player *player)
+int GetZergAirRushScore(Player player)
 {
   return player->completedUnitCount(UnitTypes::Zerg_Hydralisk) + 
     player->completedUnitCount(UnitTypes::Zerg_Mutalisk) + 
      2 * player->completedUnitCount(UnitTypes::Zerg_Spore_Colony);
 }
 
-int GetProtossAirRushScore(Player *player)
+int GetProtossAirRushScore(Player player)
 {
   return player->completedUnitCount(UnitTypes::Protoss_Dragoon) + 
          player->completedUnitCount(UnitTypes::Protoss_Scout);
@@ -48,8 +48,8 @@ bool Rush::execute(aithread &thread) const
   bool isRushed = false;
 
   // Get closest enemy owner
-  Unit *pClosest = Broodwar->getClosestUnit(thread.getLocation().center(), IsEnemy && (!IsBuilding || IsLifted) );
-  Player *closestEnemy = pClosest ? pClosest->getPlayer() : nullptr;
+  Unit pClosest = Broodwar->getClosestUnit(thread.getLocation().center(), IsEnemy && (!IsBuilding || IsLifted) );
+  Player closestEnemy = pClosest ? pClosest->getPlayer() : nullptr;
   if ( !closestEnemy )  return true;
 
   // Check rush categories

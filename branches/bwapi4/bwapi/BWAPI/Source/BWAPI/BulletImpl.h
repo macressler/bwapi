@@ -17,22 +17,22 @@ namespace BWAPI
    * Interface for broodwar bullets, can be used to obtain any information
    * about bullets and spells
    */
-  class BulletImpl : public Bullet
+  class BulletImpl : public BulletInterface
   {
     public:
       virtual int        getID() const override;
       virtual bool       exists() const override;
-      virtual Player*    getPlayer() const override;
+      virtual Player     getPlayer() const override;
       virtual BulletType getType() const override;
-      virtual Unit*      getSource() const override;
+      virtual Unit       getSource() const override;
       virtual Position   getPosition() const override;
       virtual double     getAngle() const override;
       virtual double     getVelocityX() const override;
       virtual double     getVelocityY() const override;
-      virtual Unit*      getTarget() const override;
+      virtual Unit       getTarget() const override;
       virtual Position   getTargetPosition() const override;
       virtual int        getRemoveTimer() const override;
-      virtual bool       isVisible(Player* player = nullptr) const override;
+      virtual bool       isVisible(Player player = nullptr) const override;
 
       BulletImpl(BW::CBullet* originalBullet, u16 index);
       ~BulletImpl();

@@ -8,7 +8,7 @@
 using namespace BWAPI;
 
 int mapH, mapW;
-Player *self;
+Player self;
 
 bool isResourceClaimed[256];
 
@@ -111,28 +111,28 @@ void BWScriptEmulator::onSendText(std::string text)
   }
 }
 
-void BWScriptEmulator::onReceiveText(BWAPI::Player* player, std::string text)
+void BWScriptEmulator::onReceiveText(BWAPI::Player player, std::string text)
 {}
 
-void BWScriptEmulator::onPlayerLeft(BWAPI::Player* player)
+void BWScriptEmulator::onPlayerLeft(BWAPI::Player player)
 {}
 
 void BWScriptEmulator::onNukeDetect(BWAPI::Position target)
 {}
 
-void BWScriptEmulator::onUnitDiscover(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitDiscover(BWAPI::Unit unit)
 {}
 
-void BWScriptEmulator::onUnitEvade(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitEvade(BWAPI::Unit unit)
 {}
 
-void BWScriptEmulator::onUnitShow(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitShow(BWAPI::Unit unit)
 {}
 
-void BWScriptEmulator::onUnitHide(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitHide(BWAPI::Unit unit)
 {}
 
-void BWScriptEmulator::onUnitCreate(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitCreate(BWAPI::Unit unit)
 {
   if ( unit->getPlayer() == self )  // If we own it
   {
@@ -152,7 +152,7 @@ void BWScriptEmulator::onUnitCreate(BWAPI::Unit* unit)
   }
 }
 
-void BWScriptEmulator::onUnitDestroy(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitDestroy(BWAPI::Unit unit)
 {
   if ( unit->getPlayer() == self )  // If we own it
   {
@@ -160,10 +160,10 @@ void BWScriptEmulator::onUnitDestroy(BWAPI::Unit* unit)
   }
 }
 
-void BWScriptEmulator::onUnitMorph(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitMorph(BWAPI::Unit unit)
 {}
 
-void BWScriptEmulator::onUnitRenegade(BWAPI::Unit* unit)
+void BWScriptEmulator::onUnitRenegade(BWAPI::Unit unit)
 {}
 
 void BWScriptEmulator::onSaveGame(std::string gameName)
