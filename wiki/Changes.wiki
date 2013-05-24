@@ -1,9 +1,13 @@
 #labels Featured
-== Changes from BWAPI 4.0.0 Beta (r4350) to recent (r4375) ==
+== Changes from BWAPI 4.0.0 Beta (r4350) to recent (r4382) ==
+Changes:
+ * All interface pointers are now hidden. Instead of `Unit*` you will now just use `Unit`. This will require a "Replace in Files" operation to convert existing sources.
 
 Bug Fixes:
  * Fixed a regression that prevented auto-menu from functioning.
  * Fixed an issue that caused Type::getType to be case sensitive.
+ * Fixed a regression where addons and the engineering bay returned incorrect tile sizes.
+ * Fixed a regression that prevented the construction of structures on the right and bottom edges of the map.
 
 
 == Changes from BWAPI 3.7.4 (r4160) to BWAPI 4.0.0 Beta (r4350) ==
