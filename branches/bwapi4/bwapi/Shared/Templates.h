@@ -9,9 +9,25 @@ namespace BWAPI
   namespace Templates
   {
     //--------------------------------------------- FORWARD DECLARATIONS -------------------------------------
-    static inline bool canUseTechWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canAttackMove(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canAttackMoveGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
     static inline bool canAttackUnit(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canAttackUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canAttackUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
+    static inline bool canAttackUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
+    static inline bool canSetRallyPosition(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canSetRallyUnit(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canSetRallyUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
     static inline bool canMove(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canRightClickPosition(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canRightClickPositionGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
+    static inline bool canRightClickUnit(Unit thisUnit, bool checkCommandibility = true);
+    static inline bool canRightClickUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true);
+    static inline bool canUseTechWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canUseTechUnit(Unit thisUnit, BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
+    static inline bool canUseTechPosition(Unit thisUnit, BWAPI::TechType tech, Position target, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true);
     //--------------------------------------------- HAS POWER ------------------------------------------------
     const bool bPsiFieldMask[10][16] = {
       { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
@@ -539,20 +555,95 @@ namespace BWAPI
 
       return true;
     }
-    //------------------------------------------- CAN ATTACK MOVE --------------------------------------------
-    static inline bool canAttackMove(Unit thisUnit, bool checkCommandibility = true)
+    //------------------------------------------- CAN ATTACK -------------------------------------------------
+    static inline bool canAttack(Unit thisUnit, bool checkCommandibility = true)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
       else if ( !canCommand(thisUnit) )
         return false;
 
-      if ( ( !canAttackUnit(thisUnit, false) && thisUnit->getType() != UnitTypes::Terran_Medic ) || !canMove(thisUnit, false) )
+      if ( !canAttackMove(thisUnit, false) && !canAttackUnit(thisUnit, false) )
         return false;
 
       return true;
     }
-    static inline bool canAttackMoveGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttack(Unit thisUnit, PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+          return Broodwar->setLastError(Errors::Invalid_Parameter);
+        if ( !canAttackUnit(thisUnit, target.getUnit(), checkCanTargetUnit, checkCanIssueCommandType, false) )
+          return false;
+      }
+      else
+      {
+        if ( !canAttackMove(thisUnit, false) )
+          return false;
+      }
+
+      return true;
+    }
+    static inline bool canAttackGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( checkCommandibilityGrouped && !canCommandGrouped(thisUnit, false) )
+        return false;
+
+      if ( !canAttackMoveGrouped(thisUnit, false, false) && !canAttackUnitGrouped(thisUnit, false, false) )
+        return false;
+
+      return true;
+    }
+    static inline bool canAttackGrouped(Unit thisUnit, PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( checkCommandibilityGrouped && !canCommandGrouped(thisUnit, false) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+          return Broodwar->setLastError(Errors::Invalid_Parameter);
+        if ( !canAttackUnitGrouped(thisUnit, target.getUnit(), checkCanTargetUnit, checkCanIssueCommandTypeGrouped, false, false) )
+          return false;
+      }
+      else
+      {
+        if ( !canAttackMoveGrouped(thisUnit, false, false) )
+          return false;
+      }
+
+      return true;
+    }
+    //------------------------------------------- CAN ATTACK MOVE --------------------------------------------
+    static inline bool canAttackMove(Unit thisUnit, bool checkCommandibility)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( ( thisUnit->getType() != UnitTypes::Terran_Medic && !canAttackUnit(thisUnit, false) ) || !canMove(thisUnit, false) )
+        return false;
+
+      return true;
+    }
+    static inline bool canAttackMoveGrouped(Unit thisUnit, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -609,7 +700,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canAttackUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -649,7 +740,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttackUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -682,7 +773,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canAttackUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canAttackUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit, bool checkCanIssueCommandTypeGrouped, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1115,8 +1206,43 @@ namespace BWAPI
 
       return Broodwar->setLastError();
     }
+    //------------------------------------------- CAN SET RALLY POINT ----------------------------------------
+    static inline bool canSetRallyPoint(Unit thisUnit, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( !canSetRallyPosition(thisUnit, false) && !canSetRallyUnit(thisUnit, false) )
+        return false;
+
+      return true;
+    }
+    static inline bool canSetRallyPoint(Unit thisUnit, PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+          return Broodwar->setLastError(Errors::Invalid_Parameter);
+        if ( !canSetRallyUnit(thisUnit, target.getUnit(), checkCanTargetUnit, checkCanIssueCommandType, false) )
+          return false;
+      }
+      else
+      {
+        if ( !canSetRallyPosition(thisUnit, false) )
+          return false;
+      }
+
+      return true;
+    }
     //------------------------------------------- CAN SET RALLY POSITION -------------------------------------
-    static inline bool canSetRallyPosition(Unit thisUnit, bool checkCommandibility = true)
+    static inline bool canSetRallyPosition(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1131,7 +1257,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN SET RALLY UNIT -----------------------------------------
-    static inline bool canSetRallyUnit(Unit thisUnit, bool checkCommandibility = true)
+    static inline bool canSetRallyUnit(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1145,7 +1271,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canSetRallyUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canSetRallyUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1753,8 +1879,83 @@ namespace BWAPI
 
       return true;
     }
+    //------------------------------------------- CAN RIGHT CLICK --------------------------------------------
+    static inline bool canRightClick(Unit thisUnit, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( !canRightClickPosition(thisUnit, false) && !canRightClickUnit(thisUnit, false) )
+        return false;
+
+      return true;
+    }
+    static inline bool canRightClick(Unit thisUnit, PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+          return Broodwar->setLastError(Errors::Invalid_Parameter);
+        if ( !canRightClickUnit(thisUnit, target.getUnit(), checkCanTargetUnit, checkCanIssueCommandType, false) )
+          return false;
+      }
+      else
+      {
+        if ( !canRightClickPosition(thisUnit, false) )
+          return false;
+      }
+
+      return true;
+    }
+    static inline bool canRightClickGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( checkCommandibilityGrouped && !canCommandGrouped(thisUnit, false) )
+        return false;
+
+      if ( !canRightClickPositionGrouped(thisUnit, false, false) && !canRightClickUnitGrouped(thisUnit, false, false) )
+        return false;
+
+      return true;
+    }
+    static inline bool canRightClickGrouped(Unit thisUnit, PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandTypeGrouped = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( checkCommandibilityGrouped && !canCommandGrouped(thisUnit, false) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+          return Broodwar->setLastError(Errors::Invalid_Parameter);
+        if ( !canRightClickUnitGrouped(thisUnit, target.getUnit(), checkCanTargetUnit, checkCanIssueCommandTypeGrouped, false, false) )
+          return false;
+      }
+      else
+      {
+        if ( !canRightClickPositionGrouped(thisUnit, false, false) )
+          return false;
+      }
+
+      return true;
+    }
     //------------------------------------------- CAN RIGHT CLICK POSITION -----------------------------------
-    static inline bool canRightClickPosition(Unit thisUnit, bool checkCommandibility = true)
+    static inline bool canRightClickPosition(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1768,7 +1969,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickPositionGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickPositionGrouped(Unit thisUnit, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1786,7 +1987,7 @@ namespace BWAPI
       return true;
     }
     //------------------------------------------- CAN RIGHT CLICK UNIT ---------------------------------------
-    static inline bool canRightClickUnit(Unit thisUnit, bool checkCommandibility = true)
+    static inline bool canRightClickUnit(Unit thisUnit, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1803,7 +2004,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnit(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1827,7 +2028,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -1846,7 +2047,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canRightClickUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true)
+    static inline bool canRightClickUnitGrouped(Unit thisUnit, Unit targetUnit, bool checkCanTargetUnit, bool checkCanIssueCommandType, bool checkCommandibilityGrouped, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2068,6 +2269,34 @@ namespace BWAPI
 
       return true;
     }
+    static inline bool canUseTech(Unit thisUnit, BWAPI::TechType tech, PositionOrUnit target = nullptr, bool checkCanTargetUnit = true, bool checkTargetsType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    {
+      if ( !checkCommandibility )
+        Broodwar->setLastError();
+      else if ( !canCommand(thisUnit) )
+        return false;
+
+      if ( target.isUnit() )
+      {
+        if ( target.getUnit() == nullptr )
+        {
+          if ( !canUseTechWithoutTarget(thisUnit, tech, checkCanIssueCommandType, false) )
+            return false;
+        }
+        else
+        {
+          if ( !canUseTechUnit(thisUnit, tech, target.getUnit(), checkCanTargetUnit, checkTargetsType, checkCanIssueCommandType, false) )
+            return false;
+        }
+      }
+      else
+      {
+        if ( !canUseTechPosition(thisUnit, tech, target.getPosition(), checkTargetsType, checkCanIssueCommandType, false) )
+          return false;
+      }
+
+      return true;
+    }
     static inline bool canUseTechWithoutTarget(Unit thisUnit, BWAPI::TechType tech, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
@@ -2103,7 +2332,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechUnit(Unit thisUnit, BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechUnit(Unit thisUnit, BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit, bool checkTargetsUnits, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2269,7 +2498,7 @@ namespace BWAPI
 
       return true;
     }
-    static inline bool canUseTechPosition(Unit thisUnit, Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true)
+    static inline bool canUseTechPosition(Unit thisUnit, BWAPI::TechType tech, Position target, bool checkTargetsPositions, bool checkCanIssueCommandType, bool checkCommandibility)
     {
       if ( !checkCommandibility )
         Broodwar->setLastError();
@@ -2743,7 +2972,7 @@ namespace BWAPI
           return canUseTechUnit(thisUnit, c.extra, c.target, checkCanTargetUnit, checkCanUseTechUnitOnUnits, false, false);
 
         case UnitCommandTypes::Enum::Use_Tech_Position:
-          return canUseTechPosition(thisUnit, c.getTargetPosition(), c.extra, checkCanUseTechPositionOnPositions, false, false);
+          return canUseTechPosition(thisUnit, c.extra, c.getTargetPosition(), checkCanUseTechPositionOnPositions, false, false);
 
         case UnitCommandTypes::Enum::Place_COP:
           return canPlaceCOP(thisUnit, BWAPI::TilePosition(c.x, c.y), false, false);
@@ -2894,7 +3123,7 @@ namespace BWAPI
           return canUseTechUnit(thisUnit, c.extra, c.target, checkCanTargetUnit, checkCanUseTechUnitOnUnits, false, false);
 
         case UnitCommandTypes::Enum::Use_Tech_Position:
-          return canUseTechPosition(thisUnit, c.getTargetPosition(), c.extra, checkCanUseTechPositionOnPositions, false, false);
+          return canUseTechPosition(thisUnit, c.extra, c.getTargetPosition(), checkCanUseTechPositionOnPositions, false, false);
 
         case UnitCommandTypes::Enum::Place_COP:
           return false;

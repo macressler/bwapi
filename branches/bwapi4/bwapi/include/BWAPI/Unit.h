@@ -841,7 +841,7 @@ namespace BWAPI
     bool isSieged() const;
 
     /** Returns true if the unit is starting to attack.
-     * \see UnitInterface::attackUnit, UnitInterface::getGroundWeaponCooldown, UnitInterface::getAirWeaponCooldown. */
+     * \see UnitInterface::attack, UnitInterface::getGroundWeaponCooldown, UnitInterface::getAirWeaponCooldown. */
     virtual bool isStartingAttack() const = 0;
 
     /** Returns true if the unit has been stasised by a Protoss Arbiter.
@@ -905,7 +905,7 @@ namespace BWAPI
     /// @see UnitCommandTypes, Game::getLastError, UnitInterface::canIssueCommand
     virtual bool issueCommand(UnitCommand command) = 0;
 
-    /// Orders the unit(s) to attack move to the specified location.
+    /// Orders the unit(s) to attack move to the specified position or attack the specified unit.
     ///
     /// @param target
     ///   A Position or a Unit to designate as the target. If a Position is used, the unit will
@@ -918,7 +918,7 @@ namespace BWAPI
     ///
     /// @note A @Medic will use Heal Move instead of attack.
     ///
-    /// @see Game::getLastError, UnitInterface::canAttackMove, UnitInterface::canAttackUnit
+    /// @see Game::getLastError, UnitInterface::canAttack
     bool attack(PositionOrUnit target, bool shiftQueueCommand = false);
 
     /// Orders the worker unit(s) to construct a structure at a target position.
@@ -993,8 +993,9 @@ namespace BWAPI
      * UnitInterface::canUpgrade. */
     bool upgrade(UpgradeType upgrade);
 
-    /** Orders the unit to set its rally position to the specified position.
-     * \see UnitInterface::getRallyPosition, UnitInterface::getRallyUnit, UnitInterface::canSetRallyPosition, UnitInterface::canSetRallyUnit. */
+    /** Orders the unit to set its rally position to the specified position or unit.
+     * \see UnitInterface::getRallyPosition, UnitInterface::getRallyUnit, UnitInterface::canSetRallyPoint, UnitInterface::canSetRallyPosition,
+     * UnitInterface::canSetRallyUnit. */
     bool setRallyPoint(PositionOrUnit target);
 
     /** Orders the unit to move from its current position to the specified position.
@@ -1087,7 +1088,7 @@ namespace BWAPI
     bool unloadAll(Position target, bool shiftQueueCommand = false);
 
     /** Works like the right click in the GUI.
-     * \see UnitInterface::canRightClickPosition, UnitInterface::canRightClickUnit. */
+     * \see UnitInterface::canRightClick, UnitInterface::canRightClickPosition, UnitInterface::canRightClickUnit. */
     bool rightClick(PositionOrUnit target, bool shiftQueueCommand = false);
 
     /** Orders the SCV to stop constructing the building, and the building is left in a partially complete
@@ -1120,10 +1121,11 @@ namespace BWAPI
      * \see UnitInterface::upgrade, UnitInterface::isUpgrading, UnitInterface::getUpgrade, UnitInterface::canCancelUpgrade. */
     bool cancelUpgrade();
     
-    /** Orders the unit to use a tech requiring a position target (eg Dark Swarm). Returns true if it is a
-     * valid tech.
-     * \see UnitInterface::canUseTechWithOrWithoutTarget, UnitInterface::canUseTechWithoutTarget, UnitInterface::canUseTechUnit,
-     * UnitInterface::canUseTechPosition. */
+    /** Orders the unit to use a tech. The target may be a position, or a (non-null) unit, or
+     * nullptr (which means the tech does not target another position/unit, e.g. @Stim_Packs ).
+     * Returns true if it is a valid tech.
+     * \see UnitInterface::canUseTechWithOrWithoutTarget, UnitInterface::canUseTech,
+     * UnitInterface::canUseTechWithoutTarget, UnitInterface::canUseTechUnit, UnitInterface::canUseTechPosition. */
     bool useTech(TechType tech, PositionOrUnit target = nullptr);
 
     /** Moves a Flag Beacon to the target location.
@@ -1177,13 +1179,13 @@ namespace BWAPI
     /// The reason this function exists is because some commands are valid for an individual unit
     /// but not for those individuals as a group (e.g. buildings, critters) and some commands are
     /// only valid for a unit if it is commanded as part of a unit group, e.g.:
-    ///   1. attackMove/attackUnit for a Unitset, some of which can't attack (e.g.
-    ///       @High_Templar ). This is supported simply for consistency with BW's behaviour - you
-    ///       could issue move command(s) individually instead.
+    ///   1. attackMove/attackUnit for a Unitset, some of which can't attack, e.g. @High_Templar.
+    ///      This is supported simply for consistency with BW's behaviour - you
+    ///      could issue move command(s) individually instead.
     ///   2. attackMove/move/patrol/rightClickPosition for air unit(s) + e.g. @Larva, as part of
     ///      the air stacking technique. This is supported simply for consistency with BW's
     ///      behaviour - you could issue move/patrol/rightClickPosition command(s) for them
-    ///     individually instead.
+    ///      individually instead.
     ///
     /// @note BWAPI allows the following special cases to command a unit individually (rather than
     /// only allowing it to be commanded as part of a Unitset). These commands are not available
@@ -1264,6 +1266,31 @@ namespace BWAPI
     ///
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::isTargetable
     virtual bool canTargetUnit(Unit targetUnit, bool checkCommandibility = true) const = 0;
+
+    /// Cheap checks for whether the unit is able to execute an attack command to attack-move or attack a unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::attack,
+    /// UnitInterface::canAttackMove, UnitInterface::canAttackUnit
+    virtual bool canAttack(bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute an attack command to attack-move or attack a (non-null)
+    /// unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::attack,
+    /// UnitInterface::canAttackMove, UnitInterface::canAttackUnit
+    virtual bool canAttack(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+
+    /// Cheap checks for whether the unit is able to execute an attack command to attack-move or attack a unit,
+    /// as part of a Unitset.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommandGrouped, UnitInterface::canAttack
+    virtual bool canAttackGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute an attack command to attack-move or attack a
+    /// (non-null) unit, as part of a Unitset.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommandGrouped, UnitInterface::canAttack
+    virtual bool canAttackGrouped(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
 
     /// Checks whether the unit is able to execute an attack command to attack-move.
     ///
@@ -1363,6 +1390,20 @@ namespace BWAPI
     ///
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::upgrade
     virtual bool canUpgrade(UpgradeType type, bool checkCanIssueCommandType = true) const = 0;
+
+    /// Cheap checks for whether the unit is able to execute a setRallyPoint command to a
+    /// position or unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::setRallyPoint,
+    /// UnitInterface::canSetRallyPosition, UnitInterface::canSetRallyUnit.
+    virtual bool canSetRallyPoint(bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute a setRallyPoint command to a position
+    /// or (non-null) unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::setRallyPoint,
+    /// UnitInterface::canSetRallyPosition, UnitInterface::canSetRallyUnit.
+    virtual bool canSetRallyPoint(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
     /// Checks whether the unit is able to execute a setRallyPoint command to a position.
     ///
@@ -1538,6 +1579,32 @@ namespace BWAPI
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::unloadAll
     virtual bool canUnloadAllPosition(Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
+    /// Cheap checks for whether the unit is able to execute a rightClick command to a position
+    /// or unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::rightClick,
+    /// UnitInterface::canRightClickPosition, UnitInterface::canRightClickUnit.
+    virtual bool canRightClick(bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute a rightClick command to a position or (non-null)
+    /// unit.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::rightClick,
+    /// UnitInterface::canRightClickPosition, UnitInterface::canRightClickUnit.
+    virtual bool canRightClick(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+
+    /// Cheap checks for whether the unit is able to execute a rightClick command to a position
+    /// or unit, as part of a Unitset.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommandGrouped, UnitInterface::canRightClickUnit
+    virtual bool canRightClickGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
+
+    /// Checks whether the unit is able to execute a rightClick command to a position or (non-null)
+    /// unit, as part of a Unitset.
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommandGrouped, UnitInterface::canRightClickUnit
+    virtual bool canRightClickGrouped(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const = 0;
+
     /// Checks whether the unit is able to execute a rightClick command for a position.
     ///
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::rightClick
@@ -1630,6 +1697,13 @@ namespace BWAPI
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::useTech
     virtual bool canUseTechWithOrWithoutTarget(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
+    /// Checks whether the unit is able to execute a useTech command for a specified position or
+    /// unit (only specify nullptr if the TechType does not target another position/unit).
+    ///
+    /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::useTech,
+    /// UnitInterface::canUseTechWithoutTarget, UnitInterface::canUseTechUnit, UnitInterface::canUseTechPosition
+    virtual bool canUseTech(BWAPI::TechType tech, PositionOrUnit target = nullptr, bool checkCanTargetUnit = true, bool checkTargetsType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+
     /// Checks whether the unit is able to execute a useTech command without a target.
     ///
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::useTech
@@ -1655,7 +1729,7 @@ namespace BWAPI
     /// Checks whether the unit is able to execute a useTech command with a target position.
     ///
     /// @see Game::getLastError, UnitInterface::canIssueCommand, UnitInterface::useTech
-    virtual bool canUseTechPosition(Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
+    virtual bool canUseTechPosition(BWAPI::TechType tech, Position target, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const = 0;
 
     /// Cheap checks for whether the unit is able to execute a placeCOP command.
     ///

@@ -143,6 +143,10 @@ namespace BWAPI
       virtual bool canCommandGrouped(bool checkCommandibility = true) const override;
       virtual bool canTargetUnit(Unit targetUnit, bool checkCommandibility = true) const override;
 
+      virtual bool canAttack(bool checkCommandibility = true) const override;
+      virtual bool canAttack(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canAttackGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
+      virtual bool canAttackGrouped(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canAttackMove(bool checkCommandibility = true) const override;
       virtual bool canAttackMoveGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canAttackUnit(bool checkCommandibility = true) const override;
@@ -162,6 +166,8 @@ namespace BWAPI
       virtual bool canResearch(TechType type, bool checkCanIssueCommandType = true) const override;
       virtual bool canUpgrade(bool checkCommandibility = true) const override;
       virtual bool canUpgrade(UpgradeType type, bool checkCanIssueCommandType = true) const override;
+      virtual bool canSetRallyPoint(bool checkCommandibility = true) const override;
+      virtual bool canSetRallyPoint(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canSetRallyPosition(bool checkCommandibility = true) const override;
       virtual bool canSetRallyUnit(bool checkCommandibility = true) const override;
       virtual bool canSetRallyUnit(Unit targetUnit, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
@@ -196,6 +202,10 @@ namespace BWAPI
       virtual bool canUnloadAll(bool checkCommandibility = true) const override;
       virtual bool canUnloadAllPosition(bool checkCommandibility = true) const override;
       virtual bool canUnloadAllPosition(Position targDropPos, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canRightClick(bool checkCommandibility = true) const override;
+      virtual bool canRightClick(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canRightClickGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
+      virtual bool canRightClickGrouped(PositionOrUnit target, bool checkCanTargetUnit = true, bool checkCanIssueCommandType = true, bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canRightClickPosition(bool checkCommandibility = true) const override;
       virtual bool canRightClickPositionGrouped(bool checkCommandibilityGrouped = true, bool checkCommandibility = true) const override;
       virtual bool canRightClickUnit(bool checkCommandibility = true) const override;
@@ -213,11 +223,12 @@ namespace BWAPI
       virtual bool canCancelUpgrade(bool checkCommandibility = true) const override;
       virtual bool canUseTechWithOrWithoutTarget(bool checkCommandibility = true) const override;
       virtual bool canUseTechWithOrWithoutTarget(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canUseTech(BWAPI::TechType tech, PositionOrUnit target = nullptr, bool checkCanTargetUnit = true, bool checkTargetsType = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechWithoutTarget(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechUnit(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechUnit(BWAPI::TechType tech, Unit targetUnit, bool checkCanTargetUnit = true, bool checkTargetsUnits = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canUseTechPosition(BWAPI::TechType tech, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
-      virtual bool canUseTechPosition(Position target, BWAPI::TechType tech, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
+      virtual bool canUseTechPosition(BWAPI::TechType tech, Position target, bool checkTargetsPositions = true, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
       virtual bool canPlaceCOP(bool checkCommandibility = true) const override;
       virtual bool canPlaceCOP(TilePosition target, bool checkCanIssueCommandType = true, bool checkCommandibility = true) const override;
 
