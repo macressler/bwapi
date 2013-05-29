@@ -23,6 +23,7 @@ This page contains a list of works that BWAPI has been used for in academia. (Cu
   * [http://users.soe.ucsc.edu/~bweber/pubs/weber-acs2011-final.pdf Building Human-Level AI for Real-Time Strategy Games]
   * [http://www.facom.ufu.br/posgrad/wd2011/submissions/wdcc2011_submission_6.pdf Busca Estocástica Baseada em Planejamento para Maximizar Metas em Jogos de RTS]
   * [http://users.soe.ucsc.edu/~%20bweber/pubs/weber_goalformulation.pdf Case-Based Goal Formulation]
+  * [http://breakk.no-ip.org/files/publications/scyr2013.pdf Case-Based Reasoning for Army Compositions in Real-Time Strategy Games]
   * [https://dspace.ist.utl.pt/bitstream/2295/1241178/1/Dissertacao.pdf Decentralized and Emergent NPC Coordination using Behavior Trees]
   * [http://skemman.is/is/stream/get/1946/9882/22934/1/Final_Report.pdf Developing Game AI for the Real-Time Strategy Game Starcraft]
   * [http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6120766&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6120766 Emergent Tactical Formation Using Genetic Algorithm in Real-Time Strategy Games]
