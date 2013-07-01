@@ -1,7 +1,6 @@
 #sidebar TableOfContents
-  <g:plusone size="medium"></g:plusone>
 
-  * [BWAPIManual ↑ Top]
+  * [TableOfContents ↑ Top]
   * [Academics]
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
@@ -69,3 +68,5 @@
     * [UnitTypes]
     * [UpgradeTypes]
     * [WeaponTypes]
+
+  <g:plusone size="medium"></g:plusone>
