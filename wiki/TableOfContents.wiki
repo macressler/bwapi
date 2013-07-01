@@ -1,3 +1,5 @@
+<g:plusone size="medium"></g:plusone>
+
   * [BWAPIManual ↑ Top]
   * [Academics]
   * [BWAPIOverview BWAPI Overview]
