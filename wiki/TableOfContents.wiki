@@ -1,6 +1,4 @@
 #labels Featured
-#sidebar TableOfContents
-
   * [TableOfContents ↑ Top]
   * [Academics]
   * [BWAPIOverview BWAPI Overview]
