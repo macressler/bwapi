@@ -1,3 +1,5 @@
+  <g:plusone size="medium"></g:plusone>
+
   * [BWAPIManual ↑ Top]
   * [Academics]
   * [BWAPIOverview BWAPI Overview]
@@ -9,7 +11,7 @@
   * [Projects Projects Using BWAPI]
   * [StarcraftGuide Starcraft Guide]
   * [troubleshoot Troubleshooting]
-  * Tutorials
+  * *Tutorials*
     * [UsingBWAPI Using BWAPI]
     * [Debugging]
     * [MenuAutomation Menu Automation]
@@ -18,10 +20,10 @@
     * [speed Increasing Starcraft's Performance/Speed]
     * [AutoHotkeyRestart Automating Game Restarts in AI vs AI]
     * [TournamentModule Writing a Tournament Module]
-  * Development
+  * *Development*
     * [BWAPIDevelopment Developing BWAPI]
     * [CodingStandard Coding Standard]
-  * API
+  * *API*
     * [AIModule]
     * [Bullet]
     * [BulletType]
@@ -48,7 +50,7 @@
     * [UnitType]
     * [UpgradeType]
     * [WeaponType]
-  * Enumerations
+  * *Enumerations*
     * [BulletTypes]
     * [Color#Colors Colors]
     * [Error#Errors Errors]
@@ -66,5 +68,3 @@
     * [UnitTypes]
     * [UpgradeTypes]
     * [WeaponTypes]
-
-<g:plusone size="medium"></g:plusone>
