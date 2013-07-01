@@ -5,6 +5,9 @@ This page contains a list of works that BWAPI has been used for in academia. (Cu
 
 
 = Papers/Dissertations/Reports/Projects/etc =
+  * [http://emotion.inrialpes.fr/people/synnaeve/index_files/OpeningPrediction_proceedings.pdf A Bayesian Model for Opening Prediction in RTS Games with Application to StarCraft]
+  * [http://emotion.inrialpes.fr/people/synnaeve/index_files/AIIDE_11_RC1.pdf A Bayesian Model for Plan Recognition in RTS Games applied to StarCraft]
+  * [http://emotion.inrialpes.fr/people/synnaeve/index_files/BayesianUnit.pdf A Bayesian Model for RTS Units Control applied to StarCraft]
   * [http://hal.archives-ouvertes.fr/hal-00752868/ A Bayesian Tactician]
   * [http://www.bth.se/fou/cuppsats.nsf/all/92ff9de15e23624dc1257ab4005c8bf8/$file/BTH2012Magnusson.pdf A Communicating and Controllable Teammate Bot for RTS Games]
   * [http://dl.acm.org/citation.cfm?id=2188808 A Data-Driven Approach for Resource Gathering in Real-Time Strategy Games]
@@ -45,6 +48,7 @@ This page contains a list of works that BWAPI has been used for in academia. (Cu
   * [http://starcraftnn.googlecode.com/git-history/46cfca77d4ea6781aa07cb0686932825cdc1347e/report/report.pdf Neural Networks for Small-Scale Combat Optimization in Real-Time Strategy Games]
   * [http://dl.acm.org/citation.cfm?id=2371324 Neuroevolution Based Multi-Agent System for Micromanagement in Real-Time Strategy Games]
   * [http://urn.kb.se/resolve?urn=urn:nbn:no:ntnu:diva-18449 Opponent Modeling and Strategic Reasoning in the Real-time Strategy Game Starcraft]
+  * [http://emotion.inrialpes.fr/people/synnaeve/index_files/gameaiconf.pdf Optimizing Micro-Management in RTS Games]
   * [http://www.montefiore.ulg.ac.be/~fsafadi/paper.pdf Organization in AI design for real-time strategy games]
   * [http://www.bth.se/fou/forskinfo.nsf/alfs/123430edd41f2a41c1257acb00388ce0 Potential-Field Based navigation in in StarCraft]
   * [http://users.soe.ucsc.edu/~%20bweber/pubs/weber_cig2010.pdf Reactive Planning Idioms for Multi-Scale Game AI]
@@ -53,6 +57,7 @@ This page contains a list of works that BWAPI has been used for in academia. (Cu
   * [http://www.eshukan.com/upfiles/jwz/20120319114648411.pdf Research and Application of Bounded Rationality Model Used in Game Intelligent Decision-Making]
   * [http://geneura.ugr.es/cig2012/papers/paper103.pdf SCAIL: An integrated Starcraft AI System]
   * [http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6119010 Spatial Distribution through Swarm Behavior on a Military Group in the Starcraft Video Game]
+  * [http://emotion.inrialpes.fr/people/synnaeve/index_files/SpecialTactics.pdf Special Tactics: a Bayesian Approach to Tactical Decision-making]
   * [http://pekalicious.com/starplanner/report/peikidis.pdf StarPlanner: Demonstrating the use of planning in a video game]
   * [http://elrond.informatik.tu-freiberg.de/papers/WorldComp2012/ICA4503.pdf Stochastic Search and Planning for Maximization of Resource Production in RTS Games]
   * [http://igitur-archive.library.uu.nl/student-theses/2012-0621-200638/UUindex.html Strategic reasoning in complex domains: A comparative survey on scientific AI techniques to improve real-time strategy game AI]
