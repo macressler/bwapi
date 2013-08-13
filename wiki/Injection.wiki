@@ -20,17 +20,17 @@
   Chaoslauncher is the preferred loading tool because of the ability to use its [http://wiki.teamliquid.net/starcraft/APMAlert APM Alert] and [http://wiki.teamliquid.net/starcraft/W-Mode W-MODE] plugins.
 
   How to:
-    * Download and unzip ChaosLauncher
-    * Copy the BWAPI files from the {{{BWAPI\ChaosLauncher\}}} folder to your ChaosLauncher folder.
+    * Download and install BWAPI
+    * Navigate to the `BWAPI/ChaosLauncher/` directory
     * Run ChaosLauncher
-    * Enable the BWAPI injector with any other plugins
+    * Enable the BWAPI injector and click _Start_
 
   == [http://sourceforge.net/projects/mpqdraft/ MPQDraft] ==
   MPQDraft may be preferred by some users, but is the least used among AI and BWAPI developers.
 
   How to:
-    * Download and Unzip MPQDraft
-    * Copy the BWAPI files from the {{{BWAPI\MPQDraft\}}} folder to your MPQDraft folder.
+    * Download and install BWAPI
+    * Navigate to the `BWAPI/MPQDraft/` directory
     * Run MPQDraft
     * Follow one of the two processes listed below:
 
@@ -51,4 +51,4 @@
   A DLL injector may be preferred to load other hacks such as [http://www.starcraftresolutionhack.kilu.de/ McBanes's Resolution Hack].
 
   How to:
-    * Follow the instructions provided by the DLL Injector using BWAPI.dll
+    * Follow the instructions provided by the DLL Injector using BWAPI.dll _(found in `Starcraft/bwapi-data/`)
