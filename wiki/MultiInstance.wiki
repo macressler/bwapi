@@ -6,11 +6,11 @@
 
 = Starcraft =
 
-After installing BWAPI, navigate to  _{{{\Starcraft\bwapi-data\}}}_ and run _{{{Multiple Instance Hack.bat}}}_.
+After installing BWAPI, navigate to  _`Starcraft/bwapi-data/`_ and run _`Multiple Instance Hack.bat`_.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_00.gif
 
-The batch file will proceed to run an included patch file and create a new executable called _{{{StarCraft_MultiInstance.exe}}}_ in your Starcraft folder.
+The batch file will proceed to run an included patch file and create a new executable called _`StarCraft_MultiInstance.exe`_ in your Starcraft folder.
 
 _*NOTE: We intend to automate this process in the future.*_
 
