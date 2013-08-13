@@ -6,28 +6,26 @@
 
 = Starcraft =
 
-    _*Note*: It is generally not possible to run Starcraft as multiple instances without a hack, thus we have created a patch that will allow Starcraft to have multiple instances of itself and have a unique description in Chaos Launcher._
-
-After copying the contents of _{{{starcraft-folder\}}}_ to your Starcraft folder, go to  _{{{\Starcraft\bwapi-data\}}}_ and run _{{{Multiple Instance Hack.bat}}}_.
+After installing BWAPI, navigate to  _{{{\Starcraft\bwapi-data\}}}_ and run _{{{Multiple Instance Hack.bat}}}_.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_00.gif
 
-The batch file will proceed to run an included patch file and create a new executable called _{{{StarCraft_MultiInstance.exe}}}_.
+The batch file will proceed to run an included patch file and create a new executable called _{{{StarCraft_MultiInstance.exe}}}_ in your Starcraft folder.
+
+_*NOTE: We intend to automate this process in the future.*_
 
 
 = Chaos Launcher =
 
-    _*Note*: It is also not possible for the default Chaos Launcher to support the launching of multiple instances, thus we included a hacked version that does._
-
-After copying the contents of _{{{chaos-launcher-folder\}}}_ to your Chaos Launcher folder, you should run _{{{Chaoslauncher - MultiInstance.exe}}}_.
+After installing BWAPI, navigate to the _`BWAPI/Chaoslauncher`_ directory and run _`Chaoslauncher - MultiInstance.exe`_.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_01.gif
 
-There is a drop-down menu that allows you to select the version you want to use. Click on it and select _{{{Starcraft Multi-Instance}}}_.
+There is a drop-down menu that allows you to select the version you want to use. Click on it and select _`Starcraft Multi-Instance`_.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_02.gif
 
-Select _{{{BWAPI Injector}}}_ and any other plugins you want to use. _{{{W-MODE}}}_ is also compatible and recommended with multiple instances.
+Select _`BWAPI Injector`_ and any other plugins you wish to use.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_03.gif
 
@@ -38,27 +36,24 @@ Some plugins will be greyed out. Don't worry, this is normal behaviour. There is
 
 = BWAPI =
 
-To set up BWAPI for multiple instances, you must configure the AI path for each instance. Browse to _{{{Starcraft\bwapi-data\}}}_ and open _{{{bwapi.ini}}}_.
+To set up BWAPI for multiple instances, you must configure the AI path for each instance. Browse to _`Starcraft/bwapi-data/`_ and open _`bwapi.ini`_.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_05.gif
 
-Now change the entries in _{{{ai}}}_ accordingly to load your AI modules.
+Now change the _`ai`_ entry to contain comma-separated paths to the AI modules you wish to use.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_06.gif
 
-To specify multiple ai dll's, add the path relative to the StarCraft directory to the dll in a comma separated list.
+Each comma-separated entry will be loaded for their respective instance (first instance loads the first entry, etc). If there are more instances than entries, then the last entry is used for all subsequent instances.
 
-You can also specify a revision for older AI binaries provided that revision's BWAPI.dll is copied to the _{{{bwapi-data\revisions\}}}_ folder as _{{{#.dll}}}_ (where # is the revision number) and is revision 2753 or newer._
 
 = Networking =
 
-Copy _{{{Starcraft\SNP_DirectIP.snp}}}_ to your Starcraft folder.
+After installing BWAPI, a new network mode called *Local PC* should now be available after choosing Multiplayer.
 
   http://bwapi.googlecode.com/svn/wiki/multi_tut_07.gif
 
-A new network mode called *Local PC* should now be available after choosing Multiplayer. 
-
-    _*Note*: *This network mode will only appear when BWAPI has been [Injection injected]* and will allow you to play matches between multiple instances. For network mode support, visit the [http://bwdi.googlecode.com BWDI project]._
+    _*Note*: *This network mode will only appear when BWAPI has been [Injection injected]* and will allow you to play matches between multiple instances.
 
 
 = Conclusion =
@@ -66,6 +61,5 @@ A new network mode called *Local PC* should now be available after choosing Mult
 If you run into problems, please don't hesitate to do one of the following:
 
   * Visit the [http://webchat.quakenet.org/?channels=BWAPI IRC channel]
-  * Post on the [http://groups.google.com/group/bwapi BWAPI group]
   * Post on the [http://www.broodwarai.com/forums/index.php?showforum=46 BroodwarAi forum]
   * Create an [http://code.google.com/p/bwapi/issues/list issue]
