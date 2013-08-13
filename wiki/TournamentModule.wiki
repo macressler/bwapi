@@ -10,9 +10,9 @@
   * Can restrict AI modules from making some specific calls, either partially or completely.
   * Can filter calls made or replace the data as the call is being made.
   * Can enforce flags or command optimization on game start.
-  * Runs all the callbacks that an AI module can and has access to all features of the Broodwar API.
+  * Runs all the callbacks that an AI module can and has access to all features of the Broodwar API (including drawing and screen movement).
   * Ability to retrieve the time an AI module spent in a callback by using [Game#getLastEventTime Game::getLastEventTime].
-  * Reduces the amount of spam ("BWAPI r#### using...") by allowing only one BWAPI host to broadcast tournament information.
+  * Reduces the amount of spam ("BWAPI r#### using...") by allowing only one BWAPI client to broadcast tournament information.
 
 = Configuration =
   Simply compile the tournament module as you would an AI module and in the configuration under {{{[ai]}}}, add {{{tournament=}}} and have it specify the location of your tournament module. An example configuration is below.
@@ -30,7 +30,7 @@ tournament = bwapi-data\AI\MyTournamentModule.dll
   In addition to the normal AI callbacks, the tournament module has its own unique callbacks not available to an AI module.
 
   == onAction ==
-  <code language="c++">bool onAction(int actionType, void *parameter = NULL);</code>
+  <code language="c++">bool onAction(BWAPI::Tournament::ActionID actionType, void *parameter = NULL);</code>
 
   Using an enumeration for actionType, and the parameter for that action (casted to a pointer for the appropriate parameter if a parameter exists, or ignored if none exist for that enum member), you can allow AI commands by returning {{{true}}}, or have BWAPI ignore them by returning {{{false}}}.
  
@@ -39,12 +39,9 @@ tournament = bwapi-data\AI\MyTournamentModule.dll
     enum ActionID
     {
       EnableFlag,
-      ChangeRace,
-      StartGame,
       PauseGame,
       ResumeGame,
       LeaveGame,
-      RestartGame,
       SetLocalSpeed,
       SetTextSize,
       SetLatCom,
