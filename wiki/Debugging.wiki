@@ -8,7 +8,7 @@
 
   Then, from the list of processes, select Starcraft and click `Attach`.
   
-  http://bwapi.googlecode.com/svn/wiki/debug1.gif
+  http://bwapi.googlecode.com/svn/wiki/debug2.gif
   
   Start a game as you would normally. Keep in mind that you should compile with debug information present in order to debug your module properly.
 
