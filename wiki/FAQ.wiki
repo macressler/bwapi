@@ -30,7 +30,7 @@ This page contains answers to frequent questions.
     * Prevents potential cheating (unable to read memory from another process)
 
 = Why use Visual Studio? =
-  The BWAPI uses Visual C++ for its friendly interface and powerful debugger. Users that are new to BWAPI or C++ can simply download the Integrated Developer Environment (IDE), install BWAPI, open the project, and click "compile". It is very easy to use and the only drawback is that it is not up-to-date with the new C++ language standard.
+  The BWAPI uses Visual C++ for its friendly interface and powerful debugger. Users that are new to BWAPI or C++ can simply download the Integrated Developer Environment (IDE), install BWAPI, open the project, and click "Build". It is very easy to use and the only drawback is that it is not up-to-date with the new C++ language standard.
 
 = Can I use another compiler? =
   You can only use another compiler for a Client AI. Compiling AI DLL Modules to be loaded by BWAPI directly, or even BWAPI itself can only result in incompatibilities with modules compiled in Visual C++. This is because in the C++ standard, virtual functions are *implementation defined*.
