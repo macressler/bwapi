@@ -37,5 +37,4 @@ Try to follow the [BWAPI4CodingStandard coding standard] and make sure BWAPI sti
   # Run Doxygen with `Doxyfile` found in the `/bwapi/include` directory
   # Compile the installer with Inno Script Studio
   # Rename and upload the compiled executable found in `trunk/Installer/Output` and mark it as featured
-  # Update Project [http://code.google.com/p/bwapi/admin Home] page with exciting new information.
   # Tell everyone!
