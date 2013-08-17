@@ -6,6 +6,7 @@
   * [Commands]
   * [Competitions]
   * [contact Contact Information]
+  * Documentation (coming soon)
   * [FAQ]
   * [Projects Projects Using BWAPI]
   * [StarcraftGuide Starcraft Guide]
@@ -22,7 +23,6 @@
   * *Development*
     * [BWAPIDevelopment Developing BWAPI]
     * [CodingStandard Coding Standard]
-    * Documentation (coming soon)
     * [OldDocumentation Pre-BWAPI4 Documentation]
 
   <g:plusone size="medium"></g:plusone>
