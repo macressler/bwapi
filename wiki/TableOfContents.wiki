@@ -22,6 +22,7 @@
   * *Development*
     * [BWAPIDevelopment Developing BWAPI]
     * [CodingStandard Coding Standard]
+  * Documentation (coming soon)
   * [OldDocumentation Pre-BWAPI4 Documentation]
 
   <g:plusone size="medium"></g:plusone>
