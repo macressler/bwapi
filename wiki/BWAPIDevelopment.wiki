@@ -30,8 +30,6 @@ Try to follow the [BWAPI4CodingStandard coding standard] and make sure BWAPI sti
   * [http://www.artmoney.ru/ ArtMoney]
 
 == How To Create a New Release of BWAPI ==
-
-=== Release Steps ===
   # Check out BWAPI
   # Update the `ChangeLog` file with info from the [Changes] page.
   # Update the `README` file so it has the name of the new release at the top of the file.
