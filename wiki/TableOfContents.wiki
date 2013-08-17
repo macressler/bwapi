@@ -22,7 +22,7 @@
     * [TournamentModule Writing a Tournament Module]
   * *Development*
     * [BWAPIDevelopment Developing BWAPI]
-    * [CodingStandard Coding Standard]
+    * [BWAPI4CodingStandard Coding Standard]
     * [OldDocumentation Pre-BWAPI4 Documentation]
 
   <g:plusone size="medium"></g:plusone>
