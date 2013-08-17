@@ -3,7 +3,7 @@
 While we have made a lot of progress on BWAPI, there is still plenty of things which need to be properly tested and improved. If you are interested in developing the BWAPI framework, please don't hesitate to [contact contact us].
 
 
-We are primarily using Visual Studio 2008 Express Edition. You can download [http://www.microsoft.com/express/download/#webInstall Visual Studio 2008 Express Edition from Microsoft] for free and use it for an unlimited time.
+We are using [http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express Visual Studio 2010 Express Edition] to develop BWAPI. It is completely free software.
 
 == You don't need to know how to code to get involved! ==
 Aside from writing code, participation can include any of the following:
@@ -11,22 +11,20 @@ Aside from writing code, participation can include any of the following:
   * Providing feedback about commits, bugs, and anything else by testing the HEAD revision.
   * Organizing the code, making it easier to read, and adding comments.
   * Fixing some small bugs or including small patches/fixes to the code.
-  * Improving, expanding, and/or clarifying the user documentation (wiki).
+  * Improving, expanding, and/or clarifying the user documentation found in header files and creating code samples.
   * Manage issues, recruit project members, and spread the word.
 
 == How to Start Working on BWAPI ==
 
-_Note: Only perform steps 3 and 4 if you want to use Chaos Launcher as a loader. BWAPI will work with any other basic hack loader as well as MPQDraft._
+  # Obtain an SVN Program. Google has its own instructions for getting an SVN program, but we use [http://tortoisesvn.tigris.org/ TortoiseSVN]
+  # Follow the instructions on the [http://code.google.com/p/bwapi/source/checkout Source] tab for retrieving the source code
+  # Move the contents of `starcraft-folder` from the `Release_Binary` directory to your Starcraft directory, so that BWAPI.dll is copied automatically when the project is built.
+  # Download [http://www.stack.nl/~dimitri/doxygen/download.html#srcbin Doxygen] in order to compile the BWAPI documentation. The software is freeware.
+  # Download [http://www.jrsoftware.org/isdl.php Inno Setup] and [https://www.kymoto.org/products/inno-script-studio/downloads Inno Script Studio] in order to compile the BWAPI installer. These are freeware.
 
-  # Obtain an SVN Program. Google has its own instructions for getting an SVN program, but we use TortoiseSVN, which can be found here: http://tortoisesvn.tigris.org/
-  # Follow the instructions on the [http://code.google.com/p/bwapi/source/checkout Source] tab for retrieving the source code.
-  # Download [http://www.teamliquid.net/forum/viewmessage.php?topic_id=65196 ChaosLauncher]
-  # (Optional) Create a Windows Environment variable called ChaosDir with a value pointing to the Chaos Launcher directory. For instructions on how to create a windows environment variable, read this: http://support.microsoft.com/kb/310519
-  # Move the contents of "starcraft-folder" and "chaos-launcher-folder" from the source code to your Starcraft and Chaos Launcher Directories.
-  # If you are a project member you can submit your code modifications. Following the [http://code.google.com/p/bwapi/wiki/CodingStandard coding standard] and make sure BWAPI still compiles and runs before you submit your changes.
+Try to follow the [BWAPI4CodingStandard coding standard] and make sure BWAPI still compiles and runs before you submit any changes. Also check to make sure the TestAIModule passes all test cases.
 
 == Useful Tools for finding new offsets/hooks ==
-
   * [http://www.ollydbg.de/ Ollydbg]
   * [http://www.hex-rays.com/idapro/ IDA Pro]
   * [http://www.artmoney.ru/ ArtMoney]
@@ -35,19 +33,11 @@ _Note: Only perform steps 3 and 4 if you want to use Chaos Launcher as a loader.
 
 === Release Steps ===
   # Check out BWAPI
-  # Update the {{{ChangeLog}}} file with info from the [Changes] page.
-  # Update the {{{README}}} file so it has the name of the new release at the top of the file.
+  # Update the `ChangeLog` file with info from the [Changes] page.
+  # Update the `README` file so it has the name of the new release at the top of the file.
   # Compile BWAPI as Release mode and Debug mode.
-  # Check out and compile [http://bwta.googlecode.com BWTA] using the latest BWAPI header files as Release mode and Debug mode.
-  # Copy BWTA libs and header files into {{{Release_Binary/libs/}}} and {{{Release_Binary/include/}}}
-  # [http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-export.html Export] the {{{Release_Binary}}} SVN folder to some other folder like {{{BWAPI_Beta_X.Y.Z}}} to remove the {{{.svn}}} folders.
-  # Compress the folder to zip archive.
-  # Upload to the [http://code.google.com/p/bwapi/downloads/list Downloads] page and mark as Featured.
+  # Run Doxygen with `Doxyfile` found in the `/bwapi/include` directory
+  # Compile the installer with Inno Script Studio
+  # Rename and upload the compiled executable found in `trunk/Installer/Output` and mark it as featured
   # Update Project [http://code.google.com/p/bwapi/admin Home] page with exciting new information.
   # Tell everyone!
-
-=== Post-Release Steps ===
-  # Copy the lastest release binary to {{{Release_Binary/Starcraft/bwapi-data/revisions}}}.
-  # Rename the binary to the revision number.
-  # Update {{{info.txt}}} with the new revision -> version information.
-  # Commit all the changes made in any of the Release and Post-Release steps.
