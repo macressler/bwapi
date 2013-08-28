@@ -1,5 +1,5 @@
 #labels Featured
-== Changes from BWAPI 4.0.0 Beta (r4350) to recent (r4449) ==
+== Changes from BWAPI 4.0.0 Beta (r4350) to BWAPI 4.0.1 Beta (r4453) ==
 Changes:
  * All interface pointers are now hidden. Instead of `Unit*` you will now just use `Unit`. This will require a "Replace in Files" operation to convert existing sources.
  * The installer now prompts the user to locate the Starcraft installation directory if it is not found.
