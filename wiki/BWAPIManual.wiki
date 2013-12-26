@@ -1,1 +1,1 @@
-This page has been moved [https://code.google.com/p/bwapi/wiki/OldDocumentation here].
+The older documentation has been moved to [https://code.google.com/p/bwapi/wiki/OldDocumentation here].
