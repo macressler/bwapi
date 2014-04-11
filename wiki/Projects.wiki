@@ -7,7 +7,7 @@ This page contains links to other projects that make use of BWAPI.
 = AI Modules =
   * [http://code.google.com/p/skynetbot/ Skynet]
   * [http://code.google.com/p/ualbertabot/ UAlbertaBot]
-  * [http://bwapi.krasi0.com/viewtopic.php?f=5&t=6 krasi0]
+  * [http://www.broodwarai.com/forums/viewtopic.php?f=9&t=1025 krasi0]
   * [http://code.google.com/p/bthai/ BTHAI]
   * [http://nova.wolfwork.com/ Nova]
   * [https://bitbucket.org/0x7CFE/swarm/ A Skynet zerg clone]
@@ -41,6 +41,7 @@ This page contains links to other projects that make use of BWAPI.
 
 = Wrappers =
   * JNIBWAPI: http://code.google.com/p/jnibwapi/ (Java)  
+  * CyBW: http://www.broodwarai.com/forums/viewtopic.php?f=9&t=1204 (Python)
   * Prologic: http://sourceforge.net/projects/prologic/ (Prolog)
 
 = Proxy Bots =
