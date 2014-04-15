@@ -3,7 +3,7 @@
   * [https://github.com/bwapi/bwapi/wiki/Academics Academics]
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
-  * [Commands]
+  * [https://github.com/bwapi/bwapi/wiki/Commands Commands]
   * [Competitions]
   * [contact Contact Information]
   * [http://bwapi.github.io/ BWAPI4 Documentation]
