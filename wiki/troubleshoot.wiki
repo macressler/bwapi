@@ -1,33 +1,4 @@
 #summary Troubleshooting for BWAPI
+#labels Deprecated
 
-This page helps solve common troubleshooting issues.
-
-<wiki:toc max_depth="2" />
-
-= Developer Errors =
-  == Fatal Error: C1047 ==
-  This is caused when compiling with an incompatible version of Visual C++. Using [http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express Visual C++ 2010 Express Edition] will solve the issue. See [http://msdn.microsoft.com/en-us/library/ms173554%28v=vs.80%29.aspx this article] for details.
-
-  If you wish to use a different compiler, then due to compatibility issues involved with public tournament submissions, it is strongly recommended that you refer to the tutorial on using other compilers for an AI module (_NOT YET WRITTEN_).
-
-= BWAPI Usage Errors =
-
-  == Error: This application has failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem. (14001) ==
-  If you only wish to run BWAPI in RELEASE mode, then simply ignore this error. All required RELEASE runtime files are included with the BWAPI installer.
-
-  If you wish to run the DEBUG version, then you must install [http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express Visual C++ 2010 Express Edition].
-
-
-= Chaoslauncher Usage Errors =
-
-  == Error: Injection failed. This is caused when BWAPI crashes before injecting completely. ==
-  _Note: The error code given after this message may be uninformative and/or unrelated._
-
-  This is possibly due to a feature in Windows Vista and its subsequent versions called "User Account Control"(UAC). As such, some Chaoslauncher features may be blocked if the UAC is activated. Other operating systems with similar User Account Control features could also be prone to this behavior.
-
-  === To disable the UAC in Windows Vista (_*at your own risk*_): ===
-    # Click the _*Start Menu*_ and select _*Control Panel*_.
-    # In _*Classic View*_, double-click the _*User Accounts*_ icon.
-    # Click the link labeled _*Turn User Account Control on or off*_.
-    # Make sure that the _*Use User Account Control (UAC) to help protect your computer*_ is *not* checked.
-    # Click _*OK*_ and restart your computer. After restarting, try launching Starcraft again through Chaoslauncher.
+This page has moved: https://github.com/bwapi/bwapi/wiki/Troubleshooting
