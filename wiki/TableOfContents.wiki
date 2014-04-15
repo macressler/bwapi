@@ -11,7 +11,7 @@
   * [https://github.com/bwapi/bwapi/wiki/FAQ FAQ]
   * [Projects Projects Using BWAPI]
   * [StarcraftGuide Starcraft Guide]
-  * [troubleshoot Troubleshooting]
+  * [https://github.com/bwapi/bwapi/wiki/Troubleshooting Troubleshooting]
   * *Tutorials*
     * [UsingBWAPI Using BWAPI]
     * [Debugging]
