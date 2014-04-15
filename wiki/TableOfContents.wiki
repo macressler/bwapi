@@ -8,7 +8,7 @@
   * [contact Contact Information]
   * [http://bwapi.github.io/ BWAPI4 Documentation]
   * [OldDocumentation BWAPI3 Documentation]
-  * [FAQ]
+  * [https://github.com/bwapi/bwapi/wiki/FAQ FAQ]
   * [Projects Projects Using BWAPI]
   * [StarcraftGuide Starcraft Guide]
   * [troubleshoot Troubleshooting]
