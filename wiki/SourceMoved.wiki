@@ -1,0 +1,1 @@
+The source code has moved: https://github.com/bwapi/bwapi/
