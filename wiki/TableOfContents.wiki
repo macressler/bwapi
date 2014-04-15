@@ -23,6 +23,6 @@
     * [TournamentModule Writing a Tournament Module]
   * *Development*
     * [BWAPIDevelopment Developing BWAPI]
-    * [BWAPI4CodingStandard Coding Standard]
+    * [https://github.com/bwapi/bwapi/wiki/Coding-Standard Coding Standard]
 
   <g:plusone size="medium"></g:plusone>
