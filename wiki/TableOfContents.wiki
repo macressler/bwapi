@@ -4,7 +4,7 @@
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
   * [https://github.com/bwapi/bwapi/wiki/Commands Commands]
-  * [Competitions]
+  * [https://github.com/bwapi/bwapi/wiki/Competitions Competitions]
   * [contact Contact Information]
   * [http://bwapi.github.io/ BWAPI4 Documentation]
   * [OldDocumentation BWAPI3 Documentation]
