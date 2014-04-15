@@ -1,5 +1,8 @@
 #summary Competitions held for BWAPI
-#labels Featured
+#labels Featured,Deprecated
+
+*Competitions are no longer tracked by BWAPI maintainers*
+
 
 This page contains a list of competitions using BWAPI.
 
