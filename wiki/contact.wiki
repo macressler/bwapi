@@ -1,9 +1,4 @@
 #summary How to contact BWAPI developers
+#labels Deprecated
 
-This page contains contact information for submitting or discussing issues, suggestions, comments, joining the project, and any other BWAPI topics.
-
-To contact us you simply have to do one of the following:
-
-  * Visit the [http://webchat.freenode.net/?channels=BWAPI IRC channel], which can be found on [http://freenode.net/irc_servers.shtml freenode]#BWAPI.
-  * Create an [http://code.google.com/p/bwapi/issues/list issue]
-  * Post on the [http://broodwarai.com/forums/ BWAPI forum]
+This page has moved: https://github.com/bwapi/bwapi/wiki/Contact
