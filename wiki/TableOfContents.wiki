@@ -1,12 +1,13 @@
 #labels Featured
   * [TableOfContents ↑ Top]
-  * [Academics]
+  * [https://github.com/bwapi/bwapi/wiki/Academics Academics]
   * [BWAPIOverview BWAPI Overview]
   * [Changes]
   * [Commands]
   * [Competitions]
   * [contact Contact Information]
-  * Documentation (coming soon)
+  * [http://bwapi.github.io/ BWAPI4 Documentation]
+  * [OldDocumentation BWAPI3 Documentation]
   * [FAQ]
   * [Projects Projects Using BWAPI]
   * [StarcraftGuide Starcraft Guide]
@@ -23,6 +24,5 @@
   * *Development*
     * [BWAPIDevelopment Developing BWAPI]
     * [BWAPI4CodingStandard Coding Standard]
-    * [OldDocumentation Pre-BWAPI4 Documentation]
 
   <g:plusone size="medium"></g:plusone>
