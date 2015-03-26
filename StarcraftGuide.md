@@ -1,0 +1,150 @@
+This page is a guide that contains advanced information about Starcraft Broodwar as a reference for bot developers. Please keep in mind that this article mostly covers advanced topics that are not commonly known anywhere else. More common topics should be covered elsewhere. If there is something you'd like to know, then ask Heinermann on the IRC.
+
+
+
+# Chance to Hit Guide #
+> ## Notes ##
+    * Hit chance only applies to ranged weapons. For advanced users, this guide only applies to the following weapon behaviours: "Fly & Follow Target", "Fly & Don't Follow Target", "Appear on Target Unit", and "Appear on Target Site".
+    * Splash units will still do splash damage to units that are missed unless that unit is burrowed.
+
+> ## Chance to Hit from Low Ground to High Ground ##
+> > The chance to hit from low ground to high ground is exactly 53.125%. This includes from low ground to very high ground.
+
+
+> ## Chance to Hit Unit on Doodad ##
+> > Example: Behind a tree.
+> > The chance to hit units on a doodad is exactly 53.125%. It is the same as if Doodads were higher ground.
+
+
+> ## Chance to Hit Unit on the Same Level ##
+> > The chance to hit a unit on equal grounds is exactly 99.609375%.
+
+
+> ## Chance to Hit Unit in Dark Swarm ##
+> > The chance to hit a unit inside of a [Dark Swarm](UnitTypes#Spell_Dark_Swarm.md) is 0%. Behaviour is the same as the others.
+
+# Unit Existence/Creation Guide #
+
+> ## When a unit is morphed, what happens to it? ##
+> > The unit's type value and stats change. The unit is technically the same. This includes [Zerg Drones](UnitTypes#Zerg_Drone.md) morphing into buildings(with the exception of the [Zerg Extractor](UnitTypes#Zerg_Extractor.md)), units morphing into other units, and buildings morphing into other buildings. A new unit is not created from this.
+
+
+> ## What happens when Zerglings and Scourges are made? ##
+> > When [Zerg Zerglings](UnitTypes#Zerg_Zergling.md) or [Zerg Scourges](UnitTypes#Zerg_Scourge.md) are morphed, the [Larva](UnitTypes#Zerg_Larva.md) becomes one, and the other is created.
+
+
+> ## What happens when a Command Center is infested? ##
+> > The same thing that happens when a unit is morphed.
+
+
+> ## What happens when building over a Vespene Geyser? ##
+> > The [Vespene Geyser](UnitTypes#Resource_Vespene_Geyser.md) becomes (morphs into) the building. When a [Zerg Extractor](UnitTypes#Zerg_Extractor.md) is placed, the [Zerg Drone](UnitTypes#Zerg_Drone.md) used to place it will be removed from the game. Cancelling the Extractor will create a new Drone which has full hit points.
+
+
+> ## What happens when I train a unit? ##
+> > The unit is created, even though it is not visible or finished completing. Units that are queued are not created until it begins being trained and is updating the progress bar.
+
+
+> ## Where do units go when inside of bunkers/transports? ##
+> > The unit is exactly where it was loaded. Even if you move a transport, the unit remains at the location it was loaded. It is merely hidden from view. Triggers will iterate through the transport's hold instead of detecting the unit directly. This also explains why moving [Terran Bunkers](UnitTypes#Terran_Bunker.md) in Use Map Settings will cause units to fire from where they were originally loaded.
+
+# Unit Behaviour Guide #
+
+> ## Why do units run away? ##
+> > Units will run away only if they are idle and attacked by an enemy unit that they can't attack back. This includes being damaged by the [Irradiate](TechTypes#Irradiate.md) ability. This list includes being attacked by undetected cloaked units, invincible units, undetected burrowed units, air units (when we have no air weapon), etc.
+
+
+> ## Why do units move to attack an enemy even when they are not in attack range? ##
+> > Units will move when an enemy enters their "target acquisition range", or "[Seek Range](UnitType#seekRange.md)" in BWAPI.
+
+
+> ## What are the differences between Stop and Hold Position? ##
+> > The difference will impact your unit's rate of fire. Hold position will make your unit's first shot faster, but consecutive shots will be slower, and Stop will make your unit's consecutive shots faster, but your first shot slower. When a unit is ordered to Hold Position, it runs a loop to acquire a target, perform the attack, and then stop moving, the additional command to stop moving requires additional frames, making your unit's consecutive attacks slower, but because Hold Position first acquires a target, its initial attack will be faster. Stop will order your unit to first stop doing everything immediately, which also stops it from acquiring a first target until it goes idle, increasing the time for a first attack, however it will not order your unit to stop moving after every attack, making consecutive attacks faster.
+
+
+> The above explanation may not represent the exact behaviour, but here is the short version:
+    * **Stop**: Stop -> Go to Idle -> Acquire Target -> Attack -> Attack -> ...
+    * **Hold Position**: Stop -> Acquire Target -> Attack -> Stop -> Attack -> Stop -> ...
+
+> ## Which Worker Gathers the fastest? ##
+> > All race's workers move the same. Their gathering speed is also the same.
+> > The only difference between the races is the size of their resource depot.
+> > Compare the sizes of [Terran Command Center](UnitTypes#Terran_Command_Center.md), [Protoss Nexus](UnitTypes#Protoss_Nexus.md), and [Zerg Hatchery](UnitTypes#Zerg_Hatchery.md)/[Lair](UnitTypes#Zerg_Lair.md)/[Hive](UnitTypes#Zerg_Hive.md).
+> > Only the size of their resource depot impacts resource gathering time, with the exception of the Command Center, whose addon script possibly causes a pause for workers returning on the left and right sides. Buildings also seem to favor the top left more than the bottom right, but the difference is unnoticable.
+
+
+> ## What is the regeneration rate of Protoss Shields? ##
+> > The regeneration rate of Protoss Shields is 7 points per frame internally. Visibly, this is 0.02734375 points per frame, or 0.651041666.. points per second on fastest speed.
+
+
+> ## What is the regeneration rate of Energy? ##
+> > The regeneration rate of Energy (used for abilities) is 8 points per frame internally. Like Shields, this is visibly 0.03125 points per frame, or 0.744047619.. points per second on fastest speed.
+
+
+> ## What is the regeneration rate of Zerg Hit Points? ##
+> > The regeneration rate of Zerg HP is 4 points per frame internally. Again, this is visibly 0.015625 points per frame, or 0.3720238095.. points per second on fastest speed.
+
+# Engine Guide #
+
+> ## What is Starcraft's frame rate? ##
+> > The "_frame rate_" in Starcraft refers to how often the game is being updated, **not** how often images are being drawn on the screen (technically, Starcraft has an infinite frame rate for graphics). This is more commonly known as the **logical frame rate**. Starcraft does not limit the logical frame rate by seconds, rather there is a timer that specifies the number of milliseconds Starcraft should wait before executing the next frame. To calculate the logical frame rate, we take 1000 (number of milliseconds in one second) and divide it by the value (in milliseconds) that the game waits for. These values depend on the game speed, and are as follows (rounded to nearest hundredth):
+      * **Slowest**: 1000ms/s ÷ 167ms/frame = 5.99 FPS
+      * **Slower**:  1000ms/s ÷ 111ms/frame = 9.01 FPS
+      * **Slow**:    1000ms/s ÷ 83ms/frame  = 12.05 FPS
+      * **Normal**:  1000ms/s ÷ 67ms/frame  = 14.93 FPS
+      * **Fast**:    1000ms/s ÷ 56ms/frame  = 17.86 FPS
+      * **Faster**:  1000ms/s ÷ 48ms/frame  = 20.83 FPS
+      * **Fastest**: 1000ms/s ÷ 42ms/frame  = 23.81 FPS
+
+
+> BWAPI's [setLocalSpeed](Game#setLocalSpeed.md) function has the ability to change this value.
+
+> ## What does Starcraft do when it is not executing the frame? ##
+> > Starcraft will draw graphics to the screen, poll for input, update the screen position, update minimap pings, etc.
+
+
+> ## What does frame skip do? ##
+> > By default, Starcraft only uses its frame skipping capability for watching a replay on x16 speed. What Starcraft's frame skip does is execute X number of game frames without leaving the game loop to draw graphics or poll for input. This allows Starcraft to exceed the maximum capacity it would have if it would normally try to run at infinite game frames per second.
+
+
+> BWAPI's [setFrameSkip](Game#setFrameSkip.md) function has the ability to change this value. By default, it is 1, meaning it updates the game 1 time before exiting its loop and drawing graphics.
+
+# Abilities and Bullets #
+> ## Which Cooldowns are activated? ##
+> > When a unit fires a weapon, both its air weapon and ground weapon cooldowns are set. It doesn't matter if the unit fires its air or ground weapon.
+
+
+> ## Why is the cooldown always different? ##
+> > Starcraft randomizes the cooldown.
+> > It takes the [base cooldown](WeaponTypes.md) and adds a value between (-1) and (+2).
+
+
+> ## What are the cooldowns on units that are unloaded from a transport? ##
+    * Goliaths/Tanks: 15 frames
+    * Reaver: 30 frames
+    * Spell cooldown: 30 frames
+    * Everything else: the default weapon cooldown
+
+> ## What is the cooldown on unloading from a transport? ##
+> > The cooldown for transports unloading units is 7 frames.
+
+
+> ## Why are some abilities and bullets considered units? (Dark Swarm, etc) ##
+> > Mostly because of laziness, deadlines, or similar reasons. Blizzard was able to easily implement these abilities and bullets without much effort. BWAPI considers them units only because Starcraft does. Some of them include:
+    * [Nuclear Missile](UnitTypes#Terran_Nuclear_Missile.md)
+    * [Protoss Scarab](UnitTypes#Protoss_Scarab.md)
+    * [Scanner Sweep](UnitTypes#Spell_Scanner_Sweep.md)
+    * [Dark Swarm](UnitTypes#Spell_Dark_Swarm.md)
+    * [Disruption Web](UnitTypes#Spell_Disruption_Web.md)
+
+
+> ## Can you tell me about Dark Swarm and Disruption Web? ##
+> > When a [Dark Swarm](UnitTypes#Spell_Dark_Swarm.md) or [Disruption Web](UnitTypes#Spell_Disruption_Web.md) is created, it is owned by the Neutral player (Player 12). They do not distinguish between players after that. They run on an already-implemented unit self-destruct timer, as well as set to invincible and unselectable, making the implementation easier.
+
+
+> ## Can you tell me about Scanner Sweep? ##
+> > When a [Scanner Sweep](UnitTypes#Spell_Scanner_Sweep.md) is created, it is owned by the player that cast it. The [Scanner Sweep](UnitTypes#Spell_Scanner_Sweep.md) is "invisible", similar to that of units inside a bunker, but retains its sight range, which is the same as a [Map Revealer](UnitTypes#Special_Map_Revealer.md) (a Use Map Settings unit that permanently reveals part of the map). The difference is [Scanner Sweep](UnitTypes#Spell_Scanner_Sweep.md) is run on an already-implemented self-destruct timer, and set to be a detector, making the implementation easier.
+
+
+> ## Can you tell me about Protoss Scarab and Nuclear Missile? ##
+> > For [Protoss Scarabs](UnitTypes#Protoss_Scarab.md), being in a hangar much like a [Protoss Carrier](UnitTypes#Protoss_Carrier.md) allows it to also use the same implementation, and also allows it to follow collision rules instead of directly travelling to the target, a function which bullets do not have. For the [Nuclear Missile](UnitTypes#Terran_Nuclear_Missile.md), it sports a unique behaviour of launching, disappearing, and re-appearing at a new location, a process which is already available for units. Both the [Protoss Scarab](UnitTypes#Protoss_Scarab.md) and [Nuclear Missile](UnitTypes#Terran_Nuclear_Missile.md) are given a weapon much like an [Infested Terran](UnitTypes#Zerg_Infested_Terran.md), [Zerg Scourge](UnitTypes#Zerg_Scourge.md), and [Vulture Spider Mine](UnitTypes#Terran_Vulture_Spider_Mine.md), exploding on impact. Both attacks can also be cancelled, causing them to die at their immediate location(a concept which units can easily execute).

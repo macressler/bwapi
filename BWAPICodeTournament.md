@@ -1,0 +1,110 @@
+**Note: This tournament has been completed. Because there were very few submissions, the actual "tournament" was dropped, although some games still took place. It was not for nothing though, since we have come up with some new ideas and features (you will probably like) which will be mentioned soon. We have also fixed a bug in the latest revision that caused a crash.**
+
+
+
+# Introduction #
+> The BWAPI Winter Code tournament is a fun intermission tournament that allows both open and closed source bots to get together in a wide variety of ways to test their capabilities and limitations.
+
+> The experimental tournament gives several other game types such as 2v2 and Use Map Settings a chance at becoming more popular for bots to play.
+
+# Participation/Registration #
+> Anyone can participate, as long as you are willing to run the Tournament module provided for this tournament.
+
+> Both open and closed source bots are welcome.
+> To participate, send an email to deathknight13579 (at) aim (dot) com with BWAPI in the subject, and the following information:
+    * Bot Name
+    * Bot Race (can be Random)
+    * The categories and/or maps that the bot will participate in (see below)
+    * Any suggestions for changes or additions to the categories and maps
+
+> Please send your bot binaries any time prior to the deadline date (but after BWAPI 3.7 is released).
+
+# Live Updates #
+> Those in the IRC will be updated as the tournament progresses.
+
+> Tournament games will (attempt to) be streamed live so that anyone can watch.
+
+> If the tournament requires more than a day, then it will continue the following day.
+
+# Rules #
+  * Blizzard Entertainment and those involved in the BWAPI Winter Code tournament will not be held liable for any damage caused.
+  * Starcraft: Broodwar 1.16.1 is required.
+  * The bot must be compatible with the latest release of BWAPI as of December 1st, 2011.
+  * Attempts to cheat or use exploits as classified by the [Tournament Guideline](TournamentGuideline.md) will result in disqualification.
+  * Lagging the game (timeout dialog goes to 0), crashing, or dropping out will result in a loss. **This does not include terrain analysis at the start of the match.**
+  * User chat will take place on the IRC.
+  * Rules will be changed, added, or removed at any given time. (Star this wiki page with a google account to be notified of changes)
+  * Players can save persistent data. This means you can record what other bots did in past games and use it to your advantage.
+
+# Dates #
+> Tournament will be held on **January 7th, and January 8th, 2012**. No time is specified, but a video stream will be available for viewing the progress, and the IRC will be active during those days (the time is very loose, so time zone does not really matter).
+
+> If you are submitting a bot binary, then it is preferred to do so _before_ January 4th, 2012. Submission deadlines will be lenient, so if you don't get it in on time, you can submit it before the 7th, but don't expect as much testing and feedback of the bot and its setup before the tournament date.
+
+# Hardware/Software #
+> Tournament will be run using Oracle VM VirtualBox, with machine resources split between them.
+
+  * **OS**: Windows XP Professional x64 edition, Service pack 2
+  * **Processor**: Intel Core i7 2620M @ 2.70 GHz
+  * **RAM**: 1GB
+  * **Disk Space**: 5GB (Free)
+
+# Categories, Maps, and Participants #
+> If a category does not have enough participants by January 4th, 2012, then it will be dropped.
+
+## 1v1 ##
+> ### Map Pool ###
+    * [Tau Cross](http://www.teamliquid.net/tlpd/korean/maps/3_Tau_Cross)
+    * [Into the Darkness 2](http://www.teamliquid.net/tlpd/korean/maps/54_Into_the_Darkness_2)
+    * [Heartbreak Ridge](http://www.teamliquid.net/tlpd/korean/maps/199_Heartbreak_Ridge)
+    * [Python](http://www.teamliquid.net/tlpd/korean/maps/147_Python)
+> ### Participants ###
+    * Aiur (Protoss) `[`Received`]`
+    * krasi0 (Terran) `[`Received`]`
+    * Cly (Zerg)
+    * Daggoth (Zerg)
+    * BTHAI (Terran & Protoss)
+    * Dreadbot (Protoss) `[`Received`]`
+    * BroodwarBotQ (Protoss)
+    * Skynet (Protoss) `[`Received`]`
+
+## ~~2v2~~ (Dropped) ##
+> ### ~~Map Pool~~ ###
+    * ~~[Circuit Breaker](http://www.teamliquid.net/tlpd/korean/maps/404_Circuit_Breaker)~~
+    * ~~[Python](http://www.teamliquid.net/tlpd/korean/maps/147_Python)~~
+    * ~~[Fighting Spirit](http://www.teamliquid.net/tlpd/korean/maps/237_Fighting_Spirit)~~
+    * ~~[Nostalgia](http://www.teamliquid.net/tlpd/korean/maps/42_Nostalgia)~~
+    * ~~[Zodiac](http://www.teamliquid.net/tlpd/korean/maps/157_Zodiac)~~
+> ### ~~Participants (Predetermined Pairs)~~ ###
+> ### ~~Participants (Random Pairs)~~ ###
+    * Cly (Zerg)
+
+## ~~Free For All~~ (Dropped) ##
+> ### ~~Map Pool~~ ###
+    * ~~(8) Big Game Hunters~~
+    * ~~Make some suggestions!~~
+> ### ~~Participants~~ ###
+    * Cly (Zerg)
+
+## ~~Adaptability Testing~~ (Dropped) ##
+> ### ~~Map Pool~~ ###
+    * ~~[Fastest Possible Map](http://bwapi.googlecode.com/svn/wiki/TournamentMaps/Fastest.scx)~~
+    * ~~[Maximum Clutter](http://bwapi.googlecode.com/svn/wiki/TournamentMaps/MaximumClutter.scx)~~
+    * ~~(8) Primeval Isles~~
+    * ~~Make some suggestions!~~
+> ### ~~Participants~~ ###
+    * Cly (Zerg)
+
+## ~~Use Map Settings~~ (Dropped) ##
+> ### ~~Super Wraith~~ ###
+> #### ~~Description~~ ####
+> > ~~Players control a single [Hero Wraith](UnitTypes#Hero_Tom_Kazansky.md). Initially, this wraith will repeatedly spawn a Scout that releases a barrage of missiles while the Wraith is being moved freely by the player. The Wraith must avoid touching enemy units or it will be destroyed. The objective is to survive until the time runs out, while getting as many kills as you can. Over time you will gain "level ups" such as increasing the Scouts' spawn, causing more missiles to appear.~~
+
+> #### ~~Download~~ ####
+> > [Download](http://bwapi.googlecode.com/svn/wiki/TournamentMaps/Super_Wraith.scx)
+
+
+> #### ~~Participants~~ ####
+    * Cly (Zerg)
+
+> ### Suggest Some More ###

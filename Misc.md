@@ -1,0 +1,84 @@
+# Map Coordinates #
+
+There are three different types of map coordinates:
+
+  * Positions are measured in pixels and are the highest resolution
+  * Walk Tiles - each walk tile is an 8x8 square of pixels. These are called walk tiles because walkability data is available at this resolution.
+  * Build Tiles - each build tile is a 4x4 square of walk tiles, or a 32x32 square of pixels. These are called build tiles because buildability data is available at this resolution, and correspond to the tiles seen in game. For example, a [Command Center](UnitTypes#Terran_Command_Center.md) occupies an area of 4x3 build tiles. Build tiles can be specified in [TilePosition](Misc#TilePosition.md) objects.
+
+# Position #
+
+Class header file: [BWAPI/Position.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Position.h#)
+
+Methods:
+  * int x()
+  * int y()
+  * double getDistance(Position position) - returns the actual distance to the given position
+  * int getApproxDistance(Position position) - uses Starcraft's approximated distance function, which is reasonably accurate yet avoids a sqrt operation and saves some CPU cycles.
+  * bool isValid() - returns true if the position is on the map
+  * void makeValid() - moves the position to the closest valid position
+  * bool hasPath(Position destination) - Checks if a ground path exists from this position to the given destination. See [Game::hasPath](Game#hasPath.md) for more info.
+
+## Special Positions ##
+  * Invalid
+  * None
+  * Unknown
+
+# TilePosition #
+
+Class header file: [BWAPI/TilePosition.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/TilePosition.h#)
+
+Methods:
+  * int x()
+  * int y()
+  * bool isValid() - returns true if the tile position is on the map
+  * void makeValid() - moves the tile position to the closest valid tile position
+  * bool hasPath(TilePosition destination) - Checks if a ground path exists from this tile position to the given destination. See [Game::hasPath](Game#hasPath.md) for more info.
+
+## Special TilePositions ##
+  * Invalid
+  * None
+  * Unknown
+
+# Latency::Enum #
+
+Header file: [BWAPI/Latency.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Latency.h#)
+
+The latency value is the number of frames it takes a unit command to take effect in the game after you issue it to a unit.
+
+Possible values:
+  * SinglePlayer: 2
+  * LanLow: 5
+  * LanMedium: 7
+  * LanHigh: 9
+  * BattlenetLow: 14
+  * BattlenetMedium: 19
+  * BattlenetHigh: 24
+
+# Flag::Enum #
+
+Header file: [BWAPI/Flag.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Flag.h#)
+
+Possible values:
+  * CompleteMapInformation - Enable to make all units accessible, not just visible units.
+  * UserInput - Enable to get information from the user (what units are selected, chat messages the user enters, etc)
+
+Used in [Game::enableFlag](Game#enableFlag.md) and [Game::isFlagEnabled](Game#isFlagEnabled.md).
+
+# CoordinateType::Enum #
+
+Header file: [BWAPI/CoordinateType.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/CoordinateType.h#)
+
+CoordinateTypes are used in drawing functions in the game class (i.e. [Game::drawBox](Game#drawBox.md)). Specify Map if you wish to draw a shape at a particular spot on the map, regardless of screen position. Specify Screen if you wish to draw something at a particular spot on the screen. Specify Mouse if you wish to draw something near the mouse.
+
+Possible values:
+  * Screen - (0,0) corresponds to the top left corner of the screen
+  * Map - (0,0) corresponds to the top left corner of the map
+  * Mouse - (0,0) corresponds to the tip of the mouse
+
+# Constants #
+
+Header file: [BWAPI/Constants.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Constants.h#)
+
+  * TILE\_SIZE = 32
+> > Used for converting between [TilePosition](#TilePosition.md) coordinates and [Position](#Position.md) coordinates.

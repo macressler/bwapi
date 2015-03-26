@@ -1,0 +1,1 @@
+The older documentation has been moved to [here](https://code.google.com/p/bwapi/wiki/OldDocumentation).

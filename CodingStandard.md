@@ -1,0 +1,277 @@
+## BWAPI Coding Standard ##
+Code standards: Some people love them and some people hate them. When preparing an API for public consumption having a consistent style of code and a clean interface become even more important. Yada Yada, blah blah. :)
+
+Before I jump into the standard I want to say this here: **Remember we are in this together.** The code standard should exist to help us work together; not to make it more difficult. This document can always be amended as needed.
+
+### Indentation, Tabs, and Spaces ###
+  1. Line width is 110 you can find trick how to set a column line at 110 and comment reflower to work the way you want here: http://code.google.com/p/bwapi/wiki/vsOptimisation
+  1. Do not use tabs, use 2 spaces for indentation. Some good reasons for this are: code viewed in other editors will align correctly and code pasted online will align correctly. In VS2005 you can set it to use 'spaces for tabs' in Tools->Options->TextEditor->C++->Tabs
+  1. Always indent each scope level.
+  1. Indent switch statements as follows:
+```
+switch (unitType)
+{
+  case BW::UnitType::Protoss_Probe:
+  {
+    // Probe stuff
+  } break;
+  case BW::UnitType::Terran_SCV:
+  {
+    // SCV stuff
+  } break;
+  default:
+  {
+    // All default stuff
+  }
+}
+```
+  1. Switches with similar command of same type shuld have one-line statement
+  1. Don't put parens() next to keywords, put a space between. Do put parens next to function names. Do not use parens in return statements when it's not neccessary. Do not put spaces directly inside of parens. Examples:
+```
+  if (condition && condition)
+  {
+  }
+
+  while (condition < condition)
+  {
+  }
+
+  strcpy(s, s1);
+
+  return 1;
+```
+### Formatting ###
+  1. Use ANSI style braces, not K&R style. It is preferred (not required) to use braces for all branching statements (if/for/while/do/case), even if they are single line, to avoid a large variety of common mistakes. For example:
+```
+
+/// Bad
+if (playerIsInGame) {
+  MessagePlayer("Hi!");
+}
+
+/// Good. Use this for single-line statements
+if (playerIsInGame)
+  MessagePlayer("Hi!");
+
+/// Good. Use this for multi-line statements
+if (playerIsInGame)
+{
+  MessagePlayer("Hi! Prepare to die!");
+  AssasinatePlayer();
+}
+```
+  1. In general try to have as few parameters as possible into functions and keep logical statements as short and simple as possible. However, iff any branching statements or paramater lists are complex or large, it is better to format them on multiple lines. For example:
+```
+// Bad
+if ( unitPosition.m_x < basePerimeter.GetLeftEdge() && unitPosition.m_x > basePerimeter.GetRightEdge() && unitPosition.m_y < basePerimeter.GetTopEdge() && unitPosition.m_y > basePerimeter.GetBottomEdge() )
+{
+  UnitHasBreachePerimeter(unitPosition);
+}
+
+// Good
+if (
+     unitPosition.m_x < basePerimeter.GetLeftEdge() && 
+     unitPosition.m_x > basePerimeter.GetRightEdge() && 
+     unitPosition.m_y < basePerimeter.GetTopEdge() && 
+     unitPosition.m_y > basePerimeter.GetBottomEdge()
+   )
+{
+   UnitHasBreachePerimeter(unitPosition);
+}
+
+// Bad
+int TooLazyToThinkOfAnImaginaryFunctionRightNow( u32 amountOfMyLazy, u32 timeTillIFallAsleep, BW::Unit* pUnitThatWillPutMeToSleep, u32 ohGodAnotherVariable, const std::string& thisFunctionIsHorrible );
+
+// Good (except for all the horrible names, since I am not feeling creative right now)
+int TooLazyToThinkOfAnImaginaryFunctionRightNow(      u32          amountOfMyLazy, 
+                                                      u32          timeTillIFallAsleep, 
+                                                      BW::Unit     *pUnitThatWillPutMeToSleep, 
+                                                      u32          ohGodAnotherVariable, 
+                                                const std::string  &thisFunctionIsHorrible 
+  );
+```
+  1. Format constructor initialize lists as follows (easiest addition/removal of members):
+```
+Player::Player()
+:unitCount(0)
+,pFirstUnit(NULL)
+,name("") // but default constructor should be avoided
+,isWinner(false)
+{
+  // additional constructor code
+}
+```
+
+#### Names ####
+  1. All symbol names should try to capture meaning and also be as precise and short as possible. Favor full expression of meaning, unobscured by needless abbreviation. If you can not resolve the name to something short, direct, and fully expressing the purpose than it is likely the design should be rethought.
+  1. Exception: There are some abbreviation exceptions which are common: for example BW (Brood War).
+  1. Exception: Since this project involves reverse-engineering the runtime of BW there are some design decisions out of our hand (such as the three-way union in the unit structure at +0xD0)
+#### Functions ####
+  1. Function names should be in pascalCase. IE: getUnitType() or isGoingToExplode()
+  1. Functions which directly access or set private data should follow the u32 getVariable() const and void setVariable(u32 variableValue) template.
+#### Variables ####
+  1. Global variables should be in CamelCase. IE: GlobalVariable
+  1. Local/Argument/Member variables should be in pascalCase. IE: unitType
+  1. Constant variables should use SCREAMING\_CAPS. IE: SUPPLY\_LIMIT
+  1. For example:
+```
+
+// Global variable, CamelCase
+u32 TickCounter = 0;
+
+// Global constant, SCREAMING_CAPS
+const u32 SUPPLY_LIMIT = 200;
+
+// Structure, use only for data structures
+struct Point
+{
+   u32 x;
+   u32 y;
+};
+
+// Class, use for functional classes
+class Player
+{
+public:
+  // Yada Yada
+private:
+  u32 playerNumber; // member variables pascalCase
+  std::string playerName; // <-- always leave std:: scoping
+  static u32 playerCount; // <-- Static is true scope
+  const u32 MAX_PLAYERS; // <-- Member constant
+};
+```
+  1. Avoid use of Hungarian notation. No prefixes allowed zone, thats where we are.
+#### Classes/Structures ####
+  1. Use CamelCase for class names.
+  1. Do not use any underbars in class names. If you wish to show that a name belongs to a certain domain, use a namespace. IE: ~~BW\_Unit~~ instead use BW::Unit
+#### Enumerations ####
+  1. Enumeration values should be in CamelCase.
+  1. Enumeration values may contain underbars, but this should be used sparingly and only to group subsets of the enumeration. IE: Terran\_SCV, Protoss\_Probe
+  1. Enclose enumerations in a namespace with their name. For example:
+```
+namespace UnitTypes
+{
+  enum Enum : u16
+  {
+  };
+};
+```
+#### Pointers and References ####
+  1. The asterisk and ampersand symbols should be placed next to the variable name, to emphasize correct variable behaviour. Example:
+```
+BW::Unit *unit; // Good
+const std::string &oldUnitName = unitName; // Good
+BW::Unit *unitBug1, *unitBug2, *unitBug3; // Good, all three are pointers
+BW::Unit* unitBug1, unitBug2, unitBug3; // Bad, only unitBug1 is a pointer while the others are not
+```
+#### Defines and Macros ####
+  1. Use constants and inline functions as much as possible rather than defines and macros.
+  1. Use all caps with underbar separators. IE: BOOST\_ASSERT()
+#### Type Names ####
+  1. Typedefs of fundamental types should be used rather than native type names or windows type names. For example:
+```
+unsigned int mineralCount; // Bad
+DWORD mineralCount; // Bad
+u32 mineralCount; // Good. Less typing and more descriptive (an unsigned 32 bit number)
+```
+  1. Fundamental types should be lowercase. IE: u32, s16
+  1. When possible, make a specific type to describe a variable. For example:
+```
+Milliseconds timeTillDeath = getTimeTillDeath(); // Is better than...
+u32 timeTillDeathMS = getTimeTillDeath(); // Is better than...
+u32 timeTillDeath = getTimeTillDeath();
+```
+#### File Names ####
+  1. CamelCase and should reflect the name of the class/structure/enumeration they hold.
+  1. Should never hold multiple classes/structures/enumerations unless these are strongly related (generally declared within each other's scope)
+  1. .h and .cpp
+  1. Do not use .inl files
+### Reverse Engineering ###
+  1. Offset values should be written in hexadecimal. IE: ~~100~~, instead use 0x64
+### Documentation ###
+  1. Documentation is **not** limited to comments. All aspects of code should help document it and the pages.h can be used to construct wiki like documentation pages to describe bigger issues.
+  1. Comments should not be used for version control information. Do not put changelogs, author tags, dates, or any other information that SVN will automatically generate.
+  1. Comments MUST follow [DoxyGen](http://www.stack.nl/~dimitri/doxygen/) style.
+  1. Comments exist to give additional information that you can not infer from the code. They should never repeat information already found in the code. For example:
+```
+// BAD! Tells no new information. Better off not being added.
+/** @param pPlayer pointer to a player
+    @returns unit count
+**/
+int GetUnitCount(const BW::Player* const pPlayer) const;
+
+// Better. Adds useful contract information, but repeats what could be inferred from the function name.
+/** Retrieve the current number of units under the given player's control.
+    @param pPlayer may not be NULL or invalid.
+**/
+int GetUnitCount(const BW::Player* const pPlayer) const;
+
+// Best. Only adds new information, repeats nothing, and is as concise as possible
+/// @param pPlayer must be valid
+int GetUnitCount(const BW::Player* const pPlayer) const;
+```
+  1. Documentation that can go in the header, should go in the header. For example, do not put documentation describing a method in the .cpp where it is defined, instead put it in the .h where it is declared.
+  1. Answer the questions of "How?" and "Why?" code is doing something rather than "What?". What can be read from the code it's self, but the _intention_ behind the code is where comments are needed.
+  1. Best practice: write comments as you code. Going back to add them makes it unlikely they will be added and less likely they will be good comments. Describing How/Why you are doing things as you do them also does wonders for making code easier to write.
+  1. If a section of code is unfinished or temporary, use comments to label it as such. Don't use it as an excuse to forget about the code forever though! :)
+### Directory Structure ###
+  1. Directories should correspond with namespaces. IE: put all files in the "BW" namespace in a "BW" directory. This helps make the code organization self-documenting.
+  1. Put both .cpp and .h files for a given class in the same directory (no source/header directories).
+  1. The rough project structure should follow:
+```
+bwapi/
+      SolutionName/ <-- Holds *.sln file
+                   ProjectName/ <-- Hold *.vcproj file
+                              obj/ <-- Temporary object files
+		              source/ <-- holds *.cpp and *.h files
+			            BW/ <-- Possible namespace folder name
+```
+### Function Guidelines ###
+  1. Functions should have a single obvious purpose.
+  1. Functions should be as short as required, but no shorter. :) A long function may be a sign that the function is pulling double-duty and needs to be split.
+# Functions with no parameters should be declared as such:
+```
+// Bad
+u32 getUnitCount(void);
+
+// Good
+u32 getUnitCount();
+```
+#### Use Design By Contract ####
+  1. Try to use fail-fast behavior to catch programming errors as soon as possible. The philosphy is the faster and closer the location of a bug the failure occures, the easier to fix the bug will be.
+  1. Avoid returning failure codes wherever possible: if it is a programming error it is better to fail-fast, if it is a user-input error than try to handle these as close to the source as possible.
+  1. Use Exceptions fro Util project if possible, throw Excpetion objects, not pointers (just don't put the new before the exception)
+  1. If you think you need your Exception type, make it in Util/Exceptions, and inherit it      from general exception
+### Class Guidelines ###
+  1. Use **struct** for pure data-structures, such as mapping BW process memory. Use **class** for any functional classes. In general you will never have a struct with member functions.
+  1. Classes should have a single obvious purpose.
+  1. Ordering is: public, protected, private. Only one section for each and always in that order.
+  1. Prefer private where possible, followed by protected where possible. Only expose the interface in public.
+  1. Keep inheritance chains as short as possible. The reason is not performance, but rather flexibility and understandability. Experience shows large inheritance chains are difficult to modify and understand.
+  1. Use abstract base classes for 'interface classes'
+  1. Only use multiple inheritance when you have (at most) 1 implementation class you are inheriting from. In other words only multiply inherit from interface classes.
+  1. Always use a virtual destructor if the class has any other virtual functions (in other words, is being used as base class).
+  1. Never call virtual functions from the constructor.
+  1. A class with any of (destructor, assignment operator, copy constructor) generally needs all three, since this generally means dynamic memory is involved.
+### Portability ###
+  1. Portability is **not** a goal of this project, so where it makes life easier VS2005-specific extensions will be used.
+  1. Header files should use #pragma once rather than header guards.
+  1. Packed structures should use #pragma pack(1) followed by #pragma pack() at the end.
+  1. Setting the size of an enumeration should be done through the **enum Enum : u8** syntax.
+### Version Control ###
+  1. Check in changes as often as possible. Always stay on the bleeding edge to avoid merge issues.
+  1. Never lock a file. If you are making major changes to a file and would rather it not be mucked with then contact the other team members and kindly let them know.
+### Misc ###
+  1. Try to declare variables as close to their usage as possible. Avoid 'pascal/c' style of declaring all variables at the beginning of function.
+  1. Initialize variable on declaration. This ensures they are valid, helps keep declaration close to usage, and helps prevent some common errors.
+  1. Use as little dynamic memory as possible.
+  1. Wherever there is wiggle room in this standard always follow the style used in the file you are editing. Do not reformat all the code to your liking as this both rude and can obscure the real changes when looking at revision diffs in version control.
+  1. Not required, but try to put constants on the right hand of comparisons
+
+  1. goto - some think it is evil. Avoid use where possible, but feel free to use it if the result is cleaner code that is easier to follow.
+  1. (condition) ? something : somethingElse; use this where it makes code cleaner and easier to follow. Never use it just to save typing where a full if statement would be more appropriate. :)
+  1. One statement per line.
+  1. One variable per line.
+  1. Avoid the 'using' statement' at all. Prefer typing the scope, especially for boost and the STL (std namespace). **Never** globally define 'using' in a header (this pollutes the namespace).
+  1. Be Const correct. Use the const keyword wherever you can. Always always be const correct, this sometimes requires 2 versions of functions, if the function is too complex to double it, use template.

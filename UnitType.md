@@ -1,0 +1,394 @@
+Class header file: [BWAPI/UnitType.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/UnitType.h#)
+
+The UnitType class is used to get information about a particular type of unit, such as the build time of a Lurker, or the mineral price of an Ultralisk.
+
+Table of all [UnitTypes](UnitTypes.md) (along with some stat info obtained via BWAPI).
+
+
+
+# Methods #
+
+## getID ##
+int getID() const;
+
+Returns a unique ID for this unit type.
+
+## getName ##
+std::string getName() const;
+
+Returns the name of the unit.
+
+## getRace ##
+[Race](Race.md) getRace() const;
+
+Returns the race that the unit belongs to. For example UnitTypes::Terran\_SCV.getRace() will return Races::Terran.
+
+## whatBuilds ##
+const std::pair< [UnitType](UnitType.md), int > whatBuilds() const;
+
+Returns what builds this unit type. The second number will usually be 1 unless the unit type is Protoss\_Archon or Protoss\_Dark\_Archon. Units that cannot be created, such as critters and mineral fields, will return a pair where the unit type is UnitTypes::None, and the second component is 0.
+
+Example: UnitTypes::Terran\_Marine.whatBuilds() will return an std::pair, where the first component is UnitTypes::Terran\_Barracks.
+
+## requiredUnits ##
+const std::map< [UnitType](UnitType.md), int > requiredUnits() const;
+
+Returns the units the player is required to have before it can train or build the given unit type. In addition to having the required units, the player must also have sufficient minerals, gas, and the [requiredTech](UnitType#requiredTech.md) (if any).
+
+Example: UnitTypes::Terran\_Battlecruiser.requiredUnits() will return a map of three keys: UnitTypes::Terran\_Starport, UnitTypes::Terran\_Control\_Tower, and UnitTypes::Terran\_Physics\_Lab.
+
+## requiredTech ##
+[TechType](TechType.md) requiredTech() const;
+
+Included in the API for completeness, since the only units that actually needs tech to be trained are the Zerg\_Lurker and Zerg\_Lurker\_Egg. The tech type needed is TechTypes::Lurker\_Aspect.
+
+## cloakingTech ##
+[TechType](TechType.md) cloakingTech() const;
+
+Returns the Tech type used for cloaking the unit, or TechTypes::None if the unit does not have the cloak ability or is permanently cloaked.
+
+## abilities ##
+const std::set< [TechType](TechType.md) >& abilities() const;
+
+Returns the set of tech types this unit can use, provided the tech types have been researched and the unit has enough energy.
+
+## upgrades ##
+const std::set< [UpgradeType](UpgradeType.md) >& upgrades() const;
+
+Returns the set of upgrade types that can affect this unit.
+
+## armorUpgrade ##
+[UpgradeType](UpgradeType.md) armorUpgrade() const;
+
+Returns the upgrade that increase's the unit's armor, or UpgradeTypes::None if no upgrade increase's this unit's armor. For example UnitTypes::Terran\_Marine.armorUpgrade() will return a pointer to UpgradeTypes::Terran\_Infantry\_Armor.
+
+## maxHitPoints ##
+int maxHitPoints() const;
+
+Returns the maximum amount of hit points the unit type can have.
+
+## maxShields ##
+int maxShields() const;
+
+Returns the maximum amount of shields the unit type can have.
+
+## maxEnergy ##
+int maxEnergy() const;
+
+Returns the maximum amount of energy the unit type can have.
+
+## armor ##
+int armor() const;
+
+Returns the amount of armor the non-upgraded unit type has.
+
+## mineralPrice ##
+int mineralPrice() const;
+
+Returns the mineral price of the unit. Example: UnitTypes::Siege\_Tank\_Tank\_Mode.mineralPrice() returns 150.
+
+## gasPrice ##
+int gasPrice() const;
+
+Returns the gas price of the unit. Example: UnitTypes::Siege\_Tank\_Tank\_Mode.gasPrice() returns 100.
+
+## buildTime ##
+int buildTime() const;
+
+Returns the number of frames needed to make this unit type.
+
+## supplyRequired ##
+int supplyRequired() const;
+
+Returns the amount of supply used by this unit. Supply counts returned by BWAPI are double what you would expect to see from playing the game. This is because zerglings take up 0.5 in-game supply.
+
+## supplyProvided ##
+int supplyProvided() const;
+
+Returns the amount of supply produced by this unit (i.e. for a Protoss\_Pylon). Supply counts returned by BWAPI are double what you would expect to see from playing the game. This is because zerglings take up 0.5 in-game supply.
+
+## spaceRequired ##
+int spaceRequired() const;
+
+Returns the amount of space this unit type takes up inside a bunker or transport unit.
+
+## spaceProvided ##
+int spaceProvided() const;
+
+Returns the amount of space this unit type provides.
+
+## buildScore ##
+int buildScore() const;
+
+Returns the score which is used to determine the total scores in the after-game stats screen.
+
+## destroyScore ##
+int destroyScore() const;
+
+Returns the score which is used to determine the total scores in the after-game stats screen.
+
+## size ##
+[UnitSizeType](UnitSizeType.md) size() const;
+
+Returns the size of the unit - either Small, Medium, Large, or Independent.
+
+## tileWidth ##
+int tileWidth() const;
+
+Returns the tile width of the unit. Useful for determining the size of buildings. For example UnitTypes::Terran\_Supply\_Depot.tileWidth() will return 3.
+
+## tileHeight ##
+int tileHeight() const;
+
+Returns the tile height of the unit. Useful for determining the size of buildings. For example UnitTypes::Terran\_Supply\_Depot.tileHeight() will return 2.
+
+## dimensionLeft ##
+int dimensionLeft() const;
+
+Distance from the center of the unit to the left edge of the unit, measured in pixels.
+
+## dimensionUp ##
+int dimensionUp() const;
+
+Distance from the center of the unit to the top edge of the unit, measured in pixels.
+
+## dimensionRight ##
+int dimensionRight() const;
+
+Distance from the center of the unit to the right edge of the unit, measured in pixels.
+
+## dimensionDown ##
+int dimensionDown() const;
+
+Distance from the center of the unit to the bottom edge of the unit, measured in pixels.
+
+## seekRange ##
+int seekRange() const;
+
+Returns the range at which the unit will start targeting enemy units, measured in pixels.
+
+## sightRange ##
+int sightRange() const;
+
+Returns how far the un-upgraded unit type can see into the fog of war, measured in pixels.
+
+## groundWeapon ##
+[WeaponType](WeaponType.md) groundWeapon() const;
+
+Returns the unit's ground weapon, or WeaponTypes::None if the unit cannot shoot ground units.
+
+## maxGroundHits ##
+int maxGroundHits() const;
+
+## airWeapon ##
+[WeaponType](WeaponType.md) airWeapon() const;
+
+Returns the unit's air weapon, or WeaponTypes::None if the unit cannot shoot air units.
+
+## maxAirHits ##
+int maxAirHits() const;
+
+## topSpeed ##
+double topSpeed() const;
+
+Returns the unit's non-upgraded top speed in pixels per frame. For Terran buildings that can lift off and the Zerg Infested Command Center, this returns how fast the building moves when it is lifted.
+
+## acceleration ##
+int acceleration() const;
+
+Returns how fast the unit can accelerate to its top speed. What units this quantity is measured in is currently unknown.
+
+## haltDistance ##
+int haltDistance() const;
+
+Related to how fast the unit can halt. What units this quantity is measured in is currently unknown.
+
+## turnRadius ##
+int turnRadius() const;
+
+Related to how fast the unit can turn. What units this quantity is measured in is currently unknown.
+
+## canBuildAddon ##
+bool canBuildAddon() const;
+
+Returns true if the unit type is capable of constructing any addon. This includes the Command Center, Factory, Starport, and Science Facility.
+
+## canProduce ##
+bool canProduce() const;
+
+Returns true if the unit can train other units. For example, UnitTypes::Terran\_Barracks.canProduce() will return true, while UnitTypes::Terran\_Marine.canProduce() will return false. This is also true for two non-building units: Protoss Carrier (can produce interceptors) and Protoss Reaver (can produce scarabs).
+
+## canAttack ##
+bool canAttack() const;
+
+Returns true if the unit can attack (either ground or air). Returns false for units that can only inflict damage via special abilities (such as Protoss High Templar).
+
+## canMove ##
+bool canMove() const;
+
+Returns true if the unit can move. Note that buildings will return false, even Terran buildings which can move once lifted.
+
+## isFlyer ##
+bool isFlyer() const;
+
+Returns true for flying/air units.
+
+## regeneratesHP ##
+bool regeneratesHP() const;
+
+Returns true for units that regenerate health (i.e. zerg units).
+
+## isSpellcaster ##
+bool isSpellcaster() const;
+
+Returns true if the unit type is capable of casting spells / using technology.
+
+## hasPermanentCloak ##
+bool hasPermanentCloak() const;
+
+Returns true for the two units that are permanently cloaked - Protoss Observer and Protoss Dark Templar.
+
+## isInvincible ##
+bool isInvincible() const;
+
+Returns true for units that cannot be destroyed (i.e. Terran Nuclear Missile, Mineral Field, Vespene Geyser, etc)
+
+## isOrganic ##
+bool isOrganic() const;
+
+Returns true if the unit is organic, such as a Terran Marine.
+
+## isMechanical ##
+bool isMechanical() const;
+
+Returns true if the unit is mechanical such as a Terran Vulture.
+
+## isRobotic ##
+bool isRobotic() const;
+
+Returns true for the four robotic Protoss units - Probe, Shuttle, Reaver, and Observer.
+
+## isDetector ##
+bool isDetector() const;
+
+Returns true if the unit is capable of detecting cloaked units.
+
+## isResourceContainer ##
+bool isResourceContainer() const;
+
+Returns true for the seven units that hold resources - Mineral Field (Type 1, Type 2, Type 3), Vespene Geyser, Terran Refinery, Zerg Extractor, and Protoss Assimilator.
+
+## isResourceDepot ##
+bool isResourceDepot() const;
+
+Returns true for the six units that can accept resources - Terran Command Center, Protoss Nexus, Zerg Hatchery, Zerg Lair, Zerg Hive, and Start Location.
+
+## isRefinery ##
+bool isRefinery() const;
+
+Returns true for Terran Refinery, Zerg Extractor, and Protoss Assimilator.
+
+## isMineralField ##
+bool isMineralField() const;
+
+Returns true for the three types of Mineral Fields. BWAPI typically interprets all resources as "Type 1", so this may be used in the future.
+
+## isWorker ##
+bool isWorker() const;
+
+Returns true for Protoss Probe, Terran SCV, and Zerg Drone.
+
+## requiresPsi ##
+bool requiresPsi() const;
+
+Returns true for buildings that must be near a pylon to be constructed.
+
+## requiresCreep ##
+bool requiresCreep() const;
+
+Returns true for buildings that can only be built on zerg creep.
+
+## isTwoUnitsInOneEgg ##
+bool isTwoUnitsInOneEgg() const;
+
+Returns true for Zergling and Scourge.
+
+## isBurrowable ##
+bool isBurrowable() const;
+
+Returns true for Zerg Lurker and units that can burrow when burrow tech is researched.
+
+## isCloakable ##
+bool isCloakable() const;
+
+Returns true for units that can be cloaked - Terran Ghost and Terran Wraith. Does not include units which have permanent cloak (Protoss Observer and Protoss Dark Templar).
+
+## isBuilding ##
+bool isBuilding() const;
+
+Returns true if the unit is a building (also true for mineral field and vespene geyser).
+
+## isAddon ##
+bool isAddon() const;
+
+Returns true if the unit is an add-on, such as a Terran Comsat Station.
+
+## isFlyingBuilding ##
+bool isFlyingBuilding() const;
+
+Returns true for Terran buildings that can lift off (i.e. Barracks).
+
+## isNeutral ##
+bool isNeutral() const;
+
+Returns true if the unit is neutral, such as a critter or mineral field.
+
+## isHero ##
+bool isHero() const;
+
+Returns true if the unit is a Hero unit. Hero units are special units used by the _`Campaign`_ and _`Use Map Settings`_.
+
+## isPowerup ##
+bool isPowerup() const;
+
+Returns true if the unit is a powerup. Powerups such as a [Flag](UnitTypes#Flag.md) are used by other game types like _`Capture the Flag`_ and can be carried by a worker unit.
+
+## isBeacon ##
+bool isBeacon() const;
+
+Returns true if the unit is a Zerg, Terran, or Protoss Beacon. Beacons are used in the _`Campaign`_ and _`Use Map Settings`_.
+
+## isFlagBeacon ##
+bool isFlagBeacon() const;
+
+Returns true if the unit is a Zerg, Terran, or Protoss Flag Beacon. Flag beacons will create a flag unit for _`Capture the Flag`_ mode and allow you to relocate the beacon to another location so that you may hide your flag from the enemy.
+
+## isSpecialBuilding ##
+bool isSpecialBuilding() const;
+
+Returns true if the unit is a special building such as the [Overmind](UnitTypes#Overmind.md).
+
+## isSpell ##
+bool isSpell() const;
+
+Returns true if the unit is either a [Scanner Sweep](UnitTypes#Scanner_Sweep.md), [Disruption Web](UnitTypes#Disruption_Web.md), or [Dark Swarm](UnitTypes#Dark_Swarm.md).
+
+
+# Non-Member Methods #
+
+## getUnitType ##
+[UnitType](UnitType.md) getUnitType(std::string name);
+
+Given the name of a unit type, this function will return the unit type.
+
+For example, UnitTypes::getUnitType("Terran Marine") will return UnitTypes::Terran\_Marine.
+
+## allUnitTypes ##
+std::set<[UnitType](UnitType.md)>& allUnitTypes();
+
+Returns the set of all the UnitTypes.
+
+## allMacroTypes ##
+std::set<[UnitType](UnitType.md)>& allMacroTypes();
+
+Returns the set of all the macro UnitTypes.

@@ -1,0 +1,77 @@
+Class header file: [BWAPI/Color.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Color.h#)
+
+Starcraft uses a 256 color palette to render everything, so the colors available for draw shapes using BWAPI is limited to the colors available in the [Palette](#Palette.md).
+
+Methods:
+  * Color(int id) - Create a color using the specified index from the Broodwar color [palette](#Palette.md).
+  * Color(int red, int green, int blue) - Create a color using the color in the [palette](#Palette.md) that is closest to the RGB color specified. This will check a number of colors in the pallet to see which is closest to the specified color so this function is relatively slow.
+  * int getID() - Return the index of the color in the color [palette](#Palette.md).
+  * int red() - Return the red component of the color.
+  * int green() - Return the green component of the color.
+  * int blue() - Return the blue component of the color.
+
+### Colors ###
+While any color from the [palette](#Palette.md) can be used, the following colors are available as shortcuts:
+
+  * Red
+  * Blue
+  * Teal
+  * Purple
+  * Orange
+  * Brown
+  * Yellow
+  * Green
+  * Cyan
+
+  * Black
+  * White
+  * Grey
+
+### Palette ###
+The 256 color palette used by Starcraft: BroodWar:
+
+> ![http://bwapi.googlecode.com/svn/wiki/colorPalette.gif](http://bwapi.googlecode.com/svn/wiki/colorPalette.gif)
+
+The blue sets outlined in green are interchangable parts of the palette. They may change based on the tileset and continually change if color cycling is enabled.
+
+### Text Color ###
+Examples using text color:
+```
+printf("\x03" "This is yellow text. " "\x06" "This is red text.");
+printf("%cThis is yellow text. %cThis is red text.", 0x03, 0x06);
+```
+
+Available control characters:
+```
+x01 - Previous
+x02 - Cyan (Default)
+x03 - Yellow
+x04 - White
+x05 - Grey (no override)
+x06 - Red
+x07 - Green
+x08 - Red (P1)
+x09 - Tab
+x0A - Newline
+x0B - Invisible (no override)
+x0C - Remove beyond (no override)
+x0D - Clear formatting?
+x0E - Blue (P2)
+x0F - Teal (P3)
+x10 - Purple (P4)
+x11 - Orange (P5)
+x12 - Right Align
+x13 - Center Align
+x14 - Invisible
+x15 - Brown (p6)
+x16 - White (p7)
+x17 - Yellow (p8)
+x18 - Green (p9)
+x19 - Brighter Yellow (p10)
+x1A - Cyan (player default)
+x1B - Pinkish (p11)
+x1C - Dark Cyan (p12)
+x1D - Greygreen
+x1E - Bluegrey
+x1F - Turquoise
+```

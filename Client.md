@@ -1,0 +1,34 @@
+Class header file: [BWAPI/Client/Client.h](http://code.google.com/p/bwapi/source/browse/trunk/bwapi/include/BWAPI/Client/Client.h#)
+
+The Client class manages the connection between a BWAPI client program and the BWAPI server running in BWAPI.dll. For examples of how to use this class please see the Example AI Client and the AI Module Loader that are included in the latest release of BWAPI.
+
+The BWAPIClient.lib library contains the implementation of the Client class along with classes which implement the [Game](Game.md), [Force](Force.md), [Player](Player.md), [Unit](Unit.md), and [Bullet](Bullet.md) interfaces.
+
+Stand-alone programs made with BWAPIClient should keep all interaction with dynamic BWAPI classes (Game, Force, Player, Unit, Bullet) in a single thread that runs synchronously with Starcraft: Broodwar via calls to [update()](#update.md).
+
+Methods:
+
+  * [isConnected](#isConnected.md)
+  * [connect](#connect.md)
+  * [disconnect](#disconnect.md)
+  * [update](#update.md)
+
+### isConnected ###
+bool isConnected();
+
+Returns true if the client is currently connected to the server.
+
+### connect ###
+bool connect();
+
+Attempts to connect the client to the server. If it succeeds, it returns true. If Starcraft/BWAPI is not yet running, this will fail and return false.
+
+### disconnect ###
+void disconnect();
+
+Disconnects the client from the server.
+
+### update ###
+void update();
+
+This is a blocking command that tells the server to process commands sent from the client and proceed to the next frame in the game. Thus update() will only return once the next game frame (or if in menus, next menu frame) has been received. Once the server proceeds to the next frame, the client will update some local information and then return so the AI can execute its code for the current frame. Rather than sending callbacks to the client for things like [AIModule::onUnitCreate](AIModule#onUnitCreate.md), BWAPI generates a list of event objects, which can be accessed via [Game::getEvents](Game#getEvents.md). These events correspond to AIModule callbacks.
